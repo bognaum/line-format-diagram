@@ -1,0 +1,131 @@
+Описание:
+
+1. Шаблон - это массив объектов.
+2. Объекты внутри массива имеют следующие поля:
+	= "td" - top description
+	= "bd" - bottom description
+	= "ch" - children (child)
+3. В поле "ch" может быть записана либо строка, либо такой-же массив объектов.
+
+<!-- -------------------------------------------------- -->
+
+	<?php
+		$eScheme_path = "http://MyPlugins/content/expression-scheme/archive/GIT/eScheme/";
+	?>
+	<link rel="stylesheet" type="text/css"       href="<?= $eScheme_path ?>eScheme.css">
+	<script                type="text/javascript" src="<?= $eScheme_path ?>eScheme.js"></script>
+
+<!-- -------------------------------------------------- -->
+
+	<script type="text/javascript">
+		!function() {
+			document.querySelectorAll(".expression-scheme").
+				forEach((v) => ExpressionScheme.build(v));
+		}();
+	</script>
+
+<!-- -------------------------------------------------- -->
+
+	<div id="d33" class="expression-scheme" 
+		data-bd-color="#090" 
+		data-line-text-style="
+			font-size: 60px; 
+			color: #779;
+		"
+		data-line-text-style-p1="color: #777;"
+		style="color: #b00; text-align: center;"
+		data-line-num="<?= __LINE__ ?>">
+		[
+			{
+				"td": "Доменное имя",
+				"ch": [
+					{
+						"bd": "домен 3-го уровня",
+						"td": "Хост",
+						"ch": "mail"
+					},{
+						"td": "",
+						"ch": "."
+					},{
+						"bd": "домен 2-го уровня",
+						"td": "Доменная \n зона",
+						"ch": "google"
+					},{
+						"td": "",
+						"ch": "."
+					},{
+						"bd": "домен 1-го уровня",
+						"td": "Доменная \n зона",
+						"ch": "com"
+					},{
+						"bd": "Корневой домен. \n Можно не писать.",
+						"ch": "."
+					}
+				]
+			}
+		]
+	</div>
+<!-- -------------------------------------------------- -->
+
+
+
+<!-- -------------------------------------------------- -->
+
+<div class="expression-scheme" 
+	data-line-text-style="
+		font-size: 18px; 
+		color: #77d;
+		/* border-color: transparent; */
+	"
+	data-line-text-style-p1="color: #555;"
+	data-line-text-style-p10="color: #555;"
+	style=""
+	data-line-num="<?= __LINE__ ?>">
+	
+	[
+		{
+			"ch": "background: "
+		},
+		{
+			"td": "Значение",
+			"ch": [
+				{
+					"td": "Первая часть",
+					"ch": [
+						{
+							"bd": "-image: ",
+							"ch": "url('/bg/bg_1.png') "
+						},
+						{
+							"bd": "-position: ",
+							"ch": "center"
+						}
+					]
+				},
+				{
+					"ch": " / "
+				},
+				{
+					"td": "Вторая часть",
+					"ch": [
+						{
+							"bd": "-size: ",
+							"ch": "auto 80% "
+						},
+						{
+							"ch": "no-repeat "
+						},
+						{
+							"ch": "padding-box scroll #fdd"
+						}
+					]
+				}
+			]
+		},
+		{
+			"ch": ";"
+		}
+	]
+</div>
+<!-- -------------------------------------------------- -->
+<!-- -------------------------------------------------- -->

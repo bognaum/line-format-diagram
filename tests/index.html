@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		.container {
+			margin: 10px 100px;
+		}
+	</style>
+	<link rel="stylesheet" href="./../e-scheme.css">
+	<title>Test eSheme</title>
+</head>
+<body>
+	<div class="container">
+		<div id="d33" class="expression-scheme" 
+			data-line-text-style="
+				font-size: 20px; 
+				color: #55d;
+			"
+			style="text-align: center;"
+			data-line-num="<?= __LINE__ ?>">
+			[
+				{
+					"td": "href",
+					"ch": [
+						{
+							"td": "origin",
+							"ch": [
+								{
+									"td": "protocol",
+									"ch": "https:"
+								},
+								{
+									"ch": "//"
+								},
+								{
+									"td": "host",
+									"ch": [
+										{
+											"td": "hostname",
+											"ch": "developer.mozilla.org"
+										},
+										{
+											"ch": ":"
+										},
+										{
+											"td": "port",
+											"ch": "443"
+										}
+									]
+								}
+							]
+						},
+						{
+							"td": "pathname",
+							"ch": "/en-US/search"
+						},
+						{
+							"td": "search",
+							"ch": "?q=URL"
+						},
+						{
+							"td": "hash",
+							"ch": "#search-results"
+						}
+					]
+				}
+			]
+		</div>
+		<div id="d33" class="expression-scheme" 
+			data-line-text-style="
+				font-size: 20px; 
+				color: #55d;
+			"
+			style="text-align: center;"
+			data-line-num="<?= __LINE__ ?>">
+			[
+				{
+					"td": "href",
+					"ch": [
+						{
+							"td": "origin",
+							"ch": [
+								{
+									"td": "protocol",
+									"ch": "https:"
+								},
+								{
+									"ch": "//"
+								},
+								{
+									"td": "NOT AN ORIGIN!",
+									"style": "color: #d55;",
+									"ch": [
+										{
+											"td": "username",
+											"style": "color: #d55;",
+											"ch": "someUser"
+										},
+										{
+											"style": "color: #d55;",
+											"ch": ":"
+										},
+										{
+											"td": "password",
+											"style": "color: #d55;",
+											"ch": "Pass1234"
+										},
+										{
+											"style": "color: #d55;",
+											"ch": "@"
+										}
+									]
+								},
+								{
+									"td": "host",
+									"ch": [
+										{
+											"td": "hostname",
+											"ch": "developer.mozilla.org"
+										},
+										{
+											"ch": ":"
+										},
+										{
+											"td": "port",
+											"ch": "443"
+										}
+									]
+								}
+							]
+						},
+						{
+							"td": "pathname",
+							"ch": "/en-US/search"
+						},
+						{
+							"td": "search",
+							"ch": "?q=URL"
+						},
+						{
+							"td": "hash",
+							"ch": "#search-results"
+						}
+					]
+				}
+			]
+		</div>
+	</div>
+</body>
+</html>
