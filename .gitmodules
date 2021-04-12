@@ -1,0 +1,3 @@
+[submodule "json-err-hl"]
+	path = json-err-hl
+	url = https://github.com/bognaum/json-err-hl.git
