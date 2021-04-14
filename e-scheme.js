@@ -157,8 +157,6 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			if (v.bottomDescr) {
 
 				let strCount = bLevels.shift();
-				// let strCount = bLevels[i];
-				console.log(`bLevels.length`, bLevels.length);
 				str += `
 					<div class="${clPref}-bottom-rel-wr" style="${opts.bdColor}">
 						<div class="${clPref}-bottom-rel" style="${opts.bdColor}">
@@ -184,7 +182,6 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 }
 
 function getLinersHtmlStr(bLevels, clPref) {
-	console.log(`bLevels`, bLevels);
 	let str = "";
 	for (let i = bLevels.length - 1; 0 <= i; i --) 
 		str += `<div class="${clPref}-grid-bv-liner" style="height: ${bLevels[i] * 1.3}em"></div>`;
