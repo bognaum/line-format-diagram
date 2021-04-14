@@ -1,64 +1,207 @@
-import JsonEHl from "./json-error-hl/json-error-hl.js";
+import JsonEHl from "./json-err-hl/json-err-hl.js";
 export default class EScheme {
-	build (container, template=null, clPref="e-scheme") {
+	constructor (clPref="e-scheme") {
+		this.clPref = clPref;
+	}
+
+	get version () {return "2.0.0"}
+
+	build (container, template=null) {
 		if (container.classList.contains("executed")) {
 			console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, container);
 			return;
 		}
-		const 
-			lineTextStyle = container.dataset.lineTextStyle || "",
-			bdColor       = container.dataset.bdColor && 
-				` border-color: ${container.dataset.bdColor};` || "";
 
-		/*const 
-			tLevels = [],
-			bLevels = [];*/
+		const opts = Object.assign({
+			eStyle:  "",
+			bdColor: "",
+			lineNum: 0,
+			lineTextStyle: "",
+		}, container.dataset);
 
-		let tOb;
+		template = template || container.textContent;
 
-		if (! template)
-			template = container.textContent;
+		let tOb; 
 
 		if (typeof template == "string") {
 			try {
 				tOb = JSON.parse(template);
 			} catch (err) {
-				const firstLineNum = (container.dataset.lineNum + 1) || 1;
-				showJsonError(template, firstLineNum);
+				const firstLineNum = opts.lineNum * 1;
+				const 
+					json = template,
+					hlter = new JsonEHl("e-s-json-err-hl"),
+					pre = eHTML(`<pre class="e-s-json-err-hl calm-clarified-theme"><pre>`);
+				container.parentElement.insertBefore(pre, container);
+				hlter.highlight(pre, json, firstLineNum);
+				hlter.scrollToFirstError(pre);
 				return;
 			}
+		} else if (typeof template == "object"){
+			tOb = template;
 		} else {
-
+			throw new Error("Invalid template", template);
 		}
 
-		function showJsonError(json, firstLineNum) {
-			const 
-				hlter = new JsonEHl("e-s-json-err-hl");
-				pre = document.createElement("pre");
-			pre.classList.add("e-s-json-err-hl");
-			hlter.highlight(pre, json, firstLineNum);
-		}
+		const {tLevels, bLevels} = getLevels(tOb);
+		console.log(`bLevels`, bLevels);
+		const htmlStr = getHtmlStr(tOb, opts, tLevels, bLevels, this.clPref) 
+			+ getLinersHtmlStr(bLevels, this.clPref);
 
-
-		getLevels(templ);
-		const linesHtmlStr = getLinersHtmlStr();
-
-		function getTempl(json) {
-			try {
-				return JSON.parse(templ);
-			} catch(err) {
-				console.error(err);
-				// console.log(`err`);console.dir(err);
-				if (self.jsonErrorHl) {
-					const codePre = document.createElement("pre");
-					codePre.className = "json-error-hl";
-					container.parentElement.insertBefore(codePre, container);
-					self.jsonErrorHl.highlight(codePre, json, container.dataset.lineNum || 1);
-					self.jsonErrorHl.highlight.scrollToFirstError(codePre);
-				} else if (window.findJsonError) {
-					return window.findJsonError(json).getMarkedStr();
-				}
-			}
-		}
+		container.innerHTML = `<!-- version ${this.version} -->` + htmlStr;
+		container.classList.add("executed");
 	}
+}
+
+function getLevels(tOb) {
+	const 
+		tLevels = [],
+		bLevels = [];
+
+	recursive(tOb, 0);
+	bLevels.push(1);
+	return {tLevels, bLevels};
+
+	function recursive(tOb, level=0) {
+		tLevels[level] = tLevels[level] || 0;
+
+		tOb.forEach((v) => {
+
+			if ("td" in v) {
+				const 
+					lines = v.td.split("\n"),
+					n = lines.length;
+				if (tLevels[level] < n)
+					tLevels[level] = n;
+				v.topDescr = lines.join("<br/>");
+			}
+
+			if (v.ch)
+				if (typeof v.ch != "string")
+					recursive(v.ch, level + 1);
+
+			if (v.bd)
+				if (typeof v.ch == "string") {
+					const 
+						lines = v.bd.split("\n"),
+						n = lines.length;
+					bLevels.push(n);
+					v.bottomDescr = lines.join("<br/>");
+				} else {
+					v.bottomDescr = null;
+					v.errors = v.errors || [];
+					v.errors.push("'v.bottomDescr' is deleted.");
+				}
+		});
+	}
+}
+
+function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
+	let 
+		bLevels = _bLevels.map(v => v),
+		str    = "",
+		sPartN = 0;
+
+	recursive(templ, 0);
+	return str;
+
+	function recursive(templ, level=0) {
+		templ.forEach((v) => {
+			const
+				hFZ = getHFZ(tLevels[level]);
+
+			let 
+				localBdColor = "border-color: transparent;",
+				showBdsClass = "";
+
+			if ("topDescr" in v) {
+				showBdsClass = "show-borders";
+				localBdColor = opts.bdColor;
+			} else {}
+
+			str += `<div class="${clPref}-part ${showBdsClass}" style="${localBdColor}">`;
+			
+			if ("topDescr" in v)
+				str += `<div 
+					class="${clPref}-top-descr ${clPref}-description ${clPref}-grid-v-liner" 
+					style="${hFZ+opts.bdColor}"
+				>${v.topDescr}</div>`;
+			else 
+				str += `<div 
+					class="${clPref}-grid-v-liner" 
+					style="${hFZ}"
+				></div>`;
+
+			if (v.ch)
+				if (typeof v.ch != "string") {
+					recursive(v.ch, level + 1);
+				} else {
+
+					for (let i = level + 1; i < tLevels.length; i++) {
+						let hFZ = getHFZ(tLevels[i]);
+						str += `<div class="${clPref}-grid-v-liner" style="${hFZ}"></div>`; 
+					}
+					
+					sPartN ++;
+
+					let styleStr = opts.bdColor+opts.lineTextStyle;
+
+					styleStr += v.style || "";
+
+					str += `<div 
+						class="${clPref}-line-text part-${sPartN}" 
+						style="${styleStr} ${localBdColor}"
+					>${v.ch}</div>`;
+				}
+
+			if (v.bottomDescr) {
+
+				let strCount = bLevels.shift();
+				// let strCount = bLevels[i];
+				console.log(`bLevels.length`, bLevels.length);
+				str += `
+					<div class="${clPref}-bottom-rel-wr" style="${opts.bdColor}">
+						<div class="${clPref}-bottom-rel" style="${opts.bdColor}">
+							<div class="${clPref}-rel-line" style="${opts.bdColor}">`;
+
+				bLevels.forEach((v) => {
+					str += `<div class="${clPref}-grid-bv-liner" style="height: ${v * 1.2}em"></div>`;
+				});
+
+				str += `
+								<div class="${clPref}-bottom-descr ${clPref}-description ${clPref}-grid-bv-liner" style="height: ${strCount * 1.2}em; ${opts.bdColor}">${v.bottomDescr}</div>
+							</div>
+						</div>
+					</div>
+				`;
+			}
+
+			
+
+			str += `</div>`; // .${clPref}-part
+		});
+	}
+}
+
+function getLinersHtmlStr(bLevels, clPref) {
+	console.log(`bLevels`, bLevels);
+	let str = "";
+	for (let i = bLevels.length - 1; 0 <= i; i --) 
+		str += `<div class="${clPref}-grid-bv-liner" style="height: ${bLevels[i] * 1.3}em"></div>`;
+	
+	return str;
+}
+
+function getHFZ(lineCount) {
+	return `height: ${lineCount * 1.5}em; font-size: 1em; `;
+}
+
+function eHTML(code, shell=null) {
+	const _shell = 
+		! shell                  ? document.createElement("div") :
+		typeof shell == "string" ? document.createElement(shell) :
+		typeof shell == "object" ? shell :
+			null;
+	_shell.innerHTML = code;
+	return _shell.children[0];
 }

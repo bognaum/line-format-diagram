@@ -19,7 +19,7 @@
 				color: #55d;
 			"
 			style="text-align: center;"
-			data-line-num="<?= __LINE__ ?>">
+			data-line-num="22">
 			[
 				{
 					"td": "href",
@@ -74,7 +74,176 @@
 				color: #55d;
 			"
 			style="text-align: center;"
-			data-line-num="<?= __LINE__ ?>">
+			data-line-num="22">
+			[
+				{
+					"td": "href",
+					"ch": [
+						{
+							"td": "origin",
+							"ch": [
+								{
+									"ch": "https:",
+									"bd": "protocol"
+								},
+								{
+									"ch": "//"
+								},
+								{
+									"td": "host",
+									"ch": [
+										{
+											"bd": "hostname",
+											"ch": "developer.mozilla.org"
+										},
+										{
+											"ch": ":"
+										},
+										{
+											"ch": "443",
+											"bd": "port"
+										}
+									]
+								}
+							]
+						},
+						{
+							"bd": "pathname",
+							"ch": "/en-US/search"
+						},
+						{
+							"bd": "search",
+							"ch": "?q=URL"
+						},
+						{
+							"bd": "hash",
+							"ch": "#search-results"
+						}
+					]
+				}
+			]
+		</div>
+
+		<div id="d33" class="e-scheme" 
+			data-line-text-style="
+				font-size: 20px; 
+				color: #55d;
+			"
+			style="text-align: center;"
+			data-line-num="22">
+			[
+				{
+					"td": "href",
+					"ch": [
+						{
+							"td": "origin",
+							"ch": [
+								{
+									"td": "protocol",
+									"ch": "https:"
+								},
+								{
+									"ch": "//"
+								},
+								{
+									"td": "host",
+									"ch": [
+										{
+											"td": "hostname",
+											"ch": "developer.mozilla.org"
+										},
+										{
+											"ch": ":"
+										},
+										{
+											"td": "port",
+											"ch": "443"
+										}
+									]
+								}
+							]
+						},
+						{
+							"td": "pathname",
+							"ch": "/en-US/search"
+						},
+						{
+							"td": "search",
+							"ch": "?q=URL"
+						},
+						{
+							"td": "hash",
+							"ch": "#search-results"
+						}
+					]
+				}
+			]
+		</div>
+		<div id="d33" class="e-scheme" 
+			data-line-text-style="
+				font-size: 20px; 
+				color: #55d;
+			"
+			style="text-align: center;"
+			data-line-num="22">
+			[
+				{
+					"td": "href",
+					"ch": [
+						{
+							"td": "origin",
+							"ch": [
+								{
+									"ch": "https:",
+									"bd": "protocol"
+								},
+								{
+									"ch": "//"
+								},
+								{
+									"td": "host",
+									"ch": [
+										{
+											"bd": "hostname",
+											"ch": "developer.mozilla.org"
+										},
+										{
+											"ch": ":"
+										},
+										{
+											"ch": "443",
+											"bd": "port"
+										}
+									]
+								}
+							]
+						},
+						{
+							"bd": "pathname",
+							"ch": "/en-US/search"
+						},
+						{
+							"bd": "search",
+							"ch": "?q=URL"
+						},
+						{
+							"bd": "hash",
+							"ch": "#search-results"
+						}
+					]
+				}
+			]
+		</div>
+
+
+
+		<div id="d33" class="expression-scheme" 
+			data-line-text-style="
+				font-size: 20px; 
+				color: #55d;
+			"
+			style="text-align: center;"
+			data-line-num="77">
 			[
 				{
 					"td": "href",
@@ -148,5 +317,20 @@
 			]
 		</div>
 	</div>
+	<script type="module">
+		import ESch from "./../e-scheme.js";
+		const eSch = new ESch();
+		document.querySelectorAll(".e-scheme").forEach((v) => {
+			eSch.build(v);
+		});
+	</script>
+	<link rel="stylesheet" type="text/css"       href="./../eScheme.css">
+	<script                type="text/javascript" src="./../eScheme.js"></script>
+	<script type="text/javascript">
+		!function() {
+			document.querySelectorAll(".expression-scheme").
+				forEach((v) => ExpressionScheme.build(v));
+		}();
+	</script>
 </body>
 </html>
