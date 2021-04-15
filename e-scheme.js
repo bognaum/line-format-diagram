@@ -44,7 +44,6 @@ export default class EScheme {
 		}
 
 		const {tLevels, bLevels} = getLevels(tOb);
-		console.log(`bLevels`, bLevels);
 		const htmlStr = getHtmlStr(tOb, opts, tLevels, bLevels, this.clPref) 
 			+ getLinersHtmlStr(bLevels, this.clPref);
 
