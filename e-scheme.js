@@ -49,6 +49,7 @@ export default class EScheme {
 			+ getLinersHtmlStr(bLevels, this.clPref);
 
 		container.innerHTML = `<!-- version ${this.version} -->` + htmlStr;
+		container.classList.remove("executing");
 		container.classList.add("executed");
 	}
 }
