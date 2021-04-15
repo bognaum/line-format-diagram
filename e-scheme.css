@@ -54,12 +54,7 @@
           width: 10px;
           border-left: 1px solid #999;
           border-bottom: 1px solid #999;
-          padding-bottom: calc(5px + .5em);
-          /* >.sps-grid-bv-liner {
-						padding: $bottom_descr_frame_pad;
-						border: $link_line_th + 3 solid transparent;
-						display: block;
-					} */ }
+          padding-bottom: calc(5px + .5em); }
           .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr .e-scheme-bottom-rel > .e-scheme-rel-line > .e-scheme-bottom-descr {
             position: absolute;
             left: 100%;

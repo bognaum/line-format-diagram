@@ -26,12 +26,10 @@ $pref : "e-scheme";
 		text-align: center;
 	}
 
-	// .sps-string-part {
 	.#{$pref}-part {
 		border-right: $v_line_th solid transparent;
 		border-left: $v_line_th solid transparent;
 		margin-right: -$v_line_th;
-		// .sps-grid-v-liner {
 		.#{$pref}-grid-v-liner {
 			margin: 0 $h_line_indents;
 			margin-top: 5px;
@@ -42,23 +40,19 @@ $pref : "e-scheme";
 
 
 		}
-		// .sps-description {
 		.#{$pref}-description {
 			&:hover {
 				user-select: text;
 			}
 		}
-		// .sps-sp-descr {
 		.#{$pref}-top-descr {
 			border-top-color: $h_line_color; 
 		}
-		// .sps-line-text {
 		.#{$pref}-line-text {
 			font-size: 25px;
 			font-weight: bold;
 			color: #777;
 			white-space: pre;
-			// background-color: #fff;
 			background-clip: padding-box;
 			border-left: 1px solid transparent;
 			border-right: 1px solid transparent;
@@ -67,7 +61,6 @@ $pref : "e-scheme";
 			font-family: consolas;
 			user-select: text;
 		}
-		// .sps-bottom-rel-wr {
 		.#{$pref}-bottom-rel-wr {
 			border-left: 1px solid transparent;
 			border-right: 1px solid transparent;
@@ -75,26 +68,16 @@ $pref : "e-scheme";
 			padding: 5px $h_line_indents;
 			margin: -1px;
 			display: block;
-			// .sps-bottom-rel {
 			.#{$pref}-bottom-rel {
 				display: block;
 				position: relative;
 				border-bottom: $link_line_th solid $link_line_color;
-				// margin: 5px;
-				// >.sps-rel-line {
 				>.#{$pref}-rel-line {
 					position: absolute;
 					width: 10px;
 					border-left: $link_line_th solid $link_line_color;
 					border-bottom: $link_line_th solid $link_line_color;
 					padding-bottom: calc(#{$bottom_descr_frame_pad} + .5em);
-
-					/* >.sps-grid-bv-liner {
-						padding: $bottom_descr_frame_pad;
-						border: $link_line_th + 3 solid transparent;
-						display: block;
-					} */
-					// >.sps-bottom-descr {
 					>.#{$pref}-bottom-descr {
 						position: absolute;
 						left: 100%;
@@ -106,18 +89,15 @@ $pref : "e-scheme";
 			}
 		}
 	}
-	// .sps-string-part.show-borders {
 	.#{$pref}-part.show-borders {
 		border-color: $v_line_color;
 		.sps-line-text{
 			border-color: $v_line_color;
 		}
 	}
-	// .sps-grid-v-liner+.sps-string-part {
 	.#{$pref}-grid-v-liner+.#{$pref}-part {
 		margin-left: -$v_line_th;
 	}
-	// .sps-grid-bv-liner {
 	.#{$pref}-grid-bv-liner {
 		padding: $bottom_descr_frame_pad;
 		border: $link_line_th + 3 solid transparent;
