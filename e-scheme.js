@@ -124,7 +124,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			if ("topDescr" in v)
 				str += `<div 
 					class="${clPref}-top-descr ${clPref}-description ${clPref}-grid-v-liner" 
-					style="${hFZ+opts.bdColor}"
+					style="${hFZ+opts.bdColor+(v.tStyle || "")}"
 				>${v.topDescr}</div>`;
 			else 
 				str += `<div 
@@ -175,7 +175,13 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 				});
 
 				str += `
-								<div class="${clPref}-bottom-descr ${clPref}-description ${clPref}-grid-bv-liner" style="height: ${strCount * 1.2}em; ${opts.bdColor}">${v.bottomDescr}</div>
+								<div 
+									class="${clPref}-bottom-descr ${clPref}-description ${clPref}-grid-bv-liner" 
+									style="
+										height: ${strCount * 1.2}em; 
+										${opts.bdColor+(v.bStyle || "")}
+									"
+								>${v.bottomDescr}</div>
 							</div>
 						</div>
 					</div>
