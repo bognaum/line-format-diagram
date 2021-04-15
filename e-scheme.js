@@ -7,10 +7,11 @@ export default class EScheme {
 	get version () {return "2.0.0"}
 
 	build (container, template=null) {
-		if (container.classList.contains("executed")) {
+		if (["executing", "executed"].some((v) => container.classList.contains(v))) {
 			console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, container);
 			return;
 		}
+		container.classList.add("executing");
 
 		const opts = Object.assign({
 			eStyle:  "",
