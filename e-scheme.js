@@ -133,9 +133,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 				></div>`;
 
 			if (v.ch)
-				if (typeof v.ch != "string") {
-					recursive(v.ch, level + 1);
-				} else {
+				if (typeof v.ch == "string") {
 
 					for (let i = level + 1; i < tLevels.length; i++) {
 						let hFZ = getHFZ(tLevels[i]);
@@ -150,8 +148,18 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 
 					str += `<div 
 						class="${clPref}-line-text part-${sPartN}" 
-						style="${styleStr} ${localBdColor}"
+						style="${
+							opts.bdColor 
+							+ opts.lineTextStyle 
+							+ (v.style || "") 
+							+ localBdColor
+						}"
 					>${v.ch}</div>`;
+
+				} else if (typeof v.ch == "object" && "length" in v.ch) {
+					recursive(v.ch, level + 1);
+				} else {
+					throw new Error(`(!) "ch" must be a string or an array.`);
 				}
 
 			if (v.bottomDescr) {
