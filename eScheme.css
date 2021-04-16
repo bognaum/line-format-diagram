@@ -1,10 +1,11 @@
 .expression-scheme {
   font-size: 14px;
   white-space: nowrap;
-  color: #999;
+  color: #333;
   margin: 20px 5px;
   padding: 20px 5px;
-  user-select: none; }
+  user-select: none;
+  font-family: consolas, courier, monospace; }
   .expression-scheme:not(.executed) {
     font-family: monospace;
     white-space: pre;

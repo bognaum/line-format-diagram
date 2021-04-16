@@ -1,7 +1,7 @@
 .e-scheme {
   font-size: 14px;
   white-space: nowrap;
-  color: #999;
+  color: #333;
   margin: 20px 5px;
   padding: 20px 5px;
   user-select: none;
@@ -29,9 +29,9 @@
       border-top-color: #999; }
       .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-td-block {
         position: relative;
-        top: -50%;
+        bottom: 50%;
         background-color: #fff;
-        padding: 0 5px;
+        padding: 0 3px;
         height: 100%;
         vertical-align: middle;
         display: inline-flex;
@@ -46,7 +46,7 @@
       border-right: 1px solid transparent;
       margin: -1px;
       margin-top: 5px;
-      font-family: consolas;
+      font-family: consolas, courier, monospace;
       user-select: text; }
     .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr {
       border-left: 1px solid transparent;
