@@ -127,7 +127,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 				str += `<div 
 					class="${clPref}-top-descr ${clPref}-description ${clPref}-grid-v-liner" 
 					style="${hFZ+opts.bdColor+(v.tStyle || "")}"
-				>${v.topDescr}</div>`;
+				><div class="${clPref}-td-block">${v.topDescr}</div></div>`;
 			else 
 				str += `<div 
 					class="${clPref}-grid-v-liner" 

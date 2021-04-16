@@ -26,6 +26,15 @@
       user-select: text; }
     .e-scheme .e-scheme-part .e-scheme-top-descr {
       border-top-color: #999; }
+      .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-td-block {
+        position: relative;
+        top: -50%;
+        background-color: #fff;
+        padding: 0 5px;
+        height: 100%;
+        vertical-align: middle;
+        display: inline-flex;
+        align-items: center; }
     .e-scheme .e-scheme-part .e-scheme-line-text {
       font-size: 25px;
       font-weight: bold;

@@ -48,6 +48,19 @@ $pref : "e-scheme";
 		}
 		.#{$pref}-top-descr {
 			border-top-color: $h_line_color; 
+			.#{$pref}-td-block {
+				position: relative;
+				// bottom: 50%;
+				top: -50%;
+				background-color: #fff;
+				padding: 0 5px;
+				// border: 1px solid $h_line_color;
+				height: 100%;
+				// display: table-cell;
+				vertical-align: middle;
+				display: inline-flex;
+				align-items: center;
+			}
 		}
 		.#{$pref}-line-text {
 			font-size: 25px;
