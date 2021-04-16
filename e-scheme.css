@@ -5,13 +5,13 @@
   margin: 20px 5px;
   padding: 20px 5px;
   user-select: none; }
+  .e-scheme.executed * {
+    display: inline-block;
+    text-align: center; }
   .e-scheme:not(.executed) {
     font-family: monospace;
     white-space: pre;
     text-align: left; }
-  .e-scheme * {
-    display: inline-block;
-    text-align: center; }
   .e-scheme .e-scheme-part {
     border-right: 1px solid transparent;
     border-left: 1px solid transparent;

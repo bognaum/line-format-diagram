@@ -31,11 +31,12 @@ export default class EScheme {
 				const firstLineNum = opts.lineNum * 1;
 				const 
 					json = template,
-					hlter = new JsonEHl("e-s-json-err-hl"),
-					pre = eHTML(`<pre class="e-s-json-err-hl calm-clarified-theme"><pre>`);
-				container.parentElement.insertBefore(pre, container);
-				hlter.highlight(pre, json, firstLineNum);
-				hlter.scrollToFirstError(pre);
+					highlighyer = new JsonEHl("e-s-json-err-hl");
+				container.innerHTML = 
+					`<pre class="e-s-json-err-hl calm-clarified-theme"><pre>`;
+				const pre = container.children[0];
+				highlighyer.highlight(pre, json, firstLineNum);
+				highlighyer.scrollToFirstError(pre);
 				return;
 			}
 		} else if (typeof template == "object"){
