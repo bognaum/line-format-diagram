@@ -35,31 +35,29 @@ $pref : "e-scheme";
 		.#{$pref}-grid-v-liner {
 			margin: 0 $h_line_indents;
 			margin-top: 5px;
-			display: block;
+			// display: block;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			height: 50px;
-			border-top: $h_line_th solid transparent;
-			// border-bottom: $h_line_th solid transparent;
+			// border-top: $h_line_th solid transparent;
 
 
 		}
 		.#{$pref}-description {
+			// font-style: italic;
 			&:hover {
 				user-select: text;
 			}
 		}
 		.#{$pref}-top-descr {
-			border-top-color: $h_line_color; 
+			margin-top: -5px;
+			.#{$pref}-h-line {
+				border-top: $h_line_th solid $h_line_color;
+				flex-grow: 10;
+			}
 			.#{$pref}-td-block {
-				position: relative;
-				bottom: 50%;
-				// top: -50%;
-				// margin-top: -50%;
-				background-color: #fff;
-				padding: 0 3px;
-				height: 100%;
-				vertical-align: middle;
-				display: inline-flex;
-				align-items: center;
+				flex-grow: 1;
 			}
 		}
 		.#{$pref}-line-text {

@@ -20,22 +20,19 @@
     .e-scheme .e-scheme-part .e-scheme-grid-v-liner {
       margin: 0 1px;
       margin-top: 5px;
-      display: block;
-      height: 50px;
-      border-top: 1px solid transparent; }
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px; }
     .e-scheme .e-scheme-part .e-scheme-description:hover {
       user-select: text; }
     .e-scheme .e-scheme-part .e-scheme-top-descr {
-      border-top-color: #999; }
+      margin-top: -5px; }
+      .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-h-line {
+        border-top: 1px solid #999;
+        flex-grow: 10; }
       .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-td-block {
-        position: relative;
-        bottom: 50%;
-        background-color: #fff;
-        padding: 0 3px;
-        height: 100%;
-        vertical-align: middle;
-        display: inline-flex;
-        align-items: center; }
+        flex-grow: 1; }
     .e-scheme .e-scheme-part .e-scheme-line-text {
       font-size: 25px;
       font-weight: bold;
