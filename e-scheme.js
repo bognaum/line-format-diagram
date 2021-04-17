@@ -126,11 +126,11 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			if ("topDescr" in v)
 				str += `<div 
 					class="${clPref}-top-descr ${clPref}-description ${clPref}-grid-v-liner" 
-					style="${hFZ+opts.bdColor+(v.tStyle || "")}"
+					style="${hFZ+opts.bdColor}"
 				>`+ 
-					`<div class="${clPref}-h-line"></div>`+
-					`<div class="${clPref}-td-block">${v.topDescr}</div>`+
-					`<div class="${clPref}-h-line"></div>`+
+					`<div class="${clPref}-h-line"   style="${v.tbStyle || ""}"></div>`+
+					`<div class="${clPref}-td-block" style="${v.tdStyle || ""}">${v.topDescr}</div>`+
+					`<div class="${clPref}-h-line"   style="${v.tbStyle || ""}"></div>`+
 				`</div>`;
 			else 
 				str += `<div 
@@ -173,8 +173,8 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 				let strCount = bLevels.shift();
 				str += `
 					<div class="${clPref}-bottom-rel-wr" style="${opts.bdColor}">
-						<div class="${clPref}-bottom-rel" style="${opts.bdColor}">
-							<div class="${clPref}-rel-line" style="${opts.bdColor}">`;
+						<div class="${clPref}-bottom-rel" style="${opts.bdColor+v.bbStyle || ""}">
+							<div class="${clPref}-rel-line" style="${opts.bdColor+v.bbStyle || ""}">`;
 
 				bLevels.forEach((v) => {
 					str += `<div class="${clPref}-grid-bv-liner" style="height: ${v * 1.2}em"></div>`;
@@ -185,7 +185,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 									class="${clPref}-bottom-descr ${clPref}-description ${clPref}-grid-bv-liner" 
 									style="
 										height: ${strCount * 1.2}em; 
-										${opts.bdColor+(v.bStyle || "")}
+										${opts.bdColor+(v.bdStyle || "")}
 									"
 								>${v.bottomDescr}</div>
 							</div>
