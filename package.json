@@ -1,0 +1,19 @@
+{
+  "name": "e-scheme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "e-scheme.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "wp": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "webpack": "^5.33.2",
+    "webpack-cli": "^4.6.0"
+  }
+}

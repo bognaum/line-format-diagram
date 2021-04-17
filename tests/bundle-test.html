@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		.container {
+			margin: 10px 100px 500px 100px;
+			font-family: verdana, sans-serif;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<title>Bundle test</title>
+</head>
+<body>
+	<div class="container">
+		<div id="d33" class="e-scheme" 
+			data-style="
+				font-size: 20px; 
+				color: #55d;
+			"
+			style="text-align: center;"
+			data-line-num="23">
+			[
+				{
+					"td": "href",
+					"ch": [
+						{
+							"td": "origin",
+							"ch": [
+								{
+									"td": "protocol",
+									"ch": "https:"
+								},
+								{
+									"ch": "//"
+								},
+								{
+									"td": "host",
+									"ch": [
+										{
+											"td": "hostname",
+											"ch": "developer.mozilla.org"
+										},
+										{
+											"ch": ":"
+										},
+										{
+											"td": "port",
+											"ch": "443"
+										}
+									]
+								}
+							]
+						},
+						{
+							"td": "pathname",
+							"ch": "/en-US/search"
+						},
+						{
+							"td": "search",
+							"ch": "?q=URL"
+						},
+						{
+							"td": "hash",
+							"ch": "#search-results"
+						}
+					]
+				}
+			]
+		</div>
+		<div id="d33" class="e-scheme" 
+			data-style="
+				font-size: 20px; 
+				color: #55d;
+			"
+			style="text-align: center;"
+			data-line-num="78">
+			[
+				{
+					"td": "href",
+					"ch": [
+						{
+							"td": "origin",
+							"ch": [
+								{
+									"td": "protocol",
+									"ch": "https:"
+								},
+								{
+									"ch": "//"
+								},
+								{
+									"td": "Not an origin!",
+									"tdStyle": "color: #d55; font-weight: bold;",
+									"tbStyle": "border-color: #d55;",
+									"style": "color: #d55;",
+									"ch": [
+										{
+											"td": "username",
+											"style": "color: #d55;",
+											"ch": "someUser"
+										},
+										{
+											"style": "color: #d55;",
+											"ch": ":"
+										},
+										{
+											"td": "password",
+											"style": "color: #d55;",
+											"ch": "Pass1234"
+										},
+										{
+											"style": "color: #d55;",
+											"ch": "@"
+										}
+									]
+								},
+								{
+									"td": "host",
+									"ch": [
+										{
+											"td": "hostname",
+											"ch": "developer.mozilla.org"
+										},
+										{
+											"ch": ":"
+										},
+										{
+											"td": "port",
+											"ch": "443"
+										}
+									]
+								}
+							]
+						},
+						{
+							"td": "pathname",
+							"ch": "/en-US/search"
+						},
+						{
+							"td": "search",
+							"ch": "?q=URL"
+						},
+						{
+							"td": "hash",
+							"ch": "#search-results"
+						}
+					]
+				}
+			]
+		</div>
+		<div class="e-scheme" 
+			data-style="
+				font-size: 16px; 
+				color: #77d;
+				/* background-color: #eef; */
+				/* border-color: transparent; */
+			"
+			data-line-text-style-p1=""
+			style="margin: 5px; padding: 5px;"
+			data-line-num="162">
+
+			[
+				{
+					"style": "color: #555; background-color: transparent;",
+					"ch": "background: "
+				},
+				{
+					"td": "В любой последовательности",
+					"ch": [
+						{
+							"td": "image",
+							"ch": "url('/bg_1.png')"
+						},
+						{
+							"ch": " "
+						},
+						{
+							"td": "position/size",
+							"ch": [
+								{
+									"td": "position",
+									"bd": "  : left;             (def)\n  : right; \n  : center; \n  : top;             (def)\n  : bottom; \n  : Npx; (Xpx Ypx;) \n  : N%; (X% Y%;) \n and combinations ...",
+									"ch": "right bottom"
+								},
+								{
+									"ch": "/"
+								},
+								{
+									"td": "size",
+									"bd": "  : auto;           (def)\n  : cover;\n  : contain;\n  : Npx; (Xpx Ypx;) \n  : N%; (X% Y%;) \n and combinations ...",
+									"ch": "auto 80%"
+								}
+							]
+						},
+						{
+							"ch": " "
+						},
+						{
+							"td": "repeat",
+							"bd": "  : repeat;   (def) \n  : repeat-x; \n  : repeat-y; \n  : space; \n  : round; \n  : no-repeat; ",
+							"ch": "no-repeat"
+						},
+						{
+							"ch": " "
+						},
+						{
+							"td": "origin",
+							"bd": "  : padding-box;   (def) \n  : border-box; \n  : content-box;",
+							"ch": "border-box"
+						},
+						{
+							"ch": " "
+						},
+						{
+							"td": "clip",
+							"bd": "  : border-box;   (def) \n  : padding-box; \n  : content-box; \n  : text; ",
+							"ch": "padding-box"
+						},
+						{
+							"ch": " "
+						},
+						{
+							"td": "attachment",
+							"bd": "  : scroll;   (def)\n  : fixed; \n  : local;",
+							"ch": "scroll"
+						},
+						{
+							"ch": " "
+						},
+						{
+							"td": "color",
+							"ch": "#ffdddd"
+						}
+					]
+				},
+				{
+					"style": "color: #555; background-color: transparent;",
+					"ch": "; "
+				}
+			]
+		</div>
+		<div class="e-scheme" 
+			data-style="
+				font-size: 25px; 
+				color: #77d;
+				color: #55a;
+				/* background-color: #eef; */
+				/* border-color: transparent; */
+			"
+			style="margin: 5px; padding: 5px;"
+			data-line-num="253">
+			[
+				{
+					"td": "CSS-правило",
+					"ch": [
+						{
+							"td": "контекстный (составной) селектор",
+							"ch": [
+								{
+									"td": "простой \n селектор",
+									"style": "color: #555;",
+									"ch": "div.my-class"
+								},
+								{
+									"style": "color: #555;",
+									"ch": " div span"
+								},
+								{
+									"style": "color: #5a5;",
+									"td": "псевдо-\n класс",
+									"ch": ":hover"
+								}
+							]
+						},
+						{
+							"td": "блок объявлений",
+							"ch": [
+								{
+									"ch": " { "
+								},
+								{
+									"td": "объявление \n (declaration)",
+									"ch": [
+										{
+											"td": "свой- \n ство",
+											"style": "color: #77d;",
+											"ch": "color"
+										},
+										{
+											"bd": "разделитель",
+											"ch": ": "
+										},
+										{
+											"td": "зна-\n чение",
+											"style": "color: #d77;",
+											"ch": "#333"
+										},
+										{
+											"ch": " ; "
+										}
+									]
+								},
+								{
+									"td": "объявление \n (declaration)",
+									"ch": [
+										{
+											"td": "свой- \n ство",
+											"style": "color: #77d;",
+											"ch": "margin"
+										},
+										{
+											"bd": "разделитель",
+											"ch": ": "
+										},
+										{
+											"td": "зна-\n чение",
+											"style": "color: #d77;",
+											"ch": "20px"
+										},
+										{
+											"ch": " ; "
+										}
+									]
+								},
+								{
+									"ch": " } "
+								}
+							]
+						}
+					]
+				}
+			]
+		</div>
+		<div class="e-scheme" 
+			data-style="
+				font-size: 20px; 
+				color: #55d;
+				/* background-color: #eef; */
+				/* border-color: transparent; */
+			"
+			style="margin: 5px; padding: 5px;"
+			data-line-num="344">
+			[
+				{
+					"style": "color: #333; background-color: transparent;",
+					"ch": "animation: "
+				},
+				{
+					"td": "Все анимации",
+					"ch": [
+						{
+							"td": "Анимация 1",
+							"ch": [
+								{
+									"td": "name",
+									"ch": "shadow"
+								},
+								{
+									"ch": " "
+								},
+								{
+									"td": "duration",
+									"ch": "1s"
+								},
+								{
+									"ch": " "
+								},
+								{
+									"td": "timing-function",
+									"bd": "  : ease\n  : linear\n  : ease-in\n  : ease-out\n  : ease-in-out\n  : cubic-bezier(x1, y1, x2, y2)\n  : step-start\n  : steps(1, end)\n  : steps( [количество шагов] , [start|end])\n  : initial\n  : inherit",
+									"ch": "ease-in-out"
+								},
+								{
+									"ch": " "
+								},
+								{
+									"td": "delay",
+									"ch": "0.5s"
+								},
+								{
+									"ch": " "
+								},
+								{
+									"td": "direction",
+									"ch": "alternate"
+								}
+							]
+						},
+						{
+							"ch": ", "
+						},
+						{
+							"td": "Анимация 2",
+							"ch": [
+								{
+									"ch": "move"
+								},
+								{
+									"ch": " "
+								},
+								{
+									"ch": "5s"
+								},
+								{
+									"ch": " "
+								},
+								{
+									"ch": "linear"
+								},
+								{
+									"ch": " "
+								},
+								{
+									"ch": "2s"
+								}
+							]
+						}
+					]
+				},
+				{
+					"style": "color: #555; background-color: transparent;",
+					"ch": ";"
+				}
+			]
+		</div>
+		<script type="text/javascript" src="./../build/e-scheme-bundle.js"></script>
+		<script type="text/javascript">
+			const eScheme = new EScheme.default();
+			document.querySelectorAll(".e-scheme").forEach((v) => {
+				eScheme.build(v);
+			});
+		</script>
+	</div>
+</body>
+</html>
