@@ -1,0 +1,75 @@
+table {
+  counter-reset: trn trn-0 trn-1 trn-2 trn-3 trn-4 trn-5; }
+  table .trn,
+  table .trn-0,
+  table .trn-1,
+  table .trn-2,
+  table .trn-3,
+  table .trn-4,
+  table .trn-5 {
+    text-align: center; }
+    table .trn:before,
+    table .trn-0:before,
+    table .trn-1:before,
+    table .trn-2:before,
+    table .trn-3:before,
+    table .trn-4:before,
+    table .trn-5:before {
+      display: inline-block; }
+  table .trn:before {
+    content: counter(trn);
+    counter-increment: trn; }
+  table .trn-0:before {
+    content: counter(trn-0);
+    counter-increment: trn-0; }
+  table .trn-1:before {
+    content: counter(trn-1);
+    counter-increment: trn-1; }
+  table .trn-2:before {
+    content: counter(trn-2);
+    counter-increment: trn-2; }
+  table .trn-3:before {
+    content: counter(trn-3);
+    counter-increment: trn-3; }
+  table .trn-4:before {
+    content: counter(trn-4);
+    counter-increment: trn-4; }
+  table .trn-5:before {
+    content: counter(trn-5);
+    counter-increment: trn-5; }
+  table .ta-l {
+    text-align: left; }
+  table .ta-c {
+    text-align: center; }
+  table .ta-r {
+    text-align: right; }
+
+code {
+  color: #33a;
+  padding-left: 10px;
+  padding-right: 10px;
+  white-space: nowrap;
+  white-space: pre;
+  font-family: consolas;
+  text-shadow: 0 0 2px #aaf; }
+  code span.opt {
+    color: #777;
+    text-shadow: 0 0 2px #aaa; }
+    code span.opt:before {
+      content: " ["; }
+    code span.opt:after {
+      content: "]"; }
+  code span.meta {
+    color: #777;
+    font-family: courier;
+    text-shadow: none; }
+    code span.meta.cb:before, code span.meta.corner:before {
+      content: "<"; }
+    code span.meta.cb:after, code span.meta.corner:after {
+      content: ">"; }
+    code span.meta.sb:before, code span.meta.sqare:before {
+      content: "["; }
+    code span.meta.sb:after, code span.meta.sqare:after {
+      content: "]"; }
+
+/*# sourceMappingURL=style.css.map */
