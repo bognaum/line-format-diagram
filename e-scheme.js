@@ -14,10 +14,9 @@ export default class EScheme {
 		container.classList.add("executing");
 
 		const opts = Object.assign({
-			eStyle:  "",
+			style:  "",
 			bdColor: "",
 			lineNum: 0,
-			lineTextStyle: "",
 		}, container.dataset);
 
 		opts.bdColor = opts.bdColor ? ` border-color: ${opts.bdColor}; ` : "";
@@ -180,7 +179,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 							`class="${clPref}-line-text part-${sPartN}" `,
 							`style="`,
 								`${localBdColor}`,
-								`${opts.lineTextStyle}`,
+								`${opts.style}`,
 								`${v.style || ""}`,
 							`"`,
 						`>${v.ch}</div>`
