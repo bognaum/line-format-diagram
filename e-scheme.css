@@ -34,9 +34,9 @@
       .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-td-block {
         flex-grow: 1; }
     .e-scheme .e-scheme-part .e-scheme-line-text {
-      font-size: 25px;
+      font-size: 20px;
       font-weight: bold;
-      color: #777;
+      color: #333;
       white-space: pre;
       background-clip: padding-box;
       border-left: 1px solid transparent;
