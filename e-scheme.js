@@ -124,14 +124,34 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			str += `<div class="${clPref}-part ${showBdsClass}" style="${localBdColor}">`;
 			
 			if ("topDescr" in v)
-				str += `<div 
-					class="${clPref}-top-descr ${clPref}-description ${clPref}-grid-v-liner" 
-					style="${hFZ+opts.bdColor}"
-				>`+ 
-					`<div class="${clPref}-h-line"   style="${v.tbStyle || ""}"></div>`+
-					`<div class="${clPref}-td-block" style="${v.tdStyle || ""}">${v.topDescr}</div>`+
-					`<div class="${clPref}-h-line"   style="${v.tbStyle || ""}"></div>`+
-				`</div>`;
+				str += [
+					`<div `,
+						`class="`,
+							`${clPref}-top-descr `,
+							`${clPref}-description `,
+							`${clPref}-grid-v-liner`,
+						`" `,
+						`style="${hFZ+opts.bdColor}"`,
+					`>`,
+
+						`<div `,
+							`class="${clPref}-h-line"   `,
+							`style="${v.tbStyle || ""}">`,
+						`</div>`,
+
+						`<div `,
+							`class="${clPref}-td-block" `,
+							`style="${v.tdStyle || ""}">`,
+								`${v.topDescr}`,
+						`</div>`,
+
+						`<div `,
+							`class="${clPref}-h-line"   `,
+							`style="${v.tbStyle || ""}">`,
+						`</div>`,
+
+					`</div>`,
+				].join("");
 			else 
 				str += `<div 
 					class="${clPref}-grid-v-liner" 
@@ -148,19 +168,17 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 					
 					sPartN ++;
 
-					let styleStr = opts.bdColor+opts.lineTextStyle;
-
-					styleStr += v.style || "";
-
-					str += `<div 
-						class="${clPref}-line-text part-${sPartN}" 
-						style="${
-							opts.bdColor 
-							+ opts.lineTextStyle 
-							+ (v.style || "") 
-							+ localBdColor
-						}"
-					>${v.ch}</div>`;
+					str += [
+						`<div `,
+							`class="${clPref}-line-text part-${sPartN}" `,
+							`style="${
+								opts.bdColor 
+								+ opts.lineTextStyle 
+								+ (v.style || "") 
+								+ localBdColor
+							}"`,
+						`>${v.ch}</div>`
+					].join("");
 
 				} else if (typeof v.ch == "object" && "length" in v.ch) {
 					recursive(v.ch, level + 1);
@@ -171,27 +189,42 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			if (v.bottomDescr) {
 
 				let strCount = bLevels.shift();
-				str += `
-					<div class="${clPref}-bottom-rel-wr" style="${opts.bdColor}">
-						<div class="${clPref}-bottom-rel" style="${opts.bdColor+v.bbStyle || ""}">
-							<div class="${clPref}-rel-line" style="${opts.bdColor+v.bbStyle || ""}">`;
+				str += [
+					`<div class="${clPref}-bottom-rel-wr" `,
+						`style="${opts.bdColor}">`,
+
+						`<div class="${clPref}-bottom-rel" `,
+							`style="${opts.bdColor+v.bbStyle || ""}">`,
+
+							`<div class="${clPref}-rel-line" `,
+								`style="${opts.bdColor+v.bbStyle || ""}">`
+				].join("");
 
 				bLevels.forEach((v) => {
-					str += `<div class="${clPref}-grid-bv-liner" style="height: ${v * 1.2}em"></div>`;
+					str += [
+						`<div class="${clPref}-grid-bv-liner" `,
+							`style="height: ${v * 1.2}em"></div>`
+					].join("");
 				});
 
-				str += `
-								<div 
-									class="${clPref}-bottom-descr ${clPref}-description ${clPref}-grid-bv-liner" 
-									style="
-										height: ${strCount * 1.2}em; 
-										${opts.bdColor+(v.bdStyle || "")}
-									"
-								>${v.bottomDescr}</div>
-							</div>
-						</div>
-					</div>
-				`;
+				str += [
+								`<div `,
+									`class="`,
+										`${clPref}-bottom-descr `,
+										`${clPref}-description `,
+										`${clPref}-grid-bv-liner`,
+									`" `,
+									`style="`,
+										`height: ${strCount * 1.2}em; `,
+										`${opts.bdColor+(v.bdStyle || "")}`,
+									`"`,
+								`>`,
+									`${v.bottomDescr}`,
+								`</div>`,
+							`</div>`,
+						`</div>`,
+					`</div>`,
+				].join("");
 			}
 
 			
