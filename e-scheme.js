@@ -1,7 +1,9 @@
 import JsonEHl from "./json-err-hl/json-err-hl.js";
+import setStyle from "./set-style.js";
 export default class EScheme {
 	constructor (clPref="e-scheme") {
 		this.clPref = clPref;
+		setStyle(clPref);
 	}
 
 	get version () {return "2.0.0"}
