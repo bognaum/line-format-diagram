@@ -20,6 +20,8 @@ export default class EScheme {
 			lineTextStyle: "",
 		}, container.dataset);
 
+		opts.bdColor = opts.bdColor ? ` border-color: ${opts.bdColor}; ` : "";
+
 		template = template || container.textContent;
 
 		let tOb; 
@@ -136,19 +138,24 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 
 						`<div `,
 							`class="${clPref}-h-line"   `,
-							`style="${v.tbStyle || ""}">`,
-						`</div>`,
+							`style="`,
+								`${opts.bdColor} `,
+								`${v.tbStyle || ""}"`,
+						`></div>`,
 
 						`<div `,
 							`class="${clPref}-td-block" `,
-							`style="${v.tdStyle || ""}">`,
+							`style="${v.tdStyle || ""}"`,
+						`>`,
 								`${v.topDescr}`,
 						`</div>`,
 
 						`<div `,
 							`class="${clPref}-h-line"   `,
-							`style="${v.tbStyle || ""}">`,
-						`</div>`,
+							`style="`,
+								`${opts.bdColor} `,
+								`${v.tbStyle || ""}"`,
+						`></div>`,
 
 					`</div>`,
 				].join("");
@@ -171,12 +178,11 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 					str += [
 						`<div `,
 							`class="${clPref}-line-text part-${sPartN}" `,
-							`style="${
-								opts.bdColor 
-								+ opts.lineTextStyle 
-								+ (v.style || "") 
-								+ localBdColor
-							}"`,
+							`style="`,
+								`${localBdColor}`,
+								`${opts.lineTextStyle}`,
+								`${v.style || ""}`,
+							`"`,
 						`>${v.ch}</div>`
 					].join("");
 
@@ -194,10 +200,10 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 						`style="${opts.bdColor}">`,
 
 						`<div class="${clPref}-bottom-rel" `,
-							`style="${opts.bdColor+v.bbStyle || ""}">`,
+							`style="${opts.bdColor+(v.bbStyle || "")}">`,
 
 							`<div class="${clPref}-rel-line" `,
-								`style="${opts.bdColor+v.bbStyle || ""}">`
+								`style="${opts.bdColor+(v.bbStyle || "")}">`
 				].join("");
 
 				bLevels.forEach((v) => {
