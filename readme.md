@@ -9,20 +9,16 @@ To clone
 
 Repository has submodules. Therefore:
 
-```
-git clone ...
-git submodule foreach --recursive git submodule init
-git submodule foreach --recursive git submodule update
-```
+`git clone --recursive -- ...`
 
-To download ZIP
+<!-- To download ZIP
 ---------------
 
 After download ZIP-archive you need init and update submodules.
 
 ```
 git submodule foreach --recursive git submodule init
-git submodule foreach --recursive git submodule update
+git submodule foreach --recursive git submodule update -->
 ```
 
 Using
