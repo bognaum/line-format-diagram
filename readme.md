@@ -1,7 +1,8 @@
 Expression scheme
 =================
 
-This plugin creates a scheme of some expression describing the meaning of its individual parts.
+This plugin creates a scheme of some expression describing the meaning of its 
+individual parts.
 
 To clone
 --------
@@ -13,3 +14,19 @@ git clone ...
 git submodule foreach --recursive git submodule init
 git submodule foreach --recursive git submodule update
 ```
+
+To download ZIP
+---------------
+
+After download ZIP-archive you need init and update submodules.
+
+```
+git submodule foreach --recursive git submodule init
+git submodule foreach --recursive git submodule update
+```
+
+Using
+-----
+
+How to use this plugin can be seen in the tests.
+
