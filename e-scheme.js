@@ -8,6 +8,8 @@ export default class EScheme {
 
 	get version () {return "2.0.0"}
 
+	static get version () {return this.prototype.version;}
+
 	build (container, template=null) {
 		if (["executing", "executed"].some((v) => container.classList.contains(v))) {
 			console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, container);
@@ -52,7 +54,8 @@ export default class EScheme {
 		const htmlStr = getHtmlStr(tOb, opts, tLevels, bLevels, this.clPref) 
 			+ getLinersHtmlStr(bLevels, this.clPref);
 
-		container.innerHTML = `<!-- version ${this.version} -->` + htmlStr;
+		container.innerHTML = htmlStr;
+		container.dataset.eSchemeVersion = this.version;
 		container.classList.remove("executing");
 		container.classList.add("executed");
 	}
