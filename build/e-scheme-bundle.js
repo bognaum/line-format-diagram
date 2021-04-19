@@ -274,7 +274,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-	version: "4.0.1",
+	version: "4.0.3",
 	describeAPI: _describeAPI_js__WEBPACK_IMPORTED_MODULE_0__.default,
 	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default, // (mainRule, clPref="syntax-hl-fk")
 });
@@ -805,7 +805,7 @@ class ParseContext {
 	acceptChildHypo (hpc) {
 		this.i = this.i1 = hpc.i;
 		push(this.mSlot, hpc.selfMN);
-		hpc.selfMN.i1 = hpc.i - 1;
+		hpc.selfMN.i1 = hpc.i;
 		if (hpc.msg)
 			hpc.selfMN.msg = hpc.msg;
 		hpc.selfMN = null;
