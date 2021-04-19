@@ -6,7 +6,7 @@ export default class EScheme {
 		setStyle(clPref);
 	}
 
-	get version () {return "2.0.0"}
+	get version () {return "2.0.1"}
 
 	static get version () {return this.prototype.version;}
 
