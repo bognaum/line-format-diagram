@@ -249,7 +249,7 @@
 				/* background-color: #eef; */
 				/* border-color: transparent; */
 			"
-			style="margin: 5px; padding: 5px;"
+			style="margin: 5px; padding: 5px; font-size: 18px; color: #999;"
 			data-line-num="253">
 			[
 				{
@@ -258,15 +258,30 @@
 						{
 							"td": "контекстный (составной) селектор",
 							"ch": [
+
 								{
 									"td": "простой \n селектор",
-									"style": "color: #555;",
+									"style": "color: #777;",
 									"ch": "div.my-class"
 								},
 								{
-									"style": "color: #555;",
-									"ch": " div span"
+									"ch": " ",
+									"bd": "комбинатор"
 								},
+								{
+									"style": "color: #777;",
+									"ch": "div"
+								},
+								{
+									"ch": ">",
+									"style": "color: #d77;",
+									"bd": "комбинатор"
+								},
+								{
+									"style": "color: #777;",
+									"ch": "span"
+								},
+								
 								{
 									"style": "color: #5a5;",
 									"td": "псевдо-\n класс",
@@ -278,7 +293,7 @@
 							"td": "блок объявлений",
 							"ch": [
 								{
-									"ch": " { "
+									"ch": "{ "
 								},
 								{
 									"td": "объявление \n (declaration)",
@@ -325,7 +340,7 @@
 									]
 								},
 								{
-									"ch": " } "
+									"ch": " }"
 								}
 							]
 						}
