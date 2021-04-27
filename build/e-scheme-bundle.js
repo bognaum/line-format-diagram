@@ -16,57 +16,53 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const {
+	token,
+	nToken,
+	spToken,
+	rule,
+	domain,
 	seq,
 	alter,
 	q,
 	not,
-	domain,
-	rule,
-	token,
+	spWrap,
+	error,
 	deb,
 } = _syntax_highlight_framework_syntax_hl_fk_js__WEBPACK_IMPORTED_MODULE_1__.default.describeAPI;
 
 const
 	__main_ = rule(function(pc) {
 		return seq(
-			r.space.q("*"),
-			alter(
-				r.subject,
-				err.msg("expected subject")
-			),
-			r.space.q("*"),
-			err.msg("unwanted symbol after end of code").q("*"),
+			spWrap(r.subject.catch("Main. Expected subject.")),
+			error("Main. Unexpected symbol after end of code.").q("*")
 		)(pc);
 	}),
 	list = rule(function(pc) {
-		if (token("[").in("list__open")(pc)) {
-			r.space.q("*")(pc);
-			r.subject.q("*/", r.coma_sep.in("list__coma"))(pc);
-			r.space.q("*")(pc);
-			token("]").in("list__close").or(err.msg("expected closing bracket ' ] ' or coma ' , '"))(pc);
-			return true;
-		} else
-			return false;
+		return token("[").in("list__open")
+			.break(
+				seq(
+					spWrap(r.subject.q("*/", spWrap(token(",").in("list__coma")))),
+					token("]").in("list__close")
+						.catch("List. Expected closing bracket ' ] '."),
+				)
+			).msg("List.")(pc);
+			
 	}),
 	dict = rule(function(pc) {
-		if (r.curly_op(pc)) {
-			alter(
-				seq(r.curly_cl),
-				seq(
+		return spToken("{")
+			.break(
+				alter(
+					spToken("}"),
 					seq(
-						d.string_n.or(err.msg("expected string name of field")),
-						r.colon_sep.or(err.msg("expected colon ' : '")),
-						r.subject.or(err.msg("expected subject - (null | boll | number | string | list | dict)"))
-					).q("*/", r.coma_sep),
-					seq(r.curly_cl).or(err.msg("expected closing curly ' } ' or coma ' , '")),
-				),
-			)(pc);
-			return true;
-		} else
-			return false;
-	}),
-	err = domain("error", function(pc) {
-		return pc.match(/\s*.*/y);
+						seq(
+							d.string_n.catch("Dict. Expected string name of field."),
+							spToken(":").catch("Dict. Expected colon ' : '."),
+							r.subject.catch("Dict. Expected subject - (null | boll | number | string | list | dict).")
+						).q("*/", spToken(",")),
+						spToken("}").catch("Dict. Expected closing curly ' } ' or coma ' , '."),
+					),
+				)
+			).msg("Dict.")(pc);
 	}),
 	d = {
 		string_v : domain("string_v" , function(pc) {
@@ -76,16 +72,16 @@ const
 			return r.string(pc);
 		}),
 		slashed : domain("slashed", function(pc) {
-			return pc.match(/\\[\\ntbu'"`]/y);
+			return token(/\\[\\ntbu'"`]/y)(pc);
 		}),
 		number          : domain("number", function(pc) {
-			return pc.match(/\b\d+\.|\.\d+\b|\b\d+\.?\d*\b/y);
+			return token(/\b\d+\.|\.\d+\b|\b\d+\.?\d*\b/y)(pc);
 		}),
 		bool            : domain("bool", function(pc) {
-			return pc.match(/\btrue\b|\bfalse\b/y);
+			return token(/\btrue\b|\bfalse\b/y)(pc);
 		}),
 		_null           : domain("_null", function(pc) {
-			return pc.match(/\bnull\b/y);
+			return token(/\bnull\b/y)(pc);
 		}),
 	},
 	r = {
@@ -99,33 +95,15 @@ const
 				dict
 			)(pc);
 		}),
-		coma_sep      : rule(function(pc) {
-			return seq(
-				r.space.q("*"),
-				token(","),
-				r.space.q("*"),
-				)(pc);
-		}),
-		colon_sep      : rule(function(pc) {
-			return seq(
-				r.space.q("*"),
-				token(":"),
-				r.space.q("*"),
-				)(pc);
-		}),
-		curly_op      : rule(function(pc) {
-			return seq(token("{"), r.space.q("*"))(pc);
-		}),
-		curly_cl      : rule(function(pc) {
-			return seq(r.space.q("*"), token("}"))(pc);
-		}),
 		string        : rule(function(pc) {
-			return pc.match('"')
-				&& q(pc => d.slashed(pc) || pc.notMatch('"'), "*")(pc) 
-				&& pc.match('"');
+			return seq(
+				token('"'),
+				q(alter(d.slashed, nToken('"')), "*"),
+				token('"'),
+			)(pc);
 		}),
 		space           : rule(function(pc) {
-			return pc.match(/\s+/y);
+			return token(/\s+/y)(pc);
 		}),
 	};
 
@@ -148,92 +126,84 @@ __webpack_require__.r(__webpack_exports__);
 function setStyle(clPref) {
 
 	const cssCode = `
-	.${clPref}.calm-theme {
+	.json-err-hl.calm-theme {
 	  background-color: #222; }
-	  .${clPref}.calm-theme .${clPref}__line-text {
+	  .json-err-hl.calm-theme .json-err-hl__line-text {
 	    color: #eee; }
-	    .${clPref}.calm-theme .${clPref}__line-text .string_v {
+	    .json-err-hl.calm-theme .json-err-hl__line-text .string {
 	      color: #ddc; }
-	    .${clPref}.calm-theme .${clPref}__line-text .string_n {
+	    .json-err-hl.calm-theme .json-err-hl__line-text .string_v {
+	      color: #ddc; }
+	    .json-err-hl.calm-theme .json-err-hl__line-text .string_n {
 	      color: #78a; }
-	    .${clPref}.calm-theme .${clPref}__line-text .slashed {
+	    .json-err-hl.calm-theme .json-err-hl__line-text .slashed {
 	      color: #f90; }
-	    .${clPref}.calm-theme .${clPref}__line-text .number {
+	    .json-err-hl.calm-theme .json-err-hl__line-text .number {
 	      color: #f90; }
-	    .${clPref}.calm-theme .${clPref}__line-text .bool {
+	    .json-err-hl.calm-theme .json-err-hl__line-text .bool {
 	      color: #f90; }
-	    .${clPref}.calm-theme .${clPref}__line-text ._null {
+	    .json-err-hl.calm-theme .json-err-hl__line-text ._null {
 	      color: #98f; }
-	    .${clPref}.calm-theme .${clPref}__line-text .error {
-	      color: #fff;
-	      background-color: #e48;
-	      box-shadow: inset 0 0 2px #fff; }
 
-	.${clPref}.calm-clarified-theme .${clPref}__line .${clPref}__line-number {
+	.json-err-hl.calm-clarified-theme .json-err-hl__line .json-err-hl__line-number {
 	  background-color: #444; }
 
-	.${clPref}.calm-clarified-theme .${clPref}__line-text {
+	.json-err-hl.calm-clarified-theme .json-err-hl__line-text {
 	  color: #eee; }
-	  .${clPref}.calm-clarified-theme .${clPref}__line-text .string_v {
+	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .string {
 	    color: #ddc; }
-	  .${clPref}.calm-clarified-theme .${clPref}__line-text .string_n {
+	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .string_v {
+	    color: #ddc; }
+	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .string_n {
 	    color: #78a; }
-	  .${clPref}.calm-clarified-theme .${clPref}__line-text .bool {
+	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .bool {
 	    color: #fb6; }
-	  .${clPref}.calm-clarified-theme .${clPref}__line-text .number {
+	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .number {
 	    color: #fb6; }
-	  .${clPref}.calm-clarified-theme .${clPref}__line-text .slashed {
+	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .slashed {
 	    color: #fb6; }
-	  .${clPref}.calm-clarified-theme .${clPref}__line-text ._null {
+	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text ._null {
 	    color: #98f; }
-	  .${clPref}.calm-clarified-theme .${clPref}__line-text .error {
-	    color: #fff;
-	    background-color: #e48;
-	    box-shadow: inset 0 0 2px #fff; }
 
-	.${clPref}.monokai-theme {
+	.json-err-hl.monokai-theme {
 	  background-color: #333; }
-	  .${clPref}.monokai-theme .${clPref}__line-text .string_n {
+	  .json-err-hl.monokai-theme .json-err-hl__line-text .string_n {
 	    color: #3bd; }
-	  .${clPref}.monokai-theme .${clPref}__line-text .string_v {
+	  .json-err-hl.monokai-theme .json-err-hl__line-text .string {
 	    color: #da5; }
-	  .${clPref}.monokai-theme .${clPref}__line-text .slashed {
+	  .json-err-hl.monokai-theme .json-err-hl__line-text .string_v {
+	    color: #da5; }
+	  .json-err-hl.monokai-theme .json-err-hl__line-text .slashed {
 	    color: #98f; }
-	  .${clPref}.monokai-theme .${clPref}__line-text .number {
+	  .json-err-hl.monokai-theme .json-err-hl__line-text .number {
 	    color: #98f; }
-	  .${clPref}.monokai-theme .${clPref}__line-text .bool {
+	  .json-err-hl.monokai-theme .json-err-hl__line-text .bool {
 	    color: #98f; }
-	  .${clPref}.monokai-theme .${clPref}__line-text ._null {
+	  .json-err-hl.monokai-theme .json-err-hl__line-text ._null {
 	    color: #e48; }
-	  .${clPref}.monokai-theme .${clPref}__line-text .error {
-	    color: #fff;
-	    background-color: #e48;
-	    box-shadow: inset 0 0 2px #fff; }
 
-	.${clPref}.monokai-clarified-theme .${clPref}__line-text .string_n {
+	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string_n {
 	  color: #3bd; }
 
-	.${clPref}.monokai-clarified-theme .${clPref}__line-text .string_v {
+	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string {
 	  color: #da5; }
 
-	.${clPref}.monokai-clarified-theme .${clPref}__line-text .slashed {
+	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string_v {
+	  color: #da5; }
+
+	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .slashed {
 	  color: #98f; }
 
-	.${clPref}.monokai-clarified-theme .${clPref}__line-text .number {
+	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .number {
 	  color: #98f; }
 
-	.${clPref}.monokai-clarified-theme .${clPref}__line-text .bool {
+	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .bool {
 	  color: #98f; }
 
-	.${clPref}.monokai-clarified-theme .${clPref}__line-text ._null {
+	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text ._null {
 	  color: #e48; }
 
-	.${clPref}.monokai-clarified-theme .${clPref}__line-text .error {
-	  color: #fff;
-	  background-color: #e48;
-	  box-shadow: inset 0 0 2px #fff; }
-
-	 `;
+	 `.replaceAll(/json-err-hl/g, clPref);
 
 	const styleClassName = `${clPref}__theme-style`;
 
@@ -274,9 +244,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-	version: "4.0.3",
+	version: "5.1.0",
 	describeAPI: _describeAPI_js__WEBPACK_IMPORTED_MODULE_0__.default,
-	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default, // (mainRule, clPref="syntax-hl-fk")
+	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default,
 });
 
 /***/ }),
@@ -288,41 +258,79 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+	token,
+	nToken,
+	spToken,
+	rule,
+	domain,
 	seq,
 	alter,
 	q,
 	not,
-	domain,
-	rule,
-	token,
+	spWrap,
+	error,
 	deb,
 });
 
 const Analyzer_proto = {
-	q : function wr_q(quanto, sepCallb=null) {
+	q : function (quanto, sepCallb=undefined) {
+		if (quanto == "*/" || quanto == "+/")
+			chekToAnalyzer("analyzer.q", 2, sepCallb);
 		return q(this, quanto, sepCallb);
 	},
-	in : function wr_inDomainin(name) {
+	in : function (name) {
 		return domain(name, this);
 	},
-	and : function wr_and(callb) {
+	and : function (callb) {
+		chekToAnalyzer("q", 1, callb);
 		return seq(this, callb);
 	},
-	or : function wr_or(callb) {
+	or : function (callb) {
+		chekToAnalyzer("q", 1, callb);
 		return alter(this, callb);
 	},
-	deb : function wr_deb(i0=0, i1=0) {
+	break : function (...args) {
+		for (let [k, callb] of args.entries())
+			chekToAnalyzer("seq", k + 1, callb);
+		let message = "";
+		const _error_test_ = (pc) => {
+			if(this(pc)) {
+				seq(...args).or(undefinedError(message))(pc);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		insertProto(Analyzer_proto, _error_test_);
+		_error_test_.msg = function(msg) {
+			message = msg;
+			return this;
+		}
+		return _error_test_;
+	},
+	catch : function (msg) {
+		const _wrong_ = (pc) => {
+			return alter(
+				this,
+				error(msg)
+			)(pc);
+		}
+		insertProto(Analyzer_proto, _wrong_);
+		return _wrong_;
+	},
+	deb : function (i0=0, i1=0) {
 		return deb(this, i0, i1);
 	},
 };
 
 function seq(...callbs) {
+	for (let [k, callb] of callbs.entries())
+		chekToAnalyzer("seq", k + 1, callb);
 	function _seq_(pc) {
 		const hpc = pc.createHypo();
 		for (let [k, callb] of callbs.entries()) {
-			chekToAnaliser(callb);
 			const res = callb(hpc);
-			if (res) 
+			if (res || pc.errC.eFlag) 
 				continue;
 			else 
 				return false;
@@ -335,10 +343,11 @@ function seq(...callbs) {
 }
 
 function alter(...callbs) {
+	for (let [k, callb] of callbs.entries())
+		chekToAnalyzer("alter", k + 1, callb);
 	function _alter_(pc) {
 		let res;
 		for (let [k, callb] of callbs.entries()) {
-			chekToAnaliser(callb);
 			const res = callb(pc);
 			if (res)
 				return true;
@@ -349,7 +358,8 @@ function alter(...callbs) {
 	return _alter_;
 }
 
-function q(callb, quanto, callb2=null) {
+function q(callb, quanto, callb2=undefined) {
+	chekToAnalyzer("q", 1, callb);
 	let _q_;
 	if (quanto == "*") {
 		_q_ = function _q_zero_or_many_(pc) {
@@ -387,6 +397,7 @@ function q(callb, quanto, callb2=null) {
 			return callb(pc) || true;
 		}
 	} else if (quanto == "*/") {
+		chekToAnalyzer("q", 3, callb2);
 		_q_ = function _q_zero_or_many_sep_(pc) {
 			seq(
 				callb,
@@ -395,6 +406,7 @@ function q(callb, quanto, callb2=null) {
 			return true;
 		}
 	} else if (quanto == "+/") {
+		chekToAnalyzer("q", 3, callb2);
 		_q_ = function _q_one_or_many_sep_(pc) {
 			return seq(
 					callb,
@@ -410,8 +422,9 @@ function q(callb, quanto, callb2=null) {
 }
 
 function not(callb) {
+	chekToAnalyzer("not", 1, callb);
 	const _not_ = function _not_(pc) {
-		const hpc = pc.createHypothesis();
+		const hpc = pc.createHypo();
 		const res = callb(hpc);
 		if (! res) {
 			pc.match(pc.text[pc.i]);
@@ -430,7 +443,7 @@ function domain(name, callb, msg=null) {
 			status = callb(chpc)
 		if (msg) 
 			chpc.msg = msg;
-		if (status) 
+		if (status || pc.errC.eFlag) 
 			pc.acceptChildHypo(chpc);
 		return !! status;
 	}
@@ -449,7 +462,7 @@ function rule(callb) {
 		const 
 			hpc    = pc.createHypo(),
 			status = callb(hpc);
-		if (status) 
+		if (status || pc.errC.eFlag) 
 			pc.acceptHypo(hpc);
 		return !! status;
 	}
@@ -465,7 +478,52 @@ function token(templ) {
 	return _token_;
 }
 
+function nToken(templ) {
+	const _notToken_ = function _notToken_(pc) {
+		return pc.notMatch(templ);
+	}
+	insertProto(Analyzer_proto, _notToken_);
+	return _notToken_;
+}
+
+function spToken(templ) {
+	const _space_wrapped_token_ = function(pc) {
+		return seq(token(/\s+/y).q("*"), token(templ), token(/\s+/y).q("*"),)(pc);
+	}
+	insertProto(Analyzer_proto, _space_wrapped_token_);
+	return _space_wrapped_token_;
+}
+
+function spWrap(callb) {
+	chekToAnalyzer("spWrap", 1, callb);
+	const _space_wrapped_ = function(pc) {
+		return seq(token(/\s+/y).q("*"), callb, token(/\s+/y).q("*"),)(pc);
+	}
+	insertProto(Analyzer_proto, _space_wrapped_);
+	return _space_wrapped_;
+}
+
+function error(msg) {
+	const _error_ = function(pc) {
+		domain("error", token(/\s*.*/y), msg)(pc);
+		pc.errC.eFlag = true;
+		domain("after-error", token(/\s+|\S+/y), msg).q("*")(pc);
+		return true;
+	}
+	insertProto(Analyzer_proto, _error_);
+	return _error_;
+}
+
+function undefinedError(msg) {
+	const _undefined_error_ = function(pc) {
+		return error("Undefined error. "+msg)(pc);
+	}
+	insertProto(Analyzer_proto, _undefined_error_);
+	return _undefined_error_;
+}
+
 function deb(callb, a=0, b=0) {
+	chekToAnalyzer("deb", 1, callb);
 	function _deb_(pc) {
 		b = b || pc.text.length;
 		if (a <= pc.i && pc.i <= b) {
@@ -484,13 +542,10 @@ function insertProto(proto, ob) {
 	return Object.setPrototypeOf(ob, Object.setPrototypeOf(proto, Object.getPrototypeOf(ob)));
 }
 
-function chekToAnaliser(fn) {
-	if (! fn || Object.getPrototypeOf(fn) != Analyzer_proto) {
-		console.error(fn);
-		if (fn && fn.toString)
-			console.error(fn.toString());
-		debugger;
-		throw new Error("Invalid callback.");
+function chekToAnalyzer(fName, argN, callb) {
+	if (! callb || callb instanceof Analyzer_proto) {
+		console.error(`Argument`, argN, `(from 1) of function '${fName}()' is not Analiser. There is: \n`, callb?.toString ? callb.toString() : callb);
+		throw new Error(`Invalid callback. \n\tArgument ${argN} of function '${fName}()' is not Analiser. \n`);
 	} else
 		return true;
 }
@@ -574,8 +629,9 @@ function HighlightAPI (mainRule, clPref="syntax-hl-fk") {
 	}
 
 	function renderToHighlight (model, firstLineNum=1) {
-		const content = [], dStack = [], msgStack = [], dNodeStack = [];
+		const content = [], nodeStack = [];
 		let lNum = firstLineNum, indentZoneFlag = true, lastLine;
+		nodeStack.last = () => nodeStack[nodeStack.length - 1];
 		content.push(lastLine = makeLine(lNum ++));
 		recur(model);
 		return content;
@@ -583,49 +639,64 @@ function HighlightAPI (mainRule, clPref="syntax-hl-fk") {
 			if (sb instanceof Array) {
 				sb.forEach(recur);
 			} else if (typeof sb == "object") {
-				sb.parent = dNodeStack[dNodeStack.length - 1];
+				sb.parent = nodeStack.last() || null;
 
-				dStack.push(sb.name);
-				dNodeStack.push(sb);
-				msgStack.push(sb.msg || "");
-
+				nodeStack.push(sb);
 				recur(sb.ch);
+				nodeStack.pop();
 
-				msgStack.pop();
-				dNodeStack.pop();
-				dStack.pop();
-			} else {
+			} else if (typeof sb == "string") {
 				if (sb == "\n") {
 					lastLine.setEol();
 					content.push(lastLine = makeLine(lNum ++));
 					indentZoneFlag = true;
+				} else if (indentZoneFlag && sb.match(/^\s+$/)) {
+					lastLine.indent.innerHTML += sb;
 				} else {
-					if (indentZoneFlag && sb.match(/^\s+$/)) {
-						lastLine.indent.innerHTML += sb;
-					} else {
+					let _sb = sb;
+					if (indentZoneFlag) {
+						const m = sb.match(/^(\s*)(.*)/);
+						if (! m)
+							throw new Error(`sb not matched with /^(\\s+)(.*)/. sb = ${sb}`)
+						const
+							indent = m[1],
+							theText = m[2];
+						lastLine.indent.innerHTML += indent;
+						_sb = theText;
 						indentZoneFlag = false;
-						const 
-							lastDomainNode = dNodeStack[dNodeStack.length - 1],
-							className = dStack.filter(v => v).join("- "),
-							el = evaluate(`<span class="${className || ""}"></span>`);
-						lastLine.content.appendChild(el);
-						el.textContent = sb;
-						if (msgStack.join("")) {
-							let 
-								msgStr = "";
-							dStack.forEach((v,i,a) => {
-								let pf = (i + 1 == a.length)? "" : "-";
-								msgStr += `${v+pf} : ${msgStack[i]} \n`;
-							});
-							el.title = msgStr;
-							el.style.cursor = "pointer";
-						}
-						if (lastDomainNode) {
-							el.dataset.region = `${lastDomainNode.i0}:${lastDomainNode.i1}`;
-							el.domain = lastDomainNode;
-						}
+					}
+					const 
+						lastDomainNode = nodeStack.last(),
+						className = nodeStack.map(v => v.name).filter(v => v).join("- "),
+						el = evaluate(`<span class="${className || ""}"></span>`);
+					if (nodeStack.last()?.name == "error") {
+						lastLine.guter.classList.add("error");
+						lastLine.guter.title = nodeStack.last()?.msg;
+					}
+					if (nodeStack.last()?.name == "after-error") {
+						lastLine.guter.classList.add("after-error");
+						lastLine.guter.title = nodeStack.last()?.msg;
+					}
+					lastLine.content.appendChild(el);
+					el.textContent = _sb;
+					el.astNode = nodeStack.last();
+					const msgStr = nodeStack.reduce((a,v) => {
+						if (v.msg) 
+							a += `${v.name} : ${v.msg} \n`;
+						return a;
+					}, "");
+					if (msgStr) {
+						el.title = msgStr;
+						el.style.cursor = "pointer";
+					}
+					if (lastDomainNode) {
+						el.dataset.region = `${lastDomainNode.i0}:${lastDomainNode.i1}`;
+						el.domain = lastDomainNode;
 					}
 				}
+			} else {
+				console.error("Invalid model node", sb);
+				throw new Error("Invalid model node.")
 			}
 		}
 	}
@@ -641,6 +712,7 @@ function HighlightAPI (mainRule, clPref="syntax-hl-fk") {
 					`</span>`
 				),
 				eol: null,
+				get guter  () {return this.line.children[0]},
 				get indent () {return this.line.children[1]},
 				get content() {return this.line.children[2]},
 			},
@@ -658,7 +730,7 @@ function HighlightAPI (mainRule, clPref="syntax-hl-fk") {
 	function setCSS() {
 		
 		const cssCode = `
-			.${clPref} {
+			.syntax-hl-fk {
 			  text-align: left;
 			  white-space: pre;
 			  background-color: #444;
@@ -669,14 +741,14 @@ function HighlightAPI (mainRule, clPref="syntax-hl-fk") {
 			  max-height: 500px;
 			  padding: 20px;
 			  font-family: consolas, monospace; }
-			  .${clPref} *::selection {
+			  .syntax-hl-fk *::selection {
 			    background-color: #000;
 			    background-color: rgba(120, 120, 120, 0.5); }
-			  .${clPref} .${clPref}__line {
+			  .syntax-hl-fk .syntax-hl-fk__line {
 			    margin-left: -20px; }
-			    .${clPref} .${clPref}__line > * {
+			    .syntax-hl-fk .syntax-hl-fk__line > * {
 			      display: table-cell; }
-			    .${clPref} .${clPref}__line .${clPref}__line-number {
+			    .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-number {
 			      width: 50px;
 			      min-width: 50px;
 			      max-width: 50px;
@@ -685,18 +757,26 @@ function HighlightAPI (mainRule, clPref="syntax-hl-fk") {
 			      padding-right: 10px;
 			      margin-right: 5px;
 			      transition: all .2s; }
-			      .${clPref} .${clPref}__line .${clPref}__line-number:before {
+			      .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-number:before {
 			        content: attr(data-line-number) ""; }
-			    .${clPref} .${clPref}__line .${clPref}__line-indent {
+			    .syntax-hl-fk .syntax-hl-fk__line span.syntax-hl-fk__line-number.error {
+			      color: #fff;
+			      background-color: #e48; }
+			    .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-indent {
 			      padding-left: 5px; }
-			    .${clPref} .${clPref}__line .${clPref}__line-text {
+			    .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text {
 			      padding-left: 20px;
 			      white-space: pre-wrap;
 			      word-break: break-word; }
-			      .${clPref} .${clPref}__line .${clPref}__line-text:before {
+			      .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text .error {
+			        color: #fff;
+			        background-color: #e48;
+			        box-shadow: inset 0 0 2px #fff; }
+			      .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text:before {
 			        content: "";
 			        margin-left: -20px; }
-		`;
+
+		`.replace(/syntax-hl-fk/g, clPref);
 
 		const styleClassName = `${clPref}__base-style`;
 
@@ -741,6 +821,7 @@ class ParseContext {
 			mSlot:  {value: pc.mSlot},
 			dStack: {value: pc.dStack},
 			lFStack: {value: pc.lFStack},
+			errC: {value: pc.errC || {eFlag: false}},
 		});
 		this.i = pc.i;
 		this.i0 = pc.i0;
@@ -749,6 +830,69 @@ class ParseContext {
 		// this.debugDomain = pc.debugDomain;
 	}
 	match (templ) {
+		const {mSubstr, len} = this._getMatchSubstr(templ);
+
+		if (mSubstr) {
+			this.i += len;
+			push(this.mSlot, mSubstr);
+			this.monitor = this.i+ " : "+this.text.substr(this.i, 20)
+			return mSubstr;
+		} else
+			return "";
+	}
+	notMatch (templ) {
+		const {mSubstr, len} = this._getMatchSubstr(templ);
+
+		if (mSubstr) {
+			return false;
+		} else {
+			const simbol = this.text[this.i];
+			push(this.mSlot, simbol);
+			this.i += 1;
+			this.monitor = this.i+ " : "+this.text.substr(this.i, 20);
+			return simbol;
+		}
+
+
+		const hpc = this.createHypo();
+		if (! hpc.match(templ)) {
+			this.match(this.text[this.i]);
+			return true;
+		} else
+			return false;
+	}
+	createHypo () {
+		const 
+			{text, i, mSlot, dStack, errC} = this,
+			hpc = {text, i, mSlot: [], dStack, errC};
+		return new ParseContext(hpc);
+	}
+	acceptHypo (hpc) {
+		this.i = hpc.i;
+		this.monitor = hpc.monitor;
+		// this.mSlot.push(...hpc.mSlot);
+		hpc.mSlot.forEach((v) => push(this.mSlot, v));
+		return true;
+	}
+	createChildHypo (name) {
+		const 
+			{text, i, dStack, errC} = this,
+			mSlot = [],
+			mn = new _ModelNode_js__WEBPACK_IMPORTED_MODULE_0__.default(name, mSlot),
+			hpc = {text, i, i0: i, mSlot, selfMN: mn, dStack, errC};
+		mn.i0 = i;
+		return new ParseContext(hpc);
+	}
+	acceptChildHypo (hpc) {
+		this.i = this.i1 = hpc.i;
+		push(this.mSlot, hpc.selfMN);
+		hpc.selfMN.i1 = hpc.i;
+		if (hpc.msg)
+			hpc.selfMN.msg = hpc.msg;
+		hpc.selfMN = null;
+		return true;
+	}
+	_getMatchSubstr (templ) {
 		let mSubstr = "", len;
 		if (typeof templ == "string") {
 			len = templ.length;
@@ -761,55 +905,9 @@ class ParseContext {
 			const mOb    = this.text.match(templ);
 			mSubstr =  mOb && mOb[0] || "";
 			len = mSubstr.length;
-
 		}
 
-		if (mSubstr) {
-			this.i += len;
-			push(this.mSlot, mSubstr);
-			this.monitor = this.i+ " : "+this.text.substr(this.i, 20)
-			return mSubstr;
-		} else
-			return "";
-	}
-	notMatch (templ) {
-		const hpc = this.createHypo();
-		if (! hpc.match(templ)) {
-			this.match(this.text[this.i]);
-			return true;
-		} else
-			return false;
-	}
-	createHypo () {
-		const 
-			{text, i, mSlot, dStack} = this,
-			hpc = {text, i, mSlot: [], dStack};
-		return new ParseContext(hpc);
-	}
-	acceptHypo (hpc) {
-		this.i = hpc.i;
-		this.monitor = hpc.monitor;
-		// this.mSlot.push(...hpc.mSlot);
-		hpc.mSlot.forEach((v) => push(this.mSlot, v));
-		return true;
-	}
-	createChildHypo (name) {
-		const 
-			{text, i, dStack} = this,
-			mSlot = [],
-			mn = new _ModelNode_js__WEBPACK_IMPORTED_MODULE_0__.default(name, mSlot),
-			hpc = {text, i, i0: i, mSlot, selfMN: mn, dStack};
-		mn.i0 = i;
-		return new ParseContext(hpc);
-	}
-	acceptChildHypo (hpc) {
-		this.i = this.i1 = hpc.i;
-		push(this.mSlot, hpc.selfMN);
-		hpc.selfMN.i1 = hpc.i;
-		if (hpc.msg)
-			hpc.selfMN.msg = hpc.msg;
-		hpc.selfMN = null;
-		return true;
+		return {mSubstr, len};
 	}
 }
 
@@ -1071,7 +1169,7 @@ class EScheme {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
-	get version () {return "2.0.0"}
+	get version () {return "2.0.1"}
 
 	static get version () {return this.prototype.version;}
 
