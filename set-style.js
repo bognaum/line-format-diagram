@@ -1,7 +1,7 @@
 export default function setStyle(clPref) {
 
 	const cssCode = `
-	.${clPref} {
+	.e-scheme {
 	  font-size: 14px;
 	  white-space: nowrap;
 	  color: #333;
@@ -9,34 +9,31 @@ export default function setStyle(clPref) {
 	  padding: 20px 5px;
 	  user-select: none;
 	  font-family: consolas, courier, monospace; }
-	  .${clPref}.executed * {
+	  .e-scheme.executed * {
 	    display: inline-block;
 	    text-align: center; }
-	  .${clPref}:not(.executed) {
+	  .e-scheme:not(.executed) {
 	    font-family: monospace;
 	    white-space: pre;
 	    text-align: left; }
-	  .${clPref} .${clPref}-part {
+	  .e-scheme .e-scheme-part {
 	    border-right: 1px solid transparent;
 	    border-left: 1px solid transparent;
 	    margin-right: -1px; }
-	    .${clPref} .${clPref}-part .${clPref}-grid-v-liner {
+	    .e-scheme .e-scheme-part .e-scheme-grid-v-liner {
 	      margin: 0 1px;
-	      margin-top: 5px;
 	      display: flex;
 	      align-items: center;
 	      justify-content: center;
 	      height: 50px; }
-	    .${clPref} .${clPref}-part .${clPref}-description:hover {
+	    .e-scheme .e-scheme-part .e-scheme-description:hover {
 	      user-select: text; }
-	    .${clPref} .${clPref}-part .${clPref}-top-descr {
-	      margin-top: -5px; }
-	      .${clPref} .${clPref}-part .${clPref}-top-descr .${clPref}-h-line {
-	        border-top: 1px solid #999;
-	        flex-grow: 10; }
-	      .${clPref} .${clPref}-part .${clPref}-top-descr .${clPref}-td-block {
-	        flex-grow: 1; }
-	    .${clPref} .${clPref}-part .${clPref}-line-text {
+	    .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-h-line {
+	      border-top: 1px solid #999;
+	      flex-grow: 10; }
+	    .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-td-block {
+	      flex-grow: 1; }
+	    .e-scheme .e-scheme-part .e-scheme-line-text {
 	      font-size: 20px;
 	      font-weight: bold;
 	      color: #333;
@@ -48,41 +45,62 @@ export default function setStyle(clPref) {
 	      margin-top: 5px;
 	      font-family: consolas, courier, monospace;
 	      user-select: text; }
-	    .${clPref} .${clPref}-part .${clPref}-bottom-rel-wr {
+	    .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr {
 	      border-left: 1px solid transparent;
 	      border-right: 1px solid transparent;
 	      border-color: #999;
 	      padding: 5px 1px;
 	      margin: -1px;
 	      display: block; }
-	      .${clPref} .${clPref}-part .${clPref}-bottom-rel-wr .${clPref}-bottom-rel {
+	      .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr .e-scheme-bottom-rel {
 	        display: block;
 	        position: relative;
 	        border-bottom: 1px solid #999; }
-	        .${clPref} .${clPref}-part .${clPref}-bottom-rel-wr .${clPref}-bottom-rel > .${clPref}-rel-line {
+	        .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr .e-scheme-bottom-rel > .e-scheme-rel-line {
 	          position: absolute;
 	          width: 10px;
 	          border-left: 1px solid #999;
 	          border-bottom: 1px solid #999;
 	          padding-bottom: calc(5px + .5em); }
-	          .${clPref} .${clPref}-part .${clPref}-bottom-rel-wr .${clPref}-bottom-rel > .${clPref}-rel-line > .${clPref}-bottom-descr {
+	          .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr .e-scheme-bottom-rel > .e-scheme-rel-line > .e-scheme-bottom-descr {
 	            position: absolute;
 	            left: 100%;
 	            white-space: pre;
 	            border: 1px solid #999;
 	            text-align: left; }
-	  .${clPref} .${clPref}-part.show-borders {
+	  .e-scheme .e-scheme-part.show-borders {
 	    border-color: #999; }
-	    .${clPref} .${clPref}-part.show-borders .sps-line-text {
+	    .e-scheme .e-scheme-part.show-borders .sps-line-text {
 	      border-color: #999; }
-	  .${clPref} .${clPref}-grid-v-liner + .${clPref}-part {
+	  .e-scheme .e-scheme-grid-v-liner + .e-scheme-part {
 	    margin-left: -1px; }
-	  .${clPref} .${clPref}-grid-bv-liner {
+	  .e-scheme .e-scheme-grid-bv-liner {
 	    padding: 5px;
 	    border: 4px solid transparent;
 	    display: block; }
 
-	 `;
+	.e-scheme.top-lines .e-scheme-part .e-scheme-grid-v-liner {
+	  margin-top: 5px;
+	  border-top: 1px solid transparent; }
+
+	.e-scheme.top-lines .e-scheme-part .e-scheme-top-descr {
+	  border-top: 1px solid #999;
+	  align-items: flex-start; }
+	  .e-scheme.top-lines .e-scheme-part .e-scheme-top-descr .e-scheme-h-line {
+	    border: none; }
+
+	.e-scheme.bottom-lines .e-scheme-part .e-scheme-grid-v-liner {
+	  margin-bottom: 5px;
+	  border-bottom: 1px solid transparent; }
+
+	.e-scheme.bottom-lines .e-scheme-part .e-scheme-top-descr {
+	  border-bottom: 1px solid #999;
+	  margin-top: -5px;
+	  align-items: flex-end; }
+	  .e-scheme.bottom-lines .e-scheme-part .e-scheme-top-descr .e-scheme-h-line {
+	    border: none; }
+
+	 `.replace(/e-scheme/g, clPref);
 
 	const styleClassName = `${clPref}__theme-style`;
 

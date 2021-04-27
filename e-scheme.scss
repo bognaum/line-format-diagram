@@ -1,14 +1,16 @@
 $pref : "e-scheme";
+
+$v_line_th:    1px;
+$h_line_th:    1px;
+$link_line_th: 1px;
+$h_line_indents: 1px;
+$bottom_descr_frame_pad : 5px;
+$v_line_color:    #999;
+$h_line_color:    #999;
+$link_line_color: #999;
+// $descr_color:     #999;
+
 .#{$pref} {
-	$v_line_th:    1px;
-	$h_line_th:    1px;
-	$link_line_th: 1px;
-	$h_line_indents: 1px;
-	$bottom_descr_frame_pad : 5px;
-	$v_line_color:    #999;
-	$h_line_color:    #999;
-	$link_line_color: #999;
-	// $descr_color:     #999;
 	font-size: 14px;
 	white-space: nowrap;
 	color: #333;
@@ -32,15 +34,13 @@ $pref : "e-scheme";
 		border-right: $v_line_th solid transparent;
 		border-left: $v_line_th solid transparent;
 		margin-right: -$v_line_th;
-		.#{$pref}-grid-v-liner {
+		.#{$pref}-grid-v-liner {  // !!!!!!!!!!!!!!!
 			margin: 0 $h_line_indents;
-			margin-top: 5px;
-			// display: block;
+			// margin-top: 5px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			height: 50px;
-			// border-top: $h_line_th solid transparent;
 
 
 		}
@@ -50,9 +50,9 @@ $pref : "e-scheme";
 				user-select: text;
 			}
 		}
-		.#{$pref}-top-descr {
-			margin-top: -5px;
-			.#{$pref}-h-line {
+		.#{$pref}-top-descr { // !!!!!!!!!!!!!!!!!!!!
+			// margin-top: -5px;
+			.#{$pref}-h-line {  // !!!!!!!!!!
 				border-top: $h_line_th solid $h_line_color;
 				flex-grow: 10;
 			}
@@ -114,5 +114,40 @@ $pref : "e-scheme";
 		padding: $bottom_descr_frame_pad;
 		border: $link_line_th + 3 solid transparent;
 		display: block;
+	}
+}
+
+.#{$pref}.top-lines{
+	.#{$pref}-part {
+		.#{$pref}-grid-v-liner {
+			margin-top: 5px;
+			border-top: 1px solid transparent;
+		}
+		.#{$pref}-top-descr {
+			border-top: 1px solid $h_line_color;
+			align-items: flex-start;
+			.#{$pref}-h-line {
+				border: none;
+			}
+		}
+
+	}
+}
+
+.#{$pref}.bottom-lines{
+	.#{$pref}-part {
+		.#{$pref}-grid-v-liner {
+			margin-bottom: 5px;
+			border-bottom: 1px solid transparent;
+		}
+		.#{$pref}-top-descr {
+			border-bottom: 1px solid $h_line_color;
+			margin-top: -5px;
+			align-items: flex-end;
+			.#{$pref}-h-line {
+				border: none;
+			}
+		}
+
 	}
 }
