@@ -3,10 +3,280 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<style>
+		body {
+			color: #333;
+			font-family: verdana, sans-serif;
+		}
+		a {
+			color: #333;
+			text-decoration: underline #07f;
+		}
+		a:visited {
+			text-decoration: underline #0a0;
+		}
+		a:hover {
+			text-decoration: underline #f00;
+		}
+		header {
+			padding: 50px 20px;
+			margin-bottom: 50px;
+		}
+		header h1 {
+			text-align: center;
+		}
+		header nav ol {
+			padding: 0;
+			list-style-type: "";
+			display: flex;
+			justify-content: space-around;
+		}
+		header nav ol li{
+			
+		}
+		header nav ol li a{
+			padding: 10px 20px;
+		}
+	</style>
+	<title>e-scheme main</title>
 </head>
 <body>
-	<script type="text/javascript">
+
+	<header>
+		<h1>Expression scheme</h1>
+		<nav>
+			<ol>
+				<li><a target="_blank" href="docs">Docs</a></li>
+				<li><a target="_blank" href="tests">Test 1</a></li>
+				<li><a target="_blank" href="tests/bundle-test.html">Test 2</a></li>
+			</ol>
+		</nav>
+	</header>
+	<article>
+		<div class="e-scheme" 
+			data-style="
+				/* font-size: 25px;  */
+				/* color: #77d; */
+				/* color: #55a; */
+				/* background-color: #eef; */
+				/* border-color: transparent; */
+			"
+			style="margin: 100px 5px; padding: 5px; text-align: center;"
+			data-line-num="61">
+			[
+				{
+					"td": "CSS-правило",
+					"ch": [
+						{
+							"td": "контекстный (составной) селектор",
+							"ch": [
+
+								{
+									"td": "простой \n селектор",
+									"style": "color: #777;",
+									"ch": "div.my-class"
+								},
+								{
+									"ch": " ",
+									"bd": "комбинатор"
+								},
+								{
+									"style": "color: #777;",
+									"ch": "div"
+								},
+								{
+									"ch": ">",
+									"style": "color: #d77;",
+									"bd": "комбинатор"
+								},
+								{
+									"style": "color: #777;",
+									"ch": "span"
+								},
+								
+								{
+									"style": "color: #5a5;",
+									"td": "псевдо-\n класс",
+									"ch": ":hover"
+								}
+							]
+						},
+						{
+							"td": "блок объявлений",
+							"ch": [
+								{
+									"ch": "{ "
+								},
+								{
+									"td": "объявление \n (declaration)",
+									"ch": [
+										{
+											"td": "свой- \n ство",
+											"style": "color: #77d;",
+											"ch": "color"
+										},
+										{
+											"bd": "разделитель",
+											"ch": ": "
+										},
+										{
+											"td": "зна-\n чение",
+											"style": "color: #d77;",
+											"ch": "#333"
+										},
+										{
+											"ch": " ; "
+										}
+									]
+								},
+								{
+									"td": "объявление \n (declaration)",
+									"ch": [
+										{
+											"td": "свой- \n ство",
+											"style": "color: #77d;",
+											"ch": "margin"
+										},
+										{
+											"bd": "разделитель",
+											"ch": ": "
+										},
+										{
+											"td": "зна-\n чение",
+											"style": "color: #d77;",
+											"ch": "20px"
+										},
+										{
+											"ch": " ; "
+										}
+									]
+								},
+								{
+									"ch": " }"
+								}
+							]
+						}
+					]
+				}
+			]
+		</div>
+		<div class="e-scheme" 
+			data-style="
+				/* font-size: 25px;  */
+				/* color: #77d; */
+				/* color: #55a; */
+				/* background-color: #eef; */
+				/* border-color: transparent; */
+			"
+			style="margin: 50px 200px; padding: 5px; text-align: center;"
+			data-line-num="168">
+			[
+				{
+					"td": "CSS-правило",
+					"ch": [
+						{
+							"td": "контекстный (составной) селектор",
+							"ch": [
+
+								{
+									"td": "простой \n селектор",
+									"style": "color: #777;",
+									"ch": "div.my-class"
+								},
+								{
+									"ch": " ",
+									"bd": "комбинатор"
+								},
+								{
+									"style": "color: #777;",
+									"ch": "div"
+								},
+								{
+									"ch": ">",
+									"style": "color: #d77;",
+									"bd": "комбинатор"
+								},
+								{
+									"style": "color: #777;",
+									"ch": "span"
+								},
+								
+								{
+									"style": "color: #5a5;",
+									"td": "псевдо-\n класс",
+									"ch": ":hover",
+								}
+							]
+						},
+						{
+							"td": "блок объявлений",
+							"ch": [
+								{
+									"ch": "{ "
+								},
+								{
+									"td": "объявление \n (declaration)",
+									"ch": [
+										{
+											"td": "свой- \n ство",
+											"style": "color: #77d;",
+											"ch": "color"
+										},
+										{
+											"bd": "разделитель",
+											"ch": ": "
+										},
+										{
+											"td": "зна-\n чение",
+											"style": "color: #d77;",
+											"ch": "#333"
+										},
+										{
+											"ch": " ; "
+										}
+									]
+								},
+								{
+									"td": "объявление \n (declaration)",
+									"ch": [
+										{
+											"td": "свой- \n ство",
+											"style": "color: #77d;",
+											"ch": "margin"
+										},
+										{
+											"bd": "разделитель",
+											"ch": ": "
+										},
+										{
+											"td": "зна-\n чение",
+											"style": "color: #d77;",
+											"ch": "20px"
+										},
+										{
+											"ch": " ; "
+										}
+									]
+								},
+								{
+									"ch": " }"
+								}
+							]
+						}
+					]
+				}
+			]
+		</div>
+	</article>
+	
+	<script type="module">
+		import ESch from "./e-scheme.js";
+		const eSch = new ESch();
+		document.querySelectorAll(".e-scheme").forEach((v) => {
+			eSch.build(v);
+		});
+	</script>
+	<!-- <script type="text/javascript">
 		const
 			l = location,
 			arr = l.pathname.split("/"),
@@ -14,6 +284,6 @@
 			newPathname = arr.join("/") + "/tests",
 			newURL = l.origin + newPathname + l.search + l.hash;
 		location.replace(newURL);
-	</script>
+	</script> -->
 </body>
 </html>
