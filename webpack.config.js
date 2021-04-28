@@ -9,4 +9,5 @@ module.exports = {
 		library: "EScheme",
 	},
 	mode: 'none', 
+	devtool: "source-map",
 };
