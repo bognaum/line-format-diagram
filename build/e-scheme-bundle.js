@@ -1187,7 +1187,7 @@ class EScheme {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
-	get version () {return "2.1.1"}
+	get version () {return "2.1.2"}
 
 	static get version () {return this.prototype.version;}
 
