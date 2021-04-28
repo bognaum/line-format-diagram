@@ -113,10 +113,18 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 	recursive(templ, 0);
 	return str;
 
-	function recursive(templ, level=0) {
+	function recursive(templ, level=0, inheritStyle="") {
 		templ.forEach((v) => {
 			const
 				hFZ = getHFZ(tLevels[level]);
+
+			v = Object.assign({
+				tbStyle: "",
+				tdStyle: "",
+				style  : "",
+				bbStyle: "",
+				bdStyle: "",
+			}, v);
 
 			let 
 				localBdColor = "border-color: transparent;",
@@ -144,12 +152,12 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 							`class="${clPref}-h-line"   `,
 							`style="`,
 								`${opts.bdColor} `,
-								`${v.tbStyle || ""}"`,
+								`${v.tbStyle}"`,
 						`></div>`,
 
 						`<div `,
 							`class="${clPref}-td-block" `,
-							`style="${v.tdStyle || ""}"`,
+							`style="${v.tdStyle}"`,
 						`>`,
 								`${v.topDescr}`,
 						`</div>`,
@@ -158,7 +166,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 							`class="${clPref}-h-line"   `,
 							`style="`,
 								`${opts.bdColor} `,
-								`${v.tbStyle || ""}"`,
+								`${v.tbStyle}"`,
 						`></div>`,
 
 					`</div>`,
@@ -185,13 +193,14 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 							`style="`,
 								`${localBdColor}`,
 								`${opts.style}`,
-								`${v.style || ""}`,
+								`${inheritStyle}`,
+								`${v.style}`,
 							`"`,
 						`>${v.ch}</div>`
 					].join("");
 
 				} else if (typeof v.ch == "object" && "length" in v.ch) {
-					recursive(v.ch, level + 1);
+					recursive(v.ch, level + 1, inheritStyle+v.style);
 				} else {
 					throw new Error(`(!) "ch" must be a string or an array.`);
 				}
@@ -204,10 +213,10 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 						`style="${opts.bdColor}">`,
 
 						`<div class="${clPref}-bottom-rel" `,
-							`style="${opts.bdColor+(v.bbStyle || "")}">`,
+							`style="${opts.bdColor+(v.bbStyle)}">`,
 
 							`<div class="${clPref}-rel-line" `,
-								`style="${opts.bdColor+(v.bbStyle || "")}">`
+								`style="${opts.bdColor+(v.bbStyle)}">`
 				].join("");
 
 				bLevels.forEach((v) => {
@@ -226,7 +235,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 									`" `,
 									`style="`,
 										`height: ${strCount * 1.2}em; `,
-										`${opts.bdColor+(v.bdStyle || "")}`,
+										`${opts.bdColor+(v.bdStyle)}`,
 									`"`,
 								`>`,
 									`${v.bottomDescr}`,
