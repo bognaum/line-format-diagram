@@ -6,7 +6,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'build'),
 		filename: 'lit-lay-bundle.js',
-		library: "EScheme",
+		library: "LitLay",
 	},
 	mode: 'none', 
 	devtool: "source-map",
