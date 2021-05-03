@@ -6,7 +6,7 @@ export default class LitLay {
 		setStyle(clPref);
 	}
 
-	get version () {return "3.0.0"}
+	get version () {return "3.1.0"}
 
 	static get version () {return this.prototype.version;}
 
