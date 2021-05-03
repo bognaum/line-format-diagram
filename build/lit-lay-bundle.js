@@ -244,7 +244,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-	version: "5.1.0",
+	version: "5.1.2",
 	describeAPI: _describeAPI_js__WEBPACK_IMPORTED_MODULE_0__.default,
 	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default,
 });
@@ -282,18 +282,18 @@ const Analyzer_proto = {
 		return domain(name, this);
 	},
 	and : function (callb) {
-		chekToAnalyzer("q", 1, callb);
+		chekToAnalyzer("analyzer.and", 1, callb);
 		return seq(this, callb);
 	},
 	or : function (callb) {
-		chekToAnalyzer("q", 1, callb);
+		chekToAnalyzer("analyzer.or", 1, callb);
 		return alter(this, callb);
 	},
 	break : function (...args) {
 		for (let [k, callb] of args.entries())
-			chekToAnalyzer("seq", k + 1, callb);
+			chekToAnalyzer("analyzer.break", k + 1, callb);
 		let message = "";
-		const _error_test_ = (pc) => {
+		const _break_ = (pc) => {
 			if(this(pc)) {
 				seq(...args).or(undefinedError(message))(pc);
 				return true;
@@ -301,27 +301,29 @@ const Analyzer_proto = {
 				return false;
 			}
 		}
-		insertProto(Analyzer_proto, _error_test_);
-		_error_test_.msg = function(msg) {
+		Object.setPrototypeOf(_break_, Analyzer_proto);
+		_break_.msg = function(msg) {
 			message = msg;
 			return this;
 		}
-		return _error_test_;
+		return _break_;
 	},
 	catch : function (msg) {
-		const _wrong_ = (pc) => {
+		const _catch_ = (pc) => {
 			return alter(
 				this,
 				error(msg)
 			)(pc);
 		}
-		insertProto(Analyzer_proto, _wrong_);
-		return _wrong_;
+		Object.setPrototypeOf(_catch_, Analyzer_proto);
+		return _catch_;
 	},
 	deb : function (i0=0, i1=0) {
 		return deb(this, i0, i1);
 	},
 };
+
+Object.setPrototypeOf(Analyzer_proto, Function);
 
 function seq(...callbs) {
 	for (let [k, callb] of callbs.entries())
@@ -338,7 +340,7 @@ function seq(...callbs) {
 		pc.acceptHypo(hpc);
 		return true;
 	}
-	insertProto(Analyzer_proto, _seq_);
+	Object.setPrototypeOf(_seq_, Analyzer_proto);
 	return _seq_;
 }
 
@@ -354,7 +356,7 @@ function alter(...callbs) {
 		}
 		return false;
 	}
-	insertProto(Analyzer_proto, _alter_);
+	Object.setPrototypeOf(_alter_, Analyzer_proto);
 	return _alter_;
 }
 
@@ -390,7 +392,7 @@ function q(callb, quanto, callb2=undefined) {
 		}
 	} else if (quanto == "+") {
 		_q_ = function _q_one_or_many_(pc) {
-			return callb(pc) && q(callb(pc), "*");
+			return callb(pc) && q(callb, "*")(pc);
 		}
 	} else if (quanto == "?") {
 		_q_ = function _q_zero_or_one_(pc) {
@@ -417,7 +419,7 @@ function q(callb, quanto, callb2=undefined) {
 		console.error(`(!)`, `Invalid quantifier`, `'${quanto}'`); debugger; throw new Error();
 	}
 
-	insertProto(Analyzer_proto, _q_);
+	Object.setPrototypeOf(_q_, Analyzer_proto);
 	return _q_;
 }
 
@@ -432,7 +434,7 @@ function not(callb) {
 		} else 
 			return false;
 	}
-	insertProto(Analyzer_proto, _not_);
+	Object.setPrototypeOf(_not_, Analyzer_proto);
 	return _not_;
 }
 
@@ -453,7 +455,7 @@ function domain(name, callb, msg=null) {
 	_domain_.as = function(otherName, msg=null) {
 		return domain(otherName, callb);
 	}
-	insertProto(Analyzer_proto, _domain_);
+	Object.setPrototypeOf(_domain_, Analyzer_proto);
 	return _domain_;
 }
 
@@ -466,7 +468,7 @@ function rule(callb) {
 			pc.acceptHypo(hpc);
 		return !! status;
 	}
-	insertProto(Analyzer_proto, _rule_);
+	Object.setPrototypeOf(_rule_, Analyzer_proto);
 	return _rule_;
 }
 
@@ -474,7 +476,7 @@ function token(templ) {
 	const _token_ = function _token_(pc) {
 		return pc.match(templ);
 	}
-	insertProto(Analyzer_proto, _token_);
+	Object.setPrototypeOf(_token_, Analyzer_proto);
 	return _token_;
 }
 
@@ -482,7 +484,7 @@ function nToken(templ) {
 	const _notToken_ = function _notToken_(pc) {
 		return pc.notMatch(templ);
 	}
-	insertProto(Analyzer_proto, _notToken_);
+	Object.setPrototypeOf(_notToken_, Analyzer_proto);
 	return _notToken_;
 }
 
@@ -490,7 +492,7 @@ function spToken(templ) {
 	const _space_wrapped_token_ = function(pc) {
 		return seq(token(/\s+/y).q("*"), token(templ), token(/\s+/y).q("*"),)(pc);
 	}
-	insertProto(Analyzer_proto, _space_wrapped_token_);
+	Object.setPrototypeOf(_space_wrapped_token_, Analyzer_proto);
 	return _space_wrapped_token_;
 }
 
@@ -499,7 +501,7 @@ function spWrap(callb) {
 	const _space_wrapped_ = function(pc) {
 		return seq(token(/\s+/y).q("*"), callb, token(/\s+/y).q("*"),)(pc);
 	}
-	insertProto(Analyzer_proto, _space_wrapped_);
+	Object.setPrototypeOf(_space_wrapped_, Analyzer_proto);
 	return _space_wrapped_;
 }
 
@@ -510,7 +512,7 @@ function error(msg) {
 		domain("after-error", token(/\s+|\S+/y), msg).q("*")(pc);
 		return true;
 	}
-	insertProto(Analyzer_proto, _error_);
+	Object.setPrototypeOf(_error_, Analyzer_proto);
 	return _error_;
 }
 
@@ -518,7 +520,7 @@ function undefinedError(msg) {
 	const _undefined_error_ = function(pc) {
 		return error("Undefined error. "+msg)(pc);
 	}
-	insertProto(Analyzer_proto, _undefined_error_);
+	Object.setPrototypeOf(_undefined_error_, Analyzer_proto);
 	return _undefined_error_;
 }
 
@@ -534,12 +536,8 @@ function deb(callb, a=0, b=0) {
 			return res;
 		}
 	}
-	insertProto(Analyzer_proto, _deb_);
+	Object.setPrototypeOf(_deb_, Analyzer_proto);
 	return _deb_;
-}
-
-function insertProto(proto, ob) {
-	return Object.setPrototypeOf(ob, Object.setPrototypeOf(proto, Object.getPrototypeOf(ob)));
 }
 
 function chekToAnalyzer(fName, argN, callb) {
@@ -987,7 +985,7 @@ __webpack_require__.r(__webpack_exports__);
 function setStyle(clPref) {
 
 	const cssCode = `
-	.e-scheme {
+	.lit-lay {
 	  font-size: 14px;
 	  white-space: nowrap;
 	  color: #333;
@@ -995,31 +993,31 @@ function setStyle(clPref) {
 	  padding: 20px 5px;
 	  user-select: none;
 	  font-family: consolas, courier, monospace; }
-	  .e-scheme.executed * {
+	  .lit-lay.executed * {
 	    display: inline-block;
 	    text-align: center; }
-	  .e-scheme:not(.executed) {
+	  .lit-lay:not(.executed) {
 	    font-family: monospace;
 	    white-space: pre;
 	    text-align: left; }
-	  .e-scheme .e-scheme-part {
+	  .lit-lay .lit-lay-part {
 	    border-right: 1px solid transparent;
 	    border-left: 1px solid transparent;
 	    margin-right: -1px; }
-	    .e-scheme .e-scheme-part .e-scheme-grid-v-liner {
+	    .lit-lay .lit-lay-part .lit-lay-grid-v-liner {
 	      margin: 0 1px;
 	      display: flex;
 	      align-items: center;
 	      justify-content: center;
 	      height: 50px; }
-	    .e-scheme .e-scheme-part .e-scheme-description:hover {
+	    .lit-lay .lit-lay-part .lit-lay-description:hover {
 	      user-select: text; }
-	    .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-h-line {
+	    .lit-lay .lit-lay-part .lit-lay-top-descr .lit-lay-h-line {
 	      border-top: 1px solid #999;
 	      flex-grow: 10; }
-	    .e-scheme .e-scheme-part .e-scheme-top-descr .e-scheme-td-block {
+	    .lit-lay .lit-lay-part .lit-lay-top-descr .lit-lay-td-block {
 	      flex-grow: 1; }
-	    .e-scheme .e-scheme-part .e-scheme-line-text {
+	    .lit-lay .lit-lay-part .lit-lay-line-text {
 	      font-size: 20px;
 	      font-weight: bold;
 	      color: #333;
@@ -1031,62 +1029,62 @@ function setStyle(clPref) {
 	      margin-top: 5px;
 	      font-family: consolas, courier, monospace;
 	      user-select: text; }
-	    .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr {
+	    .lit-lay .lit-lay-part .lit-lay-bottom-rel-wr {
 	      border-left: 1px solid transparent;
 	      border-right: 1px solid transparent;
 	      border-color: #999;
 	      padding: 5px 1px;
 	      margin: -1px;
 	      display: block; }
-	      .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr .e-scheme-bottom-rel {
+	      .lit-lay .lit-lay-part .lit-lay-bottom-rel-wr .lit-lay-bottom-rel {
 	        display: block;
 	        position: relative;
 	        border-bottom: 1px solid #999; }
-	        .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr .e-scheme-bottom-rel > .e-scheme-rel-line {
+	        .lit-lay .lit-lay-part .lit-lay-bottom-rel-wr .lit-lay-bottom-rel > .lit-lay-rel-line {
 	          position: absolute;
 	          width: 10px;
 	          border-left: 1px solid #999;
 	          border-bottom: 1px solid #999;
 	          padding-bottom: calc(5px + .5em); }
-	          .e-scheme .e-scheme-part .e-scheme-bottom-rel-wr .e-scheme-bottom-rel > .e-scheme-rel-line > .e-scheme-bottom-descr {
+	          .lit-lay .lit-lay-part .lit-lay-bottom-rel-wr .lit-lay-bottom-rel > .lit-lay-rel-line > .lit-lay-bottom-descr {
 	            position: absolute;
 	            left: 100%;
 	            white-space: pre;
 	            border: 1px solid #999;
 	            text-align: left; }
-	  .e-scheme .e-scheme-part.show-borders {
+	  .lit-lay .lit-lay-part.show-borders {
 	    border-color: #999; }
-	    .e-scheme .e-scheme-part.show-borders .sps-line-text {
+	    .lit-lay .lit-lay-part.show-borders .sps-line-text {
 	      border-color: #999; }
-	  .e-scheme .e-scheme-grid-v-liner + .e-scheme-part {
+	  .lit-lay .lit-lay-grid-v-liner + .lit-lay-part {
 	    margin-left: -1px; }
-	  .e-scheme .e-scheme-grid-bv-liner {
+	  .lit-lay .lit-lay-grid-bv-liner {
 	    padding: 5px;
 	    border: 4px solid transparent;
 	    display: block; }
 
-	.e-scheme.top-lines .e-scheme-part .e-scheme-grid-v-liner {
+	.lit-lay.top-lines .lit-lay-part .lit-lay-grid-v-liner {
 	  margin-top: 5px;
 	  border-top: 1px solid transparent; }
 
-	.e-scheme.top-lines .e-scheme-part .e-scheme-top-descr {
+	.lit-lay.top-lines .lit-lay-part .lit-lay-top-descr {
 	  border-top: 1px solid #999;
 	  align-items: flex-start; }
-	  .e-scheme.top-lines .e-scheme-part .e-scheme-top-descr .e-scheme-h-line {
+	  .lit-lay.top-lines .lit-lay-part .lit-lay-top-descr .lit-lay-h-line {
 	    border: none; }
 
-	.e-scheme.bottom-lines .e-scheme-part .e-scheme-grid-v-liner {
+	.lit-lay.bottom-lines .lit-lay-part .lit-lay-grid-v-liner {
 	  margin-bottom: 5px;
 	  border-bottom: 1px solid transparent; }
 
-	.e-scheme.bottom-lines .e-scheme-part .e-scheme-top-descr {
+	.lit-lay.bottom-lines .lit-lay-part .lit-lay-top-descr {
 	  border-bottom: 1px solid #999;
 	  margin-top: -5px;
 	  align-items: flex-end; }
-	  .e-scheme.bottom-lines .e-scheme-part .e-scheme-top-descr .e-scheme-h-line {
+	  .lit-lay.bottom-lines .lit-lay-part .lit-lay-top-descr .lit-lay-h-line {
 	    border: none; }
 
-	 `.replace(/e-scheme/g, clPref);
+	 `.replace(/\blit-lay/g, clPref);
 
 	const styleClassName = `${clPref}__theme-style`;
 
@@ -1175,14 +1173,14 @@ var __webpack_exports__ = {};
 (() => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EScheme)
+/* harmony export */   "default": () => (/* binding */ LitLay)
 /* harmony export */ });
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _set_style_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
 
 
-class EScheme {
-	constructor (clPref="e-scheme") {
+class LitLay {
+	constructor (clPref="lit-lay") {
 		this.clPref = clPref;
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
@@ -1471,4 +1469,4 @@ function eHTML(code, shell=null) {
 EScheme = __webpack_exports__;
 /******/ })()
 ;
-//# sourceMappingURL=e-scheme-bundle.js.map
+//# sourceMappingURL=lit-lay-bundle.js.map

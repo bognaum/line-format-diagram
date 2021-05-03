@@ -22,10 +22,15 @@
 			padding: 50px 20px;
 			margin-bottom: 50px;
 		}
-		header h1 {
+		header h1,
+		header h1 + p {
 			text-align: center;
 		}
+		header h1 + p {
+			font-style: italic;
+		}
 		header nav ol {
+			margin-top: 40px;
 			padding: 0;
 			list-style-type: "";
 			display: flex;
@@ -37,13 +42,21 @@
 		header nav ol li a{
 			padding: 10px 20px;
 		}
+		.lit-lay {
+			filter: blur(10px);
+		}
+		.lit-lay.executing, 
+		.lit-lay.executed {
+			filter: none;
+		}
 	</style>
-	<title>e-scheme main</title>
+	<title>lit-lay main</title>
 </head>
 <body>
 
 	<header>
-		<h1>Expression scheme</h1>
+		<h1>Literal layout</h1>
+		<p>lit-lay.js</p>
 		<nav>
 			<ol>
 				<li><a target="_blank" href="docs">Docs</a></li>
@@ -53,7 +66,7 @@
 		</nav>
 	</header>
 	<article>
-		<div class="e-scheme" 
+		<div class="lit-lay" 
 			data-style="
 				/* font-size: 25px;  */
 				/* color: #77d; */
@@ -160,7 +173,7 @@
 				}
 			]
 		</div>
-		<div class="e-scheme" 
+		<div class="lit-lay" 
 			data-style="
 				/* font-size: 25px;  */
 				/* color: #77d; */
@@ -169,7 +182,7 @@
 				/* border-color: transparent; */
 			"
 			style="margin: 50px 200px; padding: 5px; text-align: center;"
-			data-line-num="168">
+			data-line-num="185">
 			[
 				{
 					"td": "CSS-правило",
@@ -270,10 +283,10 @@
 	</article>
 	
 	<script type="module">
-		import ESch from "./e-scheme.js";
-		const eSch = new ESch();
-		document.querySelectorAll(".e-scheme").forEach((v) => {
-			eSch.build(v);
+		import LL from "./lit-lay.js";
+		const litLay = new LL();
+		document.querySelectorAll(".lit-lay").forEach((v) => {
+			litLay.build(v);
 		});
 	</script>
 	<!-- <script type="text/javascript">

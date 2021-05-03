@@ -10,15 +10,15 @@
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<!-- <link rel="stylesheet" href="./../e-scheme.css"> -->
-	<title>Test eSheme</title>
+	<!-- <link rel="stylesheet" href="./../lit-lay.css"> -->
+	<title>Test lit-lay</title>
 </head>
 <body>
 	<div class="container">
 		<p style="text-align: center;"><a target="_blank" href="bundle-test.html">bundle-test.html</a></p>
 
 
-		<div id="d33" class="e-scheme" 
+		<div id="d33" class="lit-lay" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -74,7 +74,7 @@
 			]
 		</div>
 
-		<div id="d33" class="e-scheme" 
+		<div id="d33" class="lit-lay" 
 			data-style="
 				font-size: 20px; 
 			"
@@ -129,7 +129,7 @@
 			]
 		</div>
 
-		<div id="d33" class="e-scheme" 
+		<div id="d33" class="lit-lay" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -190,7 +190,7 @@
 			]
 		</div>
 
-		<div id="d33" class="e-scheme" 
+		<div id="d33" class="lit-lay" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -268,13 +268,13 @@
 			]
 		</div>
 
-		<div id="d33" class="e-scheme" 
+		<div id="d33" class="lit-lay" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
 			"
 			style="text-align: center;"
-			data-line-num="281">
+			data-line-num="277">
 			[
 				{
 					"td": "href",
@@ -353,10 +353,10 @@
 
 	</div>
 	<script type="module">
-		import ESch from "./../e-scheme.js";
-		const eSch = new ESch();
-		document.querySelectorAll(".e-scheme").forEach((v) => {
-			eSch.build(v);
+		import LL from "./../lit-lay.js";
+		const litLay = new LL();
+		document.querySelectorAll(".lit-lay").forEach((v) => {
+			litLay.build(v);
 		});
 	</script>
 </body>

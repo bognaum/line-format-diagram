@@ -1,7 +1,7 @@
-Expression scheme
-=================
+Literal layout
+==============
 
-This plugin creates a scheme of some expression describing the meaning of its 
+This plugin creates a layout scheme of some literal expression describing the meaning of its 
 individual parts.
 
 To clone

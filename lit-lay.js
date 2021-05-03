@@ -1,7 +1,7 @@
 import JsonEHl from "./json-err-hl/json-err-hl.js";
 import setStyle from "./set-style.js";
-export default class EScheme {
-	constructor (clPref="e-scheme") {
+export default class LitLay {
+	constructor (clPref="lit-lay") {
 		this.clPref = clPref;
 		setStyle(clPref);
 	}

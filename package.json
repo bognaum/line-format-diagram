@@ -2,7 +2,7 @@
   "name": "e-scheme",
   "version": "2.0.0",
   "description": "",
-  "main": "e-scheme.js",
+  "main": "lit-lay.js",
   "directories": {
     "test": "tests"
   },
