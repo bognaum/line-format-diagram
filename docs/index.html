@@ -7,11 +7,12 @@
 	<title>Docs e-scheme</title>
 </head>
 <body>
-	<div class="wrapper">
+	<div class="container">
 		<table border="" cellpadding="5" cellspacing="0" style="margin: auto;">
+			<h1 style="text-align: center;">Docs</h1>
 			<tbody>
 				<tr>
-					<th colspan="4"><h2>Structure attributes</h2></th>
+					<th colspan="4"><h2>HTML-element attributes</h2></th>
 				</tr>
 				<tr>
 					<td class="trn"></td>
@@ -20,7 +21,7 @@
 					</td>
 					<td colspan="2">
 						<p>
-							Line number before first line of code. It needs to highlight errors of JSON. <br>Default <code>"0"</code>.
+							Line number before a first line of code. It needs to highlight errors of JSON. <br>Default <code>"0"</code>.
 						</p>
 					</td>
 				</tr>
@@ -42,7 +43,7 @@
 					</td>
 					<td colspan="2">
 						<p>
-							Style to expression line. <br>Default <code>""</code>.
+							Style to layouted line. <br>Default <code>""</code>.
 						</p>
 					</td>
 				</tr>
@@ -136,6 +137,68 @@
 				</tr>
 			</tbody>
 		</table>
+		<h2>Description</h2>
+		<p>
+			The top level of JSON template is always list <code>[...]</code>.
+		</p>
+		<p>
+			A "part" is a JSON dict object <code>{...}</code>, which has the one required field, and other optional fields. This required field is <code>"ch":</code>. It may be a string content of layouted expression line, or it may be a list of parent parts.
+		</p>
+		<p>
+			This is two simple examples.
+		</p>
+		<div class="lit-lay">
+			[
+				{
+					"td": "2",
+					"ch": "google"
+				},
+				{
+					"ch": "."
+				},
+				{
+					"td": "1",
+					"ch": "com"
+				},
+				{
+					"ch": ".",
+					"style": "color: #f88;",
+					"bd": "a zero level domain \n\nit is not necessary to write this"
+				}
+			]
+		</div>
+		<div class="lit-lay">
+			[
+				{
+					"td": "other domains",
+					"ch": [
+						{
+							"td": "2",
+							"ch": "google"
+						},
+						{
+							"ch": "."
+						},
+						{
+							"td": "1",
+							"ch": "com"
+						}
+					]
+				},
+				{
+					"ch": ".",
+					"style": "color: #f88;",
+					"bd": "a zero level domain \n\nit is not necessary to write this"
+				}
+			]
+		</div>
 	</div>
+	<script type="module">
+		import LL from "./../lit-lay.js";
+		const litLay = new LL();
+		document.querySelectorAll(".lit-lay").forEach((v) => {
+			litLay.build(v);
+		});
+	</script>
 </body>
 </html>
