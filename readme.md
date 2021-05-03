@@ -1,8 +1,12 @@
 Literal layout
 ==============
 
-This plugin creates a layout scheme of some literal expression describing the meaning of its 
-individual parts.
+Literal layouts.
+
+A front-end js plugin to create layout schemes of syntax expressions.
+
+- uses JSON to create layouts
+- has a built-in JSON error indicator
 
 To clone
 --------
@@ -11,18 +15,13 @@ Repository has submodules. Therefore:
 
 `git clone --recursive -- ...`
 
-<!-- To download ZIP
----------------
+If you have been downloaded ZIP
+------------------------------
 
-After download ZIP-archive you need init and update submodules.
+Use the `/build/lit-lay-bundle.js`. It creates a global variable `LitLay`. See [this example](https://bognaum.github.io/lit-lay/tests/bundle-test.html) or `/tests/bundle-test.html`.
 
-```
-git submodule foreach --recursive git submodule init
-git submodule foreach --recursive git submodule update
-``` -->
+How create layout scheme
+------------------------
 
-Using
------
-
-How to use this plugin can be seen in the tests.
+<https://bognaum.github.io/lit-lay/docs/>
 
