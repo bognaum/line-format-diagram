@@ -1319,7 +1319,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 				localBdColor = opts.bdColor;
 			} else {}
 
-			str += `<div class="${clPref}-part ${showBdsClass}" style="${localBdColor}">`;
+			str += `<div class="${clPref}-part ${showBdsClass} ${v.class}" style="${localBdColor}">`;
 			
 			if ("topDescr" in v)
 				str += [
