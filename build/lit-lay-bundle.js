@@ -1096,7 +1096,11 @@ function setStyle(clPref) {
 	if (! styleAlreadyExists) {
 		const style = eHTML(`<style class="${styleClassName}"></style>`);
 		style.textContent = cssCode;
-		document.head.appendChild(style);
+		const firstEl = document.head.children[0];
+		if (firstEl)
+			document.head.insertBefore(style, firstEl);
+		else
+			document.head.appendChild(style);
 	}
 }
 
