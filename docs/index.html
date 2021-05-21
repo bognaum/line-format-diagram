@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<title>Docs e-scheme</title>
+	<title>Docs LFD</title>
 </head>
 <body>
 	<div class="container">
@@ -20,7 +20,7 @@
 						Not aded.
 					</td>
 					<td colspan="2">
-						<div class="lit-lay" style="text-align: center;">
+						<div class="lfd" style="text-align: center;">
 							[
 								{
 									"td": "top descr",
@@ -36,7 +36,7 @@
 						<code>.top-lines</code>
 					</td>
 					<td colspan="2">
-						<div class="lit-lay top-lines" style="text-align: center;">
+						<div class="lfd top-lines" style="text-align: center;">
 							[
 								{
 									"td": "top descr",
@@ -52,7 +52,7 @@
 						<code>.bottom-lines</code>
 					</td>
 					<td colspan="2">
-						<div class="lit-lay bottom-lines" style="text-align: center;">
+						<div class="lfd bottom-lines" style="text-align: center;">
 							[
 								{
 									"td": "top descr",
@@ -205,7 +205,7 @@
 		<p>
 			This is two simple examples.
 		</p>
-		<div class="lit-lay">
+		<div class="lfd">
 			[
 				{
 					"td": "2",
@@ -225,7 +225,7 @@
 				}
 			]
 		</div>
-		<div class="lit-lay">
+		<div class="lfd">
 			[
 				{
 					"td": "other domains",
@@ -252,10 +252,10 @@
 		</div>
 	</div>
 	<script type="module">
-		import LL from "./../lit-lay.js";
-		const litLay = new LL();
-		document.querySelectorAll(".lit-lay").forEach((v) => {
-			litLay.build(v);
+		import LFD from "./../lfd.js";
+		const lfd = new LFD("lfd");
+		document.querySelectorAll(".lfd").forEach((v) => {
+			lfd.build(v);
 		});
 	</script>
 </body>

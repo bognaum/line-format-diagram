@@ -1,8 +1,8 @@
 {
-  "name": "e-scheme",
-  "version": "2.0.0",
+  "name": "line-format-diagram",
+  "version": "3.1.0",
   "description": "",
-  "main": "lit-lay.js",
+  "main": "lfd.js",
   "directories": {
     "test": "tests"
   },

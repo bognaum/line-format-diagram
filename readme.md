@@ -1,11 +1,9 @@
-Literal layout
-==============
+LFD - Line Format Diagram
+===================
 
-Literal layouts.
+A front-end js plugin to create a diagram that describes format of a one line expression.
 
-A front-end js plugin to create layout schemes of syntax expressions.
-
-- uses JSON to create layouts
+- uses JSON to create diagram
 - has a built-in JSON error indicator
 
 To clone
@@ -17,15 +15,10 @@ Repository has submodules. Therefore:
 
 If you have been downloaded ZIP
 ------------------------------
-Use the `/build/lit-lay-bundle.js`. It creates a global variable `LitLay`. See [this example](https://bognaum.github.io/lit-lay/tests/bundle-test.html) or `/tests/bundle-test.html`.
-
-<!-- To online connection
---------------------
-- as ESM mode <https://bognaum.github.io/lit-lay/lit-lay.js>
-- as simple mode <https://bognaum.github.io/lit-lay/bundle/lit-lay-bundle.js> -->
+Use the `/build/lfd-bundle.js`. It creates a global variable `LitLay`. See [this example](https://bognaum.github.io/line-format-diagram/tests/bundle-test.html) or `/tests/bundle-test.html`.
 
 How create layout scheme
 ------------------------
 
-<https://bognaum.github.io/lit-lay/docs/>
+<https://bognaum.github.io/line-format-diagram/docs/>
 

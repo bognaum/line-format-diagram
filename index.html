@@ -42,21 +42,21 @@
 		header nav ol li a{
 			padding: 10px 20px;
 		}
-		.lit-lay {
+		.lfd {
 			filter: blur(10px);
 		}
-		.lit-lay.executing, 
-		.lit-lay.executed {
+		.lfd.executing, 
+		.lfd.executed {
 			filter: none;
 		}
 	</style>
-	<title>lit-lay main</title>
+	<title>LFD main</title>
 </head>
 <body>
 
 	<header>
-		<h1>Literal layout</h1>
-		<p>lit-lay.js</p>
+		<h1>Line Format Diagram</h1>
+		<p>lfd.js</p>
 		<nav>
 			<ol>
 				<li><a target="_blank" href="docs">Docs</a></li>
@@ -66,7 +66,7 @@
 		</nav>
 	</header>
 	<article>
-		<div class="lit-lay" 
+		<div class="lfd" 
 			data-style="
 				/* font-size: 25px;  */
 				/* color: #77d; */
@@ -173,7 +173,7 @@
 				}
 			]
 		</div>
-		<div class="lit-lay" 
+		<div class="lfd" 
 			data-style="
 				/* font-size: 25px;  */
 				/* color: #77d; */
@@ -283,10 +283,10 @@
 	</article>
 	
 	<script type="module">
-		import LL from "./lit-lay.js";
-		const litLay = new LL();
-		document.querySelectorAll(".lit-lay").forEach((v) => {
-			litLay.build(v);
+		import LFD from "./lfd.js";
+		const lfd = new LFD("lfd");
+		document.querySelectorAll(".lfd").forEach((v) => {
+			lfd.build(v);
 		});
 	</script>
 	<!-- <script type="text/javascript">

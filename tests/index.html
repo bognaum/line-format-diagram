@@ -10,15 +10,13 @@
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<!-- <link rel="stylesheet" href="./../lit-lay.css"> -->
-	<title>Test lit-lay</title>
+	<!-- <link rel="stylesheet" href="./../lfd.css"> -->
+	<title>Test LFD</title>
 </head>
 <body>
 	<div class="container">
-		<p style="text-align: center;"><a target="_blank" href="bundle-test.html">bundle-test.html</a></p>
 
-
-		<div id="d33" class="lit-lay" 
+		<div id="d33" class="line-format-diagram" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -74,7 +72,7 @@
 			]
 		</div>
 
-		<div id="d33" class="lit-lay" 
+		<div id="d33" class="line-format-diagram" 
 			data-style="
 				font-size: 20px; 
 			"
@@ -129,7 +127,7 @@
 			]
 		</div>
 
-		<div id="d33" class="lit-lay" 
+		<div id="d33" class="line-format-diagram" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -190,7 +188,7 @@
 			]
 		</div>
 
-		<div id="d33" class="lit-lay" 
+		<div id="d33" class="line-format-diagram" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -268,7 +266,7 @@
 			]
 		</div>
 
-		<div id="d33" class="lit-lay" 
+		<div id="d33" class="line-format-diagram" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -353,10 +351,10 @@
 
 	</div>
 	<script type="module">
-		import LL from "./../lit-lay.js";
-		const litLay = new LL();
-		document.querySelectorAll(".lit-lay").forEach((v) => {
-			litLay.build(v);
+		import LFD from "./../lfd.js";
+		const lfd = new LFD();
+		document.querySelectorAll(".line-format-diagram").forEach((v) => {
+			lfd.build(v);
 		});
 	</script>
 </body>

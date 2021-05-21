@@ -10,11 +10,11 @@
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<title>Bundle test</title>
+	<title>Bundle test LFD</title>
 </head>
 <body>
 	<div class="container">
-		<div id="d33" class="lit-lay bottom-lines" 
+		<div id="d33" class="line-format-diagram bottom-lines" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -69,7 +69,7 @@
 				}
 			]
 		</div>
-		<div id="d33" class="lit-lay" 
+		<div id="d33" class="line-format-diagram" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -150,7 +150,7 @@
 				}
 			]
 		</div>
-		<div class="lit-lay top-lines" 
+		<div class="line-format-diagram top-lines" 
 			data-style="
 				font-size: 16px; 
 				color: #77d;
@@ -241,7 +241,7 @@
 				}
 			]
 		</div>
-		<div class="lit-lay" 
+		<div class="line-format-diagram" 
 			data-style="
 				font-size: 25px; 
 				color: #77d;
@@ -346,7 +346,7 @@
 				}
 			]
 		</div>
-		<div class="lit-lay" 
+		<div class="line-format-diagram" 
 			data-style="
 				font-size: 20px; 
 				color: #55d;
@@ -438,11 +438,11 @@
 				}
 			]
 		</div>
-		<script type="text/javascript" src="./../build/lit-lay-bundle.js"></script>
+		<script type="text/javascript" src="./../build/lfd-bundle.js"></script>
 		<script type="text/javascript">
-			const litLay = new LitLay.default();
-			document.querySelectorAll(".lit-lay").forEach((v) => {
-				litLay.build(v);
+			const lfd = new LineFormatDiagram.default();
+			document.querySelectorAll(".line-format-diagram").forEach((v) => {
+				lfd.build(v);
 			});
 		</script>
 	</div>
