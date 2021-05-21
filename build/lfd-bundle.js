@@ -1189,7 +1189,7 @@ class LineFormatDiagram {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
-	get version () {return "3.1.0"}
+	get version () {return "4.0.0"}
 
 	static get version () {return this.prototype.version;}
 
