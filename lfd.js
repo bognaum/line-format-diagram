@@ -6,7 +6,7 @@ export default class LineFormatDiagram {
 		setStyle(clPref);
 	}
 
-	get version () {return "4.0.1"}
+	get version () {return "4.0.2"}
 
 	static get version () {return this.prototype.version;}
 
