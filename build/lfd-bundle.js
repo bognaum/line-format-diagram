@@ -27,7 +27,7 @@ class LineFormatDiagram {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
-	get version () {return "4.0.3"}
+	get version () {return "5.0.0"}
 
 	static get version () {return this.prototype.version;}
 
@@ -324,6 +324,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const version = "1.1.1";
+
 const {
 	token,
 	nToken,
@@ -422,7 +424,7 @@ class JsonErrHlter extends _syntax_highlight_framework_syntax_hl_fk_js__WEBPACK_
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_0__.default)(clPref);
 	}
 
-	get version () { return "1.1.0"; }
+	get version () { return version; }
 
 	getHighlighted (
 		templ, firstLineNum=1, cssClasses="calm-clarified-theme") {
