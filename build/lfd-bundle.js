@@ -30,9 +30,8 @@ class LineFormatDiagram {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
-	get version () {return version;}
-
-	static get version () {return this.prototype.version;}
+	get        version () {return version;}
+	static get version () {return version;}
 
 	build (container, template=null) {
 		if (["executing", "executed"].some((v) => container.classList.contains(v))) {

@@ -9,9 +9,8 @@ export default class LineFormatDiagram {
 		setStyle(clPref);
 	}
 
-	get version () {return version;}
-
-	static get version () {return this.prototype.version;}
+	get        version () {return version;}
+	static get version () {return version;}
 
 	build (container, template=null) {
 		if (["executing", "executed"].some((v) => container.classList.contains(v))) {
