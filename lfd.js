@@ -1,12 +1,15 @@
 import JsonEHl from "./json-err-hl/json-err-hl.js";
 import setStyle from "./set-style.js";
+
+const version = "5.0.1";
+
 export default class LineFormatDiagram {
 	constructor (clPref="line-format-diagram") {
 		this.clPref = clPref;
 		setStyle(clPref);
 	}
 
-	get version () {return "5.0.1"}
+	get version () {return version;}
 
 	static get version () {return this.prototype.version;}
 
