@@ -21,13 +21,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _set_style_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 
 
+
+const version = "5.0.1";
+
 class LineFormatDiagram {
 	constructor (clPref="line-format-diagram") {
 		this.clPref = clPref;
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
-	get version () {return "5.0.1"}
+	get version () {return version;}
 
 	static get version () {return this.prototype.version;}
 
@@ -324,7 +327,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "1.1.1";
+const version = "1.1.3";
 
 const {
 	token,
@@ -564,7 +567,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-	version: "5.2.0",
+	version: "5.2.3",
 	describeAPI: _describeAPI_js__WEBPACK_IMPORTED_MODULE_0__.default,
 	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default,
 });
@@ -889,6 +892,14 @@ class HighlightAPI {
 		_setCSS(this);
 	}
 
+	/**
+	 * getHighlighted       (template, firstLineNum, cssClasses)
+	 * highlightTextContent (el)
+	 * scrollToFirstError   (el)
+	 * highlight            (el, template, firstLineNum)
+	 * setMainRule          (rule)
+	 */
+
 	getHighlighted       (...args) { return getHighlighted       (this, ...args); }
 	highlightTextContent (...args) { return highlightTextContent (this, ...args); }
 	scrollToFirstError   (...args) { return scrollToFirstError   (this, ...args); }
@@ -897,24 +908,26 @@ class HighlightAPI {
 }
 
 
-function getHighlighted(self, template, firstLineNum=1, cssClasses="") {
+function getHighlighted(self, text, firstLineNum=1, cssClasses="") {
 	const el = document.createElement("div");
 	if (typeof cssClasses == "string")
 		el.className += " " + cssClasses;
 	else if (cssClasses instanceof Array) 
-		el.classList.add(cssClasses);
+		el.classList.add(...cssClasses);
 	else 
-		throw new Error(
-			"(!) - getHighlighted(). "+
-			"Argument #3 must be a string, an array, or undefined.\n"+
-			cssClasses+" givin"
-		);
-	self.highlight(el, template, firstLineNum);
+		throw new Error([
+			"(!) getHighlighted(). ",
+			"Argument #3 must be a string, an array of strings, or undefined.",
+			"",
+			cssClasses+" given.",
+			""
+		].join("\n"));
+	highlight(self, el, text, firstLineNum);
 	return el;
 }
 
 function highlightTextContent(self, el) {
-	return self.highlight(el, el.textContent, (el.dataset.lineNum*1 + 1) || 1);
+	return highlight(self, el, el.textContent, getFirstLineNum(el));
 }
 
 function scrollToFirstError(self, el) {
@@ -930,12 +943,33 @@ function scrollToFirstError(self, el) {
 }
 
 function highlight(self, contentEl, text, firstLineNum=1) {
-	contentEl.classList.add(self.clPref);
+	if (! (contentEl instanceof HTMLElement))
+		throw new Error([
+			"(!) highlight(). Argument #1 must be a HTMLElement.",
+			"",
+			contentEl + " given.",
+			""
+		].join("\n"));
+
 	if (["executing", "executed", "exec-error"].some((v) => contentEl.classList.contains(v)))
-		throw new Error("(!) Highlighter. Already handled.", contentEl);
+		throw new Error([
+			"(!) Highlighter. Already handled.", 
+			"",
+			contentEl
+		].join("\n"));
 	
+	contentEl.classList.add(self.clPref);
 	contentEl.classList.add("executing");
 	contentEl.innerHTML = "";
+
+	if (typeof text != "string")
+		throw new Error([
+			"(!) highlight(). Argument #2 must be a string.",
+			"",
+			text + " given.",
+			""
+		].join("\n"));
+
 	try {
 		const
 			model    = _buildModel(self, text),
@@ -947,7 +981,7 @@ function highlight(self, contentEl, text, firstLineNum=1) {
 		console.error(`(!)-CATCHED`, e);
 		const lines = text.split("\n");
 		lines.forEach((line, i, a) => {
-			let lineOb = _makeLine(firstLineNum + i);
+			let lineOb = _makeLine(self, firstLineNum + i);
 			let m = line.match(/^(\s*)(.*)/);
 			[lineOb.indent.textContent, lineOb.content.textContent] = [m[1], m[2]];
 			if (i < a.length - 1)
@@ -978,7 +1012,7 @@ function _renderToHighlight (self, model, firstLineNum=1) {
 	const content = [], nodeStack = [];
 	let lNum = firstLineNum, indentZoneFlag = true, lastLine;
 	nodeStack.last = () => nodeStack[nodeStack.length - 1];
-	content.push(lastLine = _makeLine(lNum ++));
+	content.push(lastLine = _makeLine(self, lNum ++));
 	recur(model);
 	return content;
 	function recur(sb) {
@@ -1142,6 +1176,17 @@ function _evaluate (code) {
 	const shell = document.createElement("div");
 	shell.innerHTML = code;
 	return shell.children[0];
+}
+
+
+function getFirstLineNum(el) {
+	const dln = parseInt(el.dataset.lineNum);
+	if (! dln)
+		return 1;
+	else if (el.nodeName == "PRE")
+		return dln + 1;
+	else 
+		return dln;
 }
 
 /***/ }),
