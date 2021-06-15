@@ -30,61 +30,63 @@ class LineFormatDiagram {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
+	build              (...args) { return build(this, ...args); }
+
 	get        version () {return version;}
 	static get version () {return version;}
-
-	build (container, template=null) {
-		if (["executing", "executed"].some((v) => container.classList.contains(v))) {
-			console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, container);
-			return;
-		}
-		container.classList.add("executing");
-
-		const opts = Object.assign({
-			style:  "",
-			bdColor: "",
-			lineNum: 0,
-		}, container.dataset);
-
-		opts.bdColor = opts.bdColor ? ` border-color: ${opts.bdColor}; ` : "";
-
-		template = template || container.textContent;
-
-		let tOb; 
-
-		if (typeof template == "string") {
-			try {
-				tOb = JSON.parse(template);
-			} catch (err) {
-				const firstLineNum = opts.lineNum * 1;
-				const 
-					json = template,
-					highlighyer = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_0__.default("e-s-json-err-hl");
-				container.innerHTML = 
-					`<pre class="e-s-json-err-hl calm-clarified-theme"><pre>`;
-				const pre = container.children[0];
-				highlighyer.highlight(pre, json, firstLineNum);
-				highlighyer.scrollToFirstError(pre);
-				return;
-			}
-		} else if (typeof template == "object"){
-			tOb = template;
-		} else {
-			throw new Error("Invalid template", template);
-		}
-
-		const {tLevels, bLevels} = getLevels(tOb);
-		const htmlStr = getHtmlStr(tOb, opts, tLevels, bLevels, this.clPref) 
-			+ getLinersHtmlStr(bLevels, this.clPref);
-
-		container.innerHTML = htmlStr;
-		container.dataset.eSchemeVersion = this.version;
-		container.classList.remove("executing");
-		container.classList.add("executed");
-	}
 }
 
-function getLevels(tOb) {
+function build (self, container, template=null) {
+	if (["executing", "executed"].some((v) => container.classList.contains(v))) {
+		console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, container);
+		return;
+	}
+	container.classList.add("executing");
+
+	const opts = Object.assign({
+		style:  "",
+		bdColor: "",
+		lineNum: 0,
+	}, container.dataset);
+
+	opts.bdColor = opts.bdColor ? ` border-color: ${opts.bdColor}; ` : "";
+
+	template = template || container.textContent;
+
+	let tOb; 
+
+	if (typeof template == "string") {
+		try {
+			tOb = JSON.parse(template);
+		} catch (err) {
+			const firstLineNum = opts.lineNum * 1;
+			const 
+				json = template,
+				highlighyer = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_0__.default("e-s-json-err-hl");
+			container.innerHTML = 
+				`<pre class="e-s-json-err-hl calm-clarified-theme"><pre>`;
+			const pre = container.children[0];
+			highlighyer.highlight(pre, json, firstLineNum);
+			highlighyer.scrollToFirstError(pre);
+			return;
+		}
+	} else if (typeof template == "object"){
+		tOb = template;
+	} else {
+		throw new Error("Invalid template", template);
+	}
+
+	const {tLevels, bLevels} = _getLevels(tOb);
+	const htmlStr = _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
+		+ _getLinersHtmlStr(bLevels, self.clPref);
+
+	container.innerHTML = htmlStr;
+	container.dataset.eSchemeVersion = self.version;
+	container.classList.remove("executing");
+	container.classList.add("executed");
+}
+
+function _getLevels(tOb) {
 	const 
 		tLevels = [],
 		bLevels = [];
@@ -127,7 +129,7 @@ function getLevels(tOb) {
 	}
 }
 
-function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
+function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 	let 
 		bLevels = _bLevels.map(v => v),
 		str    = "",
@@ -139,7 +141,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 	function recursive(templ, level=0, inheritStyle="") {
 		templ.forEach((v) => {
 			const
-				hFZ = getHFZ(tLevels[level]);
+				hFZ = _getHFZ(tLevels[level]);
 
 			v = Object.assign({
 				tbStyle: "",
@@ -209,7 +211,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 				if (typeof v.ch == "string") {
 
 					for (let i = level + 1; i < tLevels.length; i++) {
-						let hFZ = getHFZ(tLevels[i]);
+						let hFZ = _getHFZ(tLevels[i]);
 						str += `<div class="${clPref}-grid-v-liner" style="${hFZ}"></div>`; 
 					}
 					
@@ -289,7 +291,7 @@ function getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 	}
 }
 
-function getLinersHtmlStr(bLevels, clPref) {
+function _getLinersHtmlStr(bLevels, clPref) {
 	let str = "";
 	for (let i = bLevels.length - 1; 0 <= i; i --) 
 		str += `<div class="${clPref}-grid-bv-liner" `+
@@ -298,7 +300,7 @@ function getLinersHtmlStr(bLevels, clPref) {
 	return str;
 }
 
-function getHFZ(lineCount) {
+function _getHFZ(lineCount) {
 	return `height: ${lineCount * 1.5}em; font-size: 1em; `;
 }
 
