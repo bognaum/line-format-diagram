@@ -30,28 +30,66 @@ class LineFormatDiagram {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
 	}
 
-	build              (...args) { return build(this, ...args); }
+	build              (...args) { return build             (this, ...args); }
+	buildByTextContent (...args) { return buildByTextContent(this, ...args); }
 
 	get        version () {return version;}
 	static get version () {return version;}
 }
 
-function build (self, container, template=null) {
-	if (["executing", "executed"].some((v) => container.classList.contains(v))) {
-		console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, container);
+function buildByTextContent(self, elem) {
+	return build(self, elem, elem.textContent);
+}
+
+function build (self, elem, template=null) {
+	if (["executing", "executed"].some((v) => elem.classList.contains(v))) {
+		console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, elem);
 		return;
 	}
-	container.classList.add("executing");
+	elem.classList.add("executing");
+
 
 	const opts = Object.assign({
 		style:  "",
 		bdColor: "",
 		lineNum: 0,
-	}, container.dataset);
+	}, elem.dataset);
 
 	opts.bdColor = opts.bdColor ? ` border-color: ${opts.bdColor}; ` : "";
 
-	template = template || container.textContent;
+	const {object :tOb, error :jsonError} = _tryParseJSON(template);
+
+	if (tOb) {
+
+		const {tLevels, bLevels} = _getLevels(tOb);
+		const htmlStr = _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
+			+ _getLinersHtmlStr(bLevels, self.clPref);
+
+		elem.innerHTML = htmlStr;
+		elem.dataset.eSchemeVersion = self.version;
+		elem.classList.remove("executing");
+		elem.classList.add("executed");
+
+		elem.classList.remove("executing", "executed", "exec-error");
+		elem.classList.add("executed");
+	} else if (jsonError) {
+		elem.classList.remove("executing", "executed", "exec-error");
+		elem.classList.add("exec-error");
+		const 
+			firstLN = parseInt(opts.lineNum),
+			json = template,
+			hl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_0__.default("e-s-json-err-hl"),
+			codeField = hl.getHighlighted(template, firstLN);
+		elem.innerHTML = "";
+		elem.appendChild(codeField);
+		hl.scrollToFirstError(codeField);
+		console.error(`(!) \n`, elem, "\n", jsonError);
+		return;
+	} else {
+		throw new Error();
+	}
+
+	/*template = template || elem.textContent;
 
 	let tOb; 
 
@@ -62,10 +100,10 @@ function build (self, container, template=null) {
 			const firstLineNum = opts.lineNum * 1;
 			const 
 				json = template,
-				highlighyer = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_0__.default("e-s-json-err-hl");
-			container.innerHTML = 
+				highlighyer = new JsonEHl("e-s-json-err-hl");
+			elem.innerHTML = 
 				`<pre class="e-s-json-err-hl calm-clarified-theme"><pre>`;
-			const pre = container.children[0];
+			const pre = elem.children[0];
 			highlighyer.highlight(pre, json, firstLineNum);
 			highlighyer.scrollToFirstError(pre);
 			return;
@@ -74,16 +112,9 @@ function build (self, container, template=null) {
 		tOb = template;
 	} else {
 		throw new Error("Invalid template", template);
-	}
+	}*/
 
-	const {tLevels, bLevels} = _getLevels(tOb);
-	const htmlStr = _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
-		+ _getLinersHtmlStr(bLevels, self.clPref);
-
-	container.innerHTML = htmlStr;
-	container.dataset.eSchemeVersion = self.version;
-	container.classList.remove("executing");
-	container.classList.add("executed");
+	
 }
 
 function _getLevels(tOb) {
@@ -288,6 +319,19 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 
 			str += `</div>`; // .${clPref}-part
 		});
+	}
+}
+
+function _tryParseJSON (json) {
+	try {
+		return {
+			object: JSON.parse(json)
+		};
+	} catch (err) {
+		return {
+			text: json,
+			error: err,
+		}
 	}
 }
 
