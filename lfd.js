@@ -1,7 +1,7 @@
 import JsonEHl from "./json-err-hl/json-err-hl.js";
 import setStyle from "./set-style.js";
 
-const version = "5.0.1";
+const version = "6.0.0";
 
 export default class LineFormatDiagram {
 	constructor (clPref="line-format-diagram") {

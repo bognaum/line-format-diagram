@@ -22,7 +22,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "5.0.1";
+const version = "6.0.0";
 
 class LineFormatDiagram {
 	constructor (clPref="line-format-diagram") {
