@@ -37,6 +37,7 @@ function build (self, elem, template=null) {
 		].join("\n"));
 
 	elem.dataset.fileTreeDiagramVersion = version;
+	elem.classList.add(this.clPref);
 	elem.classList.add("executing");
 
 	if (typeof template != "string")
