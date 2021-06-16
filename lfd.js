@@ -21,11 +21,31 @@ function buildByTextContent(self, elem) {
 }
 
 function build (self, elem, template=null) {
-	if (["executing", "executed"].some((v) => elem.classList.contains(v))) {
-		console.error(`(!) Expression Scheme:`, `Dowble execution. \n`, elem);
-		return;
-	}
+	if (! (elem instanceof HTMLElement))
+		throw new Error([
+			"(!) build(). Argument #1 must be a HTMLElement.",
+			"",
+			elem + " given.",
+			""
+		].join("\n"));
+
+	if (["executing", "executed", "exec-error"].some((v) => elem.classList.contains(v)))
+		throw new Error([
+			"(!) Line format diagram. Already handled.", 
+			"",
+			elem
+		].join("\n"));
+
+	elem.dataset.fileTreeDiagramVersion = version;
 	elem.classList.add("executing");
+
+	if (typeof template != "string")
+		throw new Error([
+			"(!) build(). Argument #2 must be a string.",
+			"",
+			template + " given.",
+			""
+		].join("\n"));
 
 
 	const opts = Object.assign({
@@ -46,8 +66,6 @@ function build (self, elem, template=null) {
 
 		elem.innerHTML = htmlStr;
 		elem.dataset.eSchemeVersion = self.version;
-		elem.classList.remove("executing");
-		elem.classList.add("executed");
 
 		elem.classList.remove("executing", "executed", "exec-error");
 		elem.classList.add("executed");
