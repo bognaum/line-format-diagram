@@ -17,8 +17,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ LineFormatDiagram)
 /* harmony export */ });
-/* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _set_style_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _set_style_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
+/* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+
+
 
 
 
@@ -27,7 +31,7 @@ const version = "6.0.2";
 class LineFormatDiagram {
 	constructor (clPref="line-format-diagram") {
 		this.clPref = clPref;
-		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_1__.default)(clPref);
+		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_2__.default)(clPref);
 	}
 
 	build              (...args) { return build             (this, ...args); }
@@ -41,7 +45,7 @@ function buildByTextContent(self, elem) {
 	return build(self, elem, elem.textContent);
 }
 
-function build (self, elem, template=null) {
+function build (self, elem, template) {
 	if (! (elem instanceof HTMLElement))
 		throw new Error([
 			"(!) build(). Argument #1 must be a HTMLElement.",
@@ -70,23 +74,13 @@ function build (self, elem, template=null) {
 		].join("\n"));
 
 
-	const opts = Object.assign({
-		style:  "",
-		bdColor: "",
-		lineNum: 0,
-	}, elem.dataset);
+	
 
-	opts.bdColor = opts.bdColor ? ` border-color: ${opts.bdColor}; ` : "";
-
-	const {object :tOb, error :jsonError} = _tryParseJSON(template);
+	const {object :tOb, error :jsonError} = _lib_js__WEBPACK_IMPORTED_MODULE_0__.tryParseJSON(template);
 
 	if (tOb) {
 
-		const {tLevels, bLevels} = _getLevels(tOb);
-		const htmlStr = _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
-			+ _getLinersHtmlStr(bLevels, self.clPref);
-
-		elem.innerHTML = htmlStr;
+		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_3__.default)(self, elem, tOb);
 		elem.dataset.eSchemeVersion = self.version;
 
 		elem.classList.remove("executing", "executed", "exec-error");
@@ -95,9 +89,9 @@ function build (self, elem, template=null) {
 		elem.classList.remove("executing", "executed", "exec-error");
 		elem.classList.add("exec-error");
 		const 
-			firstLN = parseInt(opts.lineNum),
+			firstLN = parseInt(elem.dataset.lineNum) || 1,
 			json = template,
-			hl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_0__.default("e-s-json-err-hl"),
+			hl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_1__.default("e-s-json-err-hl"),
 			codeField = hl.getHighlighted(template, firstLN);
 		elem.innerHTML = "";
 		elem.appendChild(codeField);
@@ -108,274 +102,8 @@ function build (self, elem, template=null) {
 		throw new Error();
 	}
 
-	/*template = template || elem.textContent;
-
-	let tOb; 
-
-	if (typeof template == "string") {
-		try {
-			tOb = JSON.parse(template);
-		} catch (err) {
-			const firstLineNum = opts.lineNum * 1;
-			const 
-				json = template,
-				highlighyer = new JsonEHl("e-s-json-err-hl");
-			elem.innerHTML = 
-				`<pre class="e-s-json-err-hl calm-clarified-theme"><pre>`;
-			const pre = elem.children[0];
-			highlighyer.highlight(pre, json, firstLineNum);
-			highlighyer.scrollToFirstError(pre);
-			return;
-		}
-	} else if (typeof template == "object"){
-		tOb = template;
-	} else {
-		throw new Error("Invalid template", template);
-	}*/
-
-	
 }
 
-function _getLevels(tOb) {
-	const 
-		tLevels = [],
-		bLevels = [];
-
-	recursive(tOb, 0);
-	bLevels.push(1);
-	return {tLevels, bLevels};
-
-	function recursive(tOb, level=0) {
-		tLevels[level] = tLevels[level] || 0;
-
-		tOb.forEach((v) => {
-
-			if ("td" in v) {
-				const 
-					lines = v.td.split("\n"),
-					n = lines.length;
-				if (tLevels[level] < n)
-					tLevels[level] = n;
-				v.topDescr = lines.join("<br/>");
-			}
-
-			if (v.ch)
-				if (typeof v.ch != "string")
-					recursive(v.ch, level + 1);
-
-			if (v.bd)
-				if (typeof v.ch == "string") {
-					const 
-						lines = v.bd.split("\n"),
-						n = lines.length;
-					bLevels.push(n);
-					v.bottomDescr = lines.join("<br/>");
-				} else {
-					v.bottomDescr = null;
-					v.errors = v.errors || [];
-					v.errors.push("'v.bottomDescr' is deleted.");
-				}
-		});
-	}
-}
-
-function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
-	let 
-		bLevels = _bLevels.map(v => v),
-		str    = "",
-		sPartN = 0;
-
-	recursive(templ, 0);
-	return str;
-
-	function recursive(templ, level=0, inheritStyle="") {
-		templ.forEach((v) => {
-			const
-				hFZ = _getHFZ(tLevels[level]);
-
-			v = Object.assign({
-				tbStyle: "",
-				tdStyle: "",
-				style  : "",
-				bbStyle: "",
-				bdStyle: "",
-				class  : "",
-			}, v);
-
-			let 
-				localBdColor = "border-color: transparent;",
-				showBdsClass = "";
-
-			if ("topDescr" in v) {
-				showBdsClass = "show-borders";
-				localBdColor = opts.bdColor;
-			} else {}
-
-			str += `<div class="${clPref}-part ${showBdsClass} ${v.class}" style="${localBdColor}">`;
-			
-			if ("topDescr" in v)
-				str += [
-					`<div `,
-						`class="`,
-							`${clPref}-top-descr `,
-							`${clPref}-description `,
-							`${clPref}-grid-v-liner `,
-							`${v.class}`,
-						`" `,
-						`style="`,
-							`\n/* Autogenerated*/  ${hFZ}`,
-							`\n/*Common bdColor*/  ${opts.bdColor}`,
-						`"`,
-					`>`,
-
-						`<div `,
-							`class="${clPref}-h-line ${v.class}" `,
-							`style="`,
-								`\n/*Common bdColor*/  ${opts.bdColor} `,
-								`\n/* Local tbStyle*/  ${v.tbStyle}"`,
-						`></div>`,
-
-						`<div `,
-							`class="${clPref}-td-block ${v.class}" `,
-							`style="/*Local tdStyle*/  ${v.tdStyle}"`,
-						`>`,
-								`${v.topDescr}`,
-						`</div>`,
-
-						`<div `,
-							`class="${clPref}-h-line ${v.class}" `,
-							`style="`,
-								`\n/*Common bdColor*/  ${opts.bdColor} `,
-								`\n/* Local tbStyle*/  ${v.tbStyle}"`,
-						`></div>`,
-
-					`</div>`,
-				].join("");
-			else 
-				str += `<div 
-					class="${clPref}-grid-v-liner" 
-					style="/*Autogenerated*/  ${hFZ}"
-				></div>`;
-
-			if (v.ch)
-				if (typeof v.ch == "string") {
-
-					for (let i = level + 1; i < tLevels.length; i++) {
-						let hFZ = _getHFZ(tLevels[i]);
-						str += `<div class="${clPref}-grid-v-liner" style="${hFZ}"></div>`; 
-					}
-					
-					sPartN ++;
-
-					str += [
-						`<div `,
-							`class="${clPref}-line-text ${v.class}" `,
-							`style="`,
-								`\n/*  Autogenerated*/  ${localBdColor}`,
-								`\n/*   Common style*/  ${opts.style}`,
-								`\n/*Inherited style*/  ${inheritStyle}`,
-								`\n/*      Own style*/  ${v.style}`,
-							`"`,
-						`>${v.ch}</div>`
-					].join("");
-
-				} else if (typeof v.ch == "object" && "length" in v.ch) {
-					recursive(v.ch, level + 1, inheritStyle+v.style);
-				} else {
-					throw new Error(`(!) "ch" must be a string or an array.`);
-				}
-
-			if (v.bottomDescr) {
-
-				let strCount = bLevels.shift();
-				str += [
-					`<div class="${clPref}-bottom-rel-wr ${v.class}" `,
-						`style="/*Common bdColor*/  ${opts.bdColor}">`,
-
-						`<div class="${clPref}-bottom-rel ${v.class}" `,
-							`style="`,
-								`\n/*Common bdColor*/  ${opts.bdColor}`,
-								`\n/* Local bbStyle*/  ${(v.bbStyle)}`,
-							`">`,
-
-							`<div class="${clPref}-rel-line ${v.class}" `,
-								`style="`,
-									`\n/*Common bdColor*/  ${opts.bdColor}`,
-									`\n/* Local bbStyle*/  ${(v.bbStyle)}`,
-								`">`
-				].join("");
-
-				bLevels.forEach((v) => {
-					str += [
-						`<div class="${clPref}-grid-bv-liner" `,
-							`style="/*Autogenerated*/  height: ${v * 1.2}em"></div>`
-					].join("");
-				});
-
-				str += [
-								`<div `,
-									`class="`,
-										`${clPref}-bottom-descr `,
-										`${clPref}-description `,
-										`${clPref}-grid-bv-liner `,
-										`${v.class}`,
-									`" `,
-									`style="`,
-										`\n/*Autogenerated*/  height: ${strCount * 1.2}em; `,
-										`\n/*Common bdColor*/  ${opts.bdColor}`,
-										`\n/* Local bdStyle*/  ${(v.bdStyle)}`,
-									`"`,
-								`>`,
-									`${v.bottomDescr}`,
-								`</div>`,
-							`</div>`,
-						`</div>`,
-					`</div>`,
-				].join("");
-			}
-
-			
-
-			str += `</div>`; // .${clPref}-part
-		});
-	}
-}
-
-function _tryParseJSON (json) {
-	try {
-		return {
-			object: JSON.parse(json)
-		};
-	} catch (err) {
-		return {
-			text: json,
-			error: err,
-		}
-	}
-}
-
-function _getLinersHtmlStr(bLevels, clPref) {
-	let str = "";
-	for (let i = bLevels.length - 1; 0 <= i; i --) 
-		str += `<div class="${clPref}-grid-bv-liner" `+
-			`style="/*Autogenerated*/  height: ${bLevels[i] * 1.3}em"></div>`;
-	
-	return str;
-}
-
-function _getHFZ(lineCount) {
-	return `height: ${lineCount * 1.5}em; font-size: 1em; `;
-}
-
-function eHTML(code, shell=null) {
-	const _shell = 
-		! shell                  ? document.createElement("div") :
-		typeof shell == "string" ? document.createElement(shell) :
-		typeof shell == "object" ? shell :
-			null;
-	_shell.innerHTML = code;
-	return _shell.children[0];
-}
 
 /***/ }),
 /* 2 */
@@ -1578,6 +1306,625 @@ function eHTML(code, shell=null) {
 			null;
 	_shell.innerHTML = code;
 	return _shell.children[0];
+}
+
+/***/ }),
+/* 10 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ buildDiagram)
+/* harmony export */ });
+/* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+
+
+
+function buildDiagram(self, elem, tOb) {
+	const opts = Object.assign({
+		style:  "",
+		bdColor: "",
+		lineNum: 0,
+	}, elem.dataset);
+
+	opts.bdColor = opts.bdColor &&= ` border-color: ${opts.bdColor}; `;
+
+	const {tLevels, bLevels} = _getLevels(tOb);
+	const htmlStr = _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
+		+ _getLinersHtmlStr(bLevels, self.clPref);
+
+	elem.innerHTML = htmlStr;
+}
+function _getLevels(tOb) {
+	const 
+		tLevels = [],
+		bLevels = [];
+
+	let serialN = 0;
+
+	recursive(tOb, 0);
+	bLevels.push(1);
+	return {tLevels, bLevels};
+
+	function recursive(tOb, level=0) {
+		tLevels[level] = tLevels[level] || 0;
+
+		tOb.forEach((v) => {
+			v.serialN = serialN ++;
+
+			if ("td" in v) {
+				const 
+					lines = v.td.split("\n"),
+					n = lines.length;
+				if (tLevels[level] < n)
+					tLevels[level] = n;
+				v.topDescr = lines.join("<br/>");
+			}
+
+			if (v.ch)
+				if (typeof v.ch != "string")
+					recursive(v.ch, level + 1);
+
+			if (v.bd)
+				if (typeof v.ch == "string") {
+					const 
+						lines = v.bd.split("\n"),
+						n = lines.length;
+					bLevels.push(n);
+					v.bottomDescr = lines.join("<br/>");
+				} else {
+					v.bottomDescr = null;
+					v.errors = v.errors || [];
+					v.errors.push("'v.bottomDescr' is deleted.");
+				}
+		});
+	}
+}
+
+function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
+	let 
+		bLevels = _bLevels.map(v => v),
+		str    = "",
+		sPartN = 0;
+
+	recursive(templ, 0);
+	return str;
+
+	function recursive(templ, level=0, inheritStyle="") {
+		templ.forEach((v) => {
+			const
+				hFZ = _getHFZ(tLevels[level]);
+
+			v = Object.assign({
+				tbStyle: "",
+				tdStyle: "",
+				style  : "",
+				bbStyle: "",
+				bdStyle: "",
+				class  : "",
+			}, v);
+
+			let 
+				localBdColor = "border-color: transparent;",
+				showBdsClass = "";
+
+			if ("topDescr" in v) {
+				showBdsClass = "show-borders";
+				localBdColor = opts.bdColor;
+			} else {}
+
+			str += `<div class="${clPref}-part ${showBdsClass} ${v.class}" ` + 
+				`style="${localBdColor}" data-serial-n="${v.serialN}">`;
+			
+			if ("topDescr" in v)
+				str += [
+					`<div `,
+						`class="`,
+							`${clPref}-top-descr `,
+							`${clPref}-description `,
+							`${clPref}-grid-v-liner `,
+							`${v.class}`,
+						`" `,
+						`style="`,
+							`\n/* Autogenerated*/  ${hFZ}`,
+							`\n/*Common bdColor*/  ${opts.bdColor}`,
+						`"`,
+					`>`,
+
+						`<div `,
+							`class="${clPref}-h-line ${v.class}" `,
+							`style="`,
+								`\n/*Common bdColor*/  ${opts.bdColor} `,
+								`\n/* Local tbStyle*/  ${v.tbStyle}"`,
+						`></div>`,
+
+						`<div `,
+							`class="${clPref}-td-block ${v.class}" `,
+							`style="/*Local tdStyle*/  ${v.tdStyle}"`,
+						`>`,
+								`${v.topDescr}`,
+						`</div>`,
+
+						`<div `,
+							`class="${clPref}-h-line ${v.class}" `,
+							`style="`,
+								`\n/*Common bdColor*/  ${opts.bdColor} `,
+								`\n/* Local tbStyle*/  ${v.tbStyle}"`,
+						`></div>`,
+
+					`</div>`,
+				].join("");
+			else 
+				str += `<div 
+					class="${clPref}-grid-v-liner" 
+					style="/*Autogenerated*/  ${hFZ}"
+				></div>`;
+
+			if (v.ch)
+				if (typeof v.ch == "string") {
+
+					for (let i = level + 1; i < tLevels.length; i++) {
+						let hFZ = _getHFZ(tLevels[i]);
+						str += `<div class="${clPref}-grid-v-liner" style="${hFZ}"></div>`; 
+					}
+					
+					sPartN ++;
+
+					str += [
+						`<div `,
+							`class="${clPref}-line-text ${v.class}" `,
+							`style="`,
+								`\n/*  Autogenerated*/  ${localBdColor}`,
+								`\n/*   Common style*/  ${opts.style}`,
+								`\n/*Inherited style*/  ${inheritStyle}`,
+								`\n/*      Own style*/  ${v.style}`,
+							`"`,
+						`>${v.ch}</div>`
+					].join("");
+
+				} else if (typeof v.ch == "object" && "length" in v.ch) {
+					recursive(v.ch, level + 1, inheritStyle+v.style);
+				} else {
+					throw new Error(`(!) "ch" must be a string or an array.`);
+				}
+
+			if (v.bottomDescr) {
+
+				let strCount = bLevels.shift();
+				str += [
+					`<div class="${clPref}-bottom-rel-wr ${v.class}" `,
+						`style="/*Common bdColor*/  ${opts.bdColor}">`,
+
+						`<div class="${clPref}-bottom-rel ${v.class}" `,
+							`style="`,
+								`\n/*Common bdColor*/  ${opts.bdColor}`,
+								`\n/* Local bbStyle*/  ${(v.bbStyle)}`,
+							`">`,
+
+							`<div class="${clPref}-rel-line ${v.class}" `,
+								`style="`,
+									`\n/*Common bdColor*/  ${opts.bdColor}`,
+									`\n/* Local bbStyle*/  ${(v.bbStyle)}`,
+								`">`
+				].join("");
+
+				bLevels.forEach((v) => {
+					str += [
+						`<div class="${clPref}-grid-bv-liner" `,
+							`style="/*Autogenerated*/  height: ${v * 1.2}em"></div>`
+					].join("");
+				});
+
+				str += [
+								`<div `,
+									`class="`,
+										`${clPref}-bottom-descr `,
+										`${clPref}-description `,
+										`${clPref}-grid-bv-liner `,
+										`${v.class}`,
+									`" `,
+									`style="`,
+										`\n/*Autogenerated*/  height: ${strCount * 1.2}em; `,
+										`\n/*Common bdColor*/  ${opts.bdColor}`,
+										`\n/* Local bdStyle*/  ${(v.bdStyle)}`,
+									`"`,
+								`>`,
+									`${v.bottomDescr}`,
+								`</div>`,
+							`</div>`,
+						`</div>`,
+					`</div>`,
+				].join("");
+			}
+
+			
+
+			str += `</div>`; // .${clPref}-part
+		});
+	}
+}
+function _getLinersHtmlStr(bLevels, clPref) {
+	let str = "";
+	for (let i = bLevels.length - 1; 0 <= i; i --) 
+		str += `<div class="${clPref}-grid-bv-liner" `+
+			`style="/*Autogenerated*/  height: ${bLevels[i] * 1.3}em"></div>`;
+	
+	return str;
+}
+
+function _getHFZ(lineCount) {
+	return `height: ${lineCount * 1.5}em; font-size: 1em; `;
+}
+
+/*function _tryParseJSON (json) {
+	try {
+		return {
+			object: JSON.parse(json)
+		};
+	} catch (err) {
+		return {
+			text: json,
+			error: err,
+		}
+	}
+}*/
+
+/*function _tryParseJSON (json) {
+	try {
+		const object = _fromJson(json)
+		return {object};
+	} catch (err) {
+		return {
+			text: json,
+			error: err,
+		}
+	}
+}
+
+function _fromJson(json) {
+	return JSON.parse(json, function(k, v) {
+		if (typeof (k * 1) == "number" && typeof v == "object" && "ch" in v) {
+			const node = new Node(v);
+			if (node.ch instanceof Array)
+				node.ch.forEach(v => v.parent = node);
+			return node;
+		} else
+			return v;
+	});
+}*/
+
+
+/*function eHTML(code, shell=null) {
+	const _shell = 
+		! shell                  ? document.createElement("div") :
+		typeof shell == "string" ? document.createElement(shell) :
+		typeof shell == "object" ? shell :
+			null;
+	_shell.innerHTML = code;
+	return _shell.children[0];
+}*/
+
+
+/***/ }),
+/* 11 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Node)
+/* harmony export */ });
+class Node {
+	constructor (ob) {
+		Object.assign(this, ob);
+	}
+	
+	split        (a, b) { return split       (this, a, b);}
+	subDiv       (a, b) { return subDiv      (this, a, b);}
+	strip        (    ) { return strip       (this      );}
+	join         (a, b) { return join        (this, a, b);}
+
+	isStr        (    ) { return isStr       (this      );}
+	isArr        (    ) { return isArr       (this      );}
+
+	toJSON       (    ) { return toJSON      (this      );}
+	get chIndex () { return getChIndex(this)}
+}
+
+/*function wrap (self) {
+	const wr = new Node({
+		td: "X",
+		ch: self
+	});
+	self.parent.ch.splice(self.chIndex, 1, wr);
+}*/
+function strip (self) {
+	checkToParent(self);
+	if (isArr(...self.ch))
+		self.parent.ch.splice(self.chIndex, 1, self.ch);
+	checkToParent(self);
+}
+
+function join (self, a, b) {
+	checkToParent(self);
+	if (isArr(self)) {
+		const joined = self.ch.slice(a, b);
+		if (isArr(...joined)) {
+			const 
+				startPoint = joined[0].chIndex,
+				pasted = [];
+			for (let v of joined)
+				pasted.push(...v);
+			for (let v of pasted)
+				v.parent = self;
+			self.ch.splice(startPoint, joined.length, ...pasted);
+		} else if (isStr(...joined)) {
+			const 
+				startPoint = joined[0].chIndex,
+				pastedStr = joined.reguce((a,v) => a += v.ch, ""),
+				pastedNode = new Node({
+					ch: pastedStr,
+					parent: self,
+				});
+			self.ch.splice(startPoint, joined.length, pastedNode);
+		}
+	}
+	const 
+		n = self.chIndex + 1,
+		right = self.parent.ch[n];
+	if (right)
+		if (isArr(self, right) || isStr(self, right)) {
+			self.ch = self.ch.concat(right.ch);
+			self.parent.ch.splice(n, 1);
+		}
+
+	checkToParent(self);
+}
+
+/*
+function joinRight (self) {
+	const 
+		n = self.chIndex + 1,
+		right = self.parent.ch[n];
+	if (right)
+		if (isArr(self, right) || isStr(self, right)) {
+			self.ch = self.ch.concat(right.ch);
+			self.parent.ch.splice(n, 1);
+		}
+}
+function joinLeft (self) {
+	const 
+		n = self.chIndex - 1,
+		left = self.parent.ch[n];
+	if (left)
+		if (isArr(self, left) || isStr(self, left)) {
+			self.ch = left.ch.concat(self.ch);
+			self.parent.ch.splice(n, 1);
+		}
+}*/
+
+function split (self, a, b) {
+	checkToParent(self);
+	const 
+		parts = [
+			self.ch.slice(0, a),
+			self.ch.slice(a, b),
+			self.ch.slice(b   ),
+		],
+		newChildren = [];
+
+	for (let p of parts) 
+		if (p.length)
+			newChildren.push(new self.constructor ({
+					td: "X",
+					ch: p,
+					parent: self.parent,
+				}));
+
+	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
+	checkToParent(self);
+}
+
+function subDiv (self, a, b) {
+	checkToParent(self);
+	const 
+		strings = [
+			self.ch.slice(0, a),
+			self.ch.slice(a, b),
+			self.ch.slice(b   ),
+		],
+		newChildren = [];
+
+	for (let str of strings) 
+		if (str.length)
+			newChildren.push(new self.constructor ({
+					td: "X",
+					ch: str,
+					parent: self,
+				}));
+
+	self.ch = newChildren;
+	checkToParent(self);
+}
+
+/*function detachRight (self, a) {
+	const 
+		left  = self.ch.slice(0, a),
+		right = self.ch.slice(a   );
+	if (left.length && right.length) {
+		self.ch = left;
+		insertRight(self, new Node({
+			td: "X",
+			ch: right,
+		}));
+	}
+}
+
+function detachLeft (self, a) {
+	const 
+		left  = self.ch.slice(0, a),
+		right = self.ch.slice(a   );
+	if (left.length && right.length) {
+		insertLeft(self, new Node({
+			td: "X",
+			ch: left,
+		}));
+		self.ch = right;
+	}
+}*/
+
+/*function insertRight (self, ...nodes) {
+	self.parent.ch.splice(self.chIndex + 1, 0, ...nodes)
+}
+
+function insertLeft (self, ...nodes) {
+	self.parent.ch.splice(self.chIndex, 0, ...nodes)
+}*/
+
+function getChIndex (self) {
+	if (self.parent) 
+		for (let [k,v] of self.parent.ch.entries()) 
+			if (v == self)
+				return k;
+
+	return null;
+}
+
+function getRoot(self) {
+	return self.parent ? getRoot(self.parent) : self;
+}
+
+function isStr(...args) {
+	for (let a of args) 
+		if (! (typeof a == "string"))
+			return false;
+	return true;
+}
+
+function isArr(...args) {
+	for (let a of args) 
+		if (! (a instanceof Array))
+			return false;
+	return true;
+}
+
+function toJSON(self) {
+	const ob = Object.assign({}, self);
+	delete ob.parent;
+	delete ob.serialN;
+
+	return JSON.stringify(ob, null, 4);
+}
+
+function checkToParent(self) {
+	const root = getRoot(self);
+	forEachRecur((node) => {
+		if (node.ch)
+			for (let v of node.ch) {
+				if (! v.parent)
+					debugger;
+				if (v.parent != node)
+					debugger;
+			}
+	});
+}
+
+function forEachRecur(preCb, ob, postCb) {
+	if (ob instanceof Array) 
+		for (let v of ob)
+				forEachRecur(preCb, v, postCb);
+	else if (typeof ob == "object") {
+		if (preCb)
+			preCb(ob);
+		forEachRecur(preCb, ob.ch, postCb);
+		if (postCb)
+			postCb(ob);
+	}
+}
+
+/***/ }),
+/* 12 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "forEachRecur": () => (/* binding */ forEachRecur),
+/* harmony export */   "tryParseJSON": () => (/* binding */ tryParseJSON),
+/* harmony export */   "fromJson": () => (/* binding */ fromJson),
+/* harmony export */   "eHTML": () => (/* binding */ eHTML),
+/* harmony export */   "eHTMLDF": () => (/* binding */ eHTMLDF)
+/* harmony export */ });
+/* harmony import */ var _Node_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+
+
+
+
+
+function setStatusMark(el, className) {
+	const classes = ["executing", "executed", "exec-error"];
+	if (classes.includes(className)) {
+		el.classList.remove(...classes);
+		el.classList.add(className);
+	} else {
+		throw new Error("Invalid className of diagram status: "+slassName);
+	}
+}
+
+
+function forEachRecur(preCb, ob, postCb) {
+	if (ob instanceof Array) 
+		for (let v of ob)
+				forEachRecur(preCb, v, postCb);
+	else if (typeof ob == "object") {
+		if (preCb)
+			preCb(ob);
+		forEachRecur(preCb, ob.ch, postCb);
+		if (postCb)
+			postCb(ob);
+	}
+}
+
+function tryParseJSON (json) {
+	try {
+		const object = fromJson(json)
+		return {object};
+	} catch (err) {
+		return {
+			text: json,
+			error: err,
+		}
+	}
+}
+
+function fromJson(json) {
+	return JSON.parse(json, function(k, v) {
+		if (typeof (k * 1) == "number" && typeof v == "object" && "ch" in v) {
+			const node = new _Node_js__WEBPACK_IMPORTED_MODULE_0__.default(v);
+			if (node.ch instanceof Array)
+				node.ch.forEach(v => v.parent = node);
+			return node;
+		} else
+			return v;
+	});
+}
+
+
+function eHTML(code, shell=null) {
+	const _shell = 
+		! shell                  ? document.createElement("div") :
+		typeof shell == "string" ? document.createElement(shell) :
+		typeof shell == "object" ? shell :
+			null;
+	_shell.innerHTML = code;
+	return _shell.children[0];
+}
+
+function eHTMLDF(code) {
+	const _shell = document.createElement("template");
+	return _shell.innerHTML = code, _shell.content;
 }
 
 /***/ })

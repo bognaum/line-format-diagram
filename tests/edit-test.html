@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		.container {
+			margin: 10px 100px;
+			font-family: verdana, sans-serif;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- <link rel="stylesheet" href="./../lfd.css"> -->
+	<title>Test LFD</title>
+</head>
+<body>
+	<div class="container">
+		<div class="lfd-edit">
+			[
+				{
+					"ch": "https://developer.mozilla.org:443/en-US/search?q=URL#search-results"
+				}
+			]
+		</div>
+	</div>
+	<script type="module">
+		import LFD from "./../lfd.js";
+		const lfd = new LFD();
+		document.querySelectorAll(".lfd-edit").forEach((v) => {
+			lfd.edit(v);
+		});
+	</script>
+</body>
+</html>
