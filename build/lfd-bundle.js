@@ -1913,8 +1913,7 @@ function _getHFZ(lineCount) {
 	}
 }
 
-function _fromJson(json) {
-	return JSON.parse(json, function(k, v) {
+
 		if (typeof (k * 1) == "number" && typeof v == "object" && "ch" in v) {
 			const node = new Node(v);
 			if (node.ch instanceof Array)
@@ -1923,7 +1922,7 @@ function _fromJson(json) {
 		} else
 			return v;
 	});
-}*/
+
 
 
 /*function eHTML(code, shell=null) {

@@ -46,7 +46,7 @@ function tryParseJSON (json) {
 }
 
 function fromJson(json) {
-	return JSON.parse(json, function(k, v) {
+	const ob =  JSON.parse(json, function(k, v) {
 		if (typeof (k * 1) == "number" && typeof v == "object" && "ch" in v) {
 			const node = new Node(v);
 			if (node.ch instanceof Array)
@@ -55,6 +55,11 @@ function fromJson(json) {
 		} else
 			return v;
 	});
+
+	if (ob instanceof Array)
+		return new Node({ch: ob});
+	else 
+		return ob;
 }
 
 
