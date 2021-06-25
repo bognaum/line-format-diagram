@@ -391,7 +391,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "1.1.3";
+const version = "1.1.4";
 
 const {
 	token,
@@ -450,7 +450,17 @@ const
 			return r.string(pc);
 		}),
 		slashed : domain("slashed", function(pc) {
-			return token(/\\[\\ntbu'"`]/y)(pc);
+			return token(
+				'\\"'         ,
+				"\\\\"        , 
+				"\\/"         , 
+				"\\b"         ,
+				"\\f"         ,
+				"\\n"         ,
+				"\\r"         ,
+				"\\t"         ,
+				/\\u\d\d\d\d/y,
+			)(pc);
 		}),
 		number          : domain("number", function(pc) {
 			return token(/\b\d+\.|\.\d+\b|\b\d+\.?\d*\b/y)(pc);
@@ -476,8 +486,8 @@ const
 		string        : rule(function(pc) {
 			return seq(
 				token('"'),
-				q(alter(d.slashed, nToken('"')), "*"),
-				token('"'),
+				q(alter(d.slashed, nToken('"', "\n", "\\")), "*"),
+				token('"').catch("String: invalid symbol"),
 			)(pc);
 		}),
 		space           : rule(function(pc) {
