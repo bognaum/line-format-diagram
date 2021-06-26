@@ -249,6 +249,7 @@ class Node {
 
 	toJSON       (    ) { return toJSON      (this      );}
 	get chIndex () { return getChIndex(this)}
+	get clone   () { return getClone  (this)}
 }
 
 /*function wrap (self) {
@@ -436,6 +437,19 @@ function toJSON(self) {
 	return JSON.stringify(ob, null, 4);
 }
 
+function getClone(self) {
+	const  clone = new Node(self);
+	delete clone.parent;
+	delete clone.serialN;
+
+	if(isArr(self)) {
+		clone.ch = self.ch.map(getColone);
+		clone.ch.forEach(v => v.parent = clone);
+	}
+
+	return clone;
+}
+
 function checkToParent(self) {
 	const root = getRoot(self);
 	forEachRecur((node) => {
@@ -460,6 +474,11 @@ function forEachRecur(preCb, ob, postCb) {
 		if (postCb)
 			postCb(ob);
 	}
+}
+
+function initChildren(self) {
+	if (isArr(self))
+		self.ch.forEach(v => v.parent = self);
 }
 
 /***/ }),
@@ -1996,14 +2015,13 @@ function editDiagram(self, elem, tOb) {
 		editButtons = editPanel.querySelector(`.${self.clPref}-edit-buttons`),
 		navButtons  = editPanel.querySelector(`.${self.clPref}-nav-buttons`),
 		diagram     = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<div class="executed"><div>`),
-		// diagram     = buildDiagram(self, elem, tOb),
 		editStage   = {
-			tOb
+			tOb: tOb.clone,
 		},
 		history   = [editStage];
 
 		elem.append(editPanel,diagram);
-		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb);
+		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb.clone);
 
 	editButtons.onclick = function (ev) {
 		const pr = self.clPref;
@@ -2028,7 +2046,7 @@ function editDiagram(self, elem, tOb) {
 
 		} while (t != this && (t = t.parentElement));
 
-		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb);
+		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb.clone);
 	};
 
 	document.onselectionchange = function (ev) {
@@ -2064,8 +2082,8 @@ function editDiagram(self, elem, tOb) {
 }
 
 
-function editLoop(self, editPanel, diagram, edirStage, history) {
-	// body...
+function editLoop(self, edirStage, history) {
+	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb);
 }
 
 

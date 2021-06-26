@@ -8,14 +8,13 @@ export default function editDiagram(self, elem, tOb) {
 		editButtons = editPanel.querySelector(`.${self.clPref}-edit-buttons`),
 		navButtons  = editPanel.querySelector(`.${self.clPref}-nav-buttons`),
 		diagram     = lib.eHTML(`<div class="executed"><div>`),
-		// diagram     = buildDiagram(self, elem, tOb),
 		editStage   = {
-			tOb
+			tOb: tOb.clone,
 		},
 		history   = [editStage];
 
 		elem.append(editPanel,diagram);
-		buildDiagram(self, diagram, editStage.tOb);
+		buildDiagram(self, diagram, editStage.tOb.clone);
 
 	editButtons.onclick = function (ev) {
 		const pr = self.clPref;
@@ -40,7 +39,7 @@ export default function editDiagram(self, elem, tOb) {
 
 		} while (t != this && (t = t.parentElement));
 
-		buildDiagram(self, diagram, editStage.tOb);
+		buildDiagram(self, diagram, editStage.tOb.clone);
 	};
 
 	document.onselectionchange = function (ev) {
@@ -76,8 +75,8 @@ export default function editDiagram(self, elem, tOb) {
 }
 
 
-function editLoop(self, editPanel, diagram, edirStage, history) {
-	// body...
+function editLoop(self, edirStage, history) {
+	buildDiagram(self, diagram, editStage.tOb);
 }
 
 

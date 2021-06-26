@@ -13,6 +13,7 @@ export default class Node {
 
 	toJSON       (    ) { return toJSON      (this      );}
 	get chIndex () { return getChIndex(this)}
+	get clone   () { return getClone  (this)}
 }
 
 /*function wrap (self) {
@@ -200,6 +201,19 @@ function toJSON(self) {
 	return JSON.stringify(ob, null, 4);
 }
 
+function getClone(self) {
+	const  clone = new Node(self);
+	delete clone.parent;
+	delete clone.serialN;
+
+	if(isArr(self)) {
+		clone.ch = self.ch.map(getColone);
+		clone.ch.forEach(v => v.parent = clone);
+	}
+
+	return clone;
+}
+
 function checkToParent(self) {
 	const root = getRoot(self);
 	forEachRecur((node) => {
@@ -224,4 +238,9 @@ function forEachRecur(preCb, ob, postCb) {
 		if (postCb)
 			postCb(ob);
 	}
+}
+
+function initChildren(self) {
+	if (isArr(self))
+		self.ch.forEach(v => v.parent = self);
 }
