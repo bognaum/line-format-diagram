@@ -36,9 +36,15 @@ class LineFormatDiagram {
 
 	build              (...args) { return build             (this, ...args); }
 	buildByTextContent (...args) { return buildByTextContent(this, ...args); }
+	getBuilded         (...args) { return getBuilded        (this, ...args); }
 
 	get        version () {return version;}
 	static get version () {return version;}
+}
+
+function getBuilded(self, templ) {
+	const elem = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<pre class=""><pre>`);
+	return build(self, elem, templ);
 }
 
 function buildByTextContent(self, elem) {
@@ -101,7 +107,7 @@ function build (self, elem, template) {
 	} else {
 		throw new Error();
 	}
-
+	return tOb;
 }
 
 
@@ -118,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "eHTML": () => (/* binding */ eHTML),
 /* harmony export */   "eHTMLDF": () => (/* binding */ eHTMLDF)
 /* harmony export */ });
-/* harmony import */ var _Node_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _NodeClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
 
 
@@ -161,15 +167,20 @@ function tryParseJSON (json) {
 }
 
 function fromJson(json) {
-	return JSON.parse(json, function(k, v) {
+	const ob =  JSON.parse(json, function(k, v) {
 		if (typeof (k * 1) == "number" && typeof v == "object" && "ch" in v) {
-			const node = new _Node_js__WEBPACK_IMPORTED_MODULE_0__.default(v);
+			const node = new _NodeClass_js__WEBPACK_IMPORTED_MODULE_0__.default(v);
 			if (node.ch instanceof Array)
 				node.ch.forEach(v => v.parent = node);
 			return node;
 		} else
 			return v;
 	});
+
+	if (ob instanceof Array)
+		return new _NodeClass_js__WEBPACK_IMPORTED_MODULE_0__.default({ch: ob});
+	else 
+		return ob;
 }
 
 
@@ -1913,7 +1924,8 @@ function _getHFZ(lineCount) {
 	}
 }
 
-
+function _fromJson(json) {
+	return JSON.parse(json, function(k, v) {
 		if (typeof (k * 1) == "number" && typeof v == "object" && "ch" in v) {
 			const node = new Node(v);
 			if (node.ch instanceof Array)
@@ -1922,7 +1934,7 @@ function _getHFZ(lineCount) {
 		} else
 			return v;
 	});
-
+}*/
 
 
 /*function eHTML(code, shell=null) {

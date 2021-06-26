@@ -13,9 +13,15 @@ export default class LineFormatDiagram {
 
 	build              (...args) { return build             (this, ...args); }
 	buildByTextContent (...args) { return buildByTextContent(this, ...args); }
+	getBuilded         (...args) { return getBuilded        (this, ...args); }
 
 	get        version () {return version;}
 	static get version () {return version;}
+}
+
+function getBuilded(self, templ) {
+	const elem = lib.eHTML(`<pre class=""><pre>`);
+	return build(self, elem, templ);
 }
 
 function buildByTextContent(self, elem) {
@@ -78,5 +84,5 @@ function build (self, elem, template) {
 	} else {
 		throw new Error();
 	}
-
+	return tOb;
 }
