@@ -2,6 +2,7 @@ import * as lib     from "./lib.js";
 import JsonEHl      from "./json-err-hl/json-err-hl.js";
 import setStyle     from "./set-style.js";
 import buildDiagram from "./buildDiagram.js";
+import editDiagram  from "./editDiagram.js";
 
 const version = "6.0.2";
 
@@ -14,9 +15,33 @@ export default class LineFormatDiagram {
 	build              (...args) { return build             (this, ...args); }
 	buildByTextContent (...args) { return buildByTextContent(this, ...args); }
 	getBuilded         (...args) { return getBuilded        (this, ...args); }
+	edit               (...args) { return edit              (this, ...args); }
 
 	get        version () {return version;}
 	static get version () {return version;}
+}
+
+function edit(self, elem) {
+	const template = elem.textContent;
+	const {object :tOb, error :jsonError} = lib.tryParseJSON(template);
+	if (tOb)
+		return editDiagram(self, elem, tOb);
+	else if (jsonError) {
+		elem.classList.remove("executing", "executed", "exec-error");
+		elem.classList.add("exec-error");
+		const 
+			firstLN = parseInt(elem.dataset.lineNum) || 1,
+			json = template,
+			hl = new JsonEHl("e-s-json-err-hl"),
+			codeField = hl.getHighlighted(template, firstLN);
+		elem.innerHTML = "";
+		elem.appendChild(codeField);
+		hl.scrollToFirstError(codeField);
+		console.error(`(!) \n`, elem, "\n", jsonError);
+		return;
+	} else {
+		throw new Error();
+	}
 }
 
 function getBuilded(self, templ) {
@@ -45,7 +70,7 @@ function build (self, elem, template) {
 		].join("\n"));
 
 	elem.dataset.fileTreeDiagramVersion = version;
-	elem.classList.add(self.clPref);
+	// elem.classList.add(self.clPref);
 	elem.classList.add("executing");
 
 	if (typeof template != "string")

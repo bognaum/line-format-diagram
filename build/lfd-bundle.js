@@ -21,6 +21,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _set_style_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
+/* harmony import */ var _editDiagram_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
+
 
 
 
@@ -37,9 +39,33 @@ class LineFormatDiagram {
 	build              (...args) { return build             (this, ...args); }
 	buildByTextContent (...args) { return buildByTextContent(this, ...args); }
 	getBuilded         (...args) { return getBuilded        (this, ...args); }
+	edit               (...args) { return edit              (this, ...args); }
 
 	get        version () {return version;}
 	static get version () {return version;}
+}
+
+function edit(self, elem) {
+	const template = elem.textContent;
+	const {object :tOb, error :jsonError} = _lib_js__WEBPACK_IMPORTED_MODULE_0__.tryParseJSON(template);
+	if (tOb)
+		return (0,_editDiagram_js__WEBPACK_IMPORTED_MODULE_4__.default)(self, elem, tOb);
+	else if (jsonError) {
+		elem.classList.remove("executing", "executed", "exec-error");
+		elem.classList.add("exec-error");
+		const 
+			firstLN = parseInt(elem.dataset.lineNum) || 1,
+			json = template,
+			hl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_1__.default("e-s-json-err-hl"),
+			codeField = hl.getHighlighted(template, firstLN);
+		elem.innerHTML = "";
+		elem.appendChild(codeField);
+		hl.scrollToFirstError(codeField);
+		console.error(`(!) \n`, elem, "\n", jsonError);
+		return;
+	} else {
+		throw new Error();
+	}
 }
 
 function getBuilded(self, templ) {
@@ -68,7 +94,7 @@ function build (self, elem, template) {
 		].join("\n"));
 
 	elem.dataset.fileTreeDiagramVersion = version;
-	elem.classList.add(self.clPref);
+	// elem.classList.add(self.clPref);
 	elem.classList.add("executing");
 
 	if (typeof template != "string")
@@ -1654,6 +1680,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function buildDiagram(self, elem, tOb) {
+	elem.classList.add(self.clPref);
 	const opts = Object.assign({
 		style:  "",
 		bdColor: "",
@@ -1947,6 +1974,124 @@ function _fromJson(json) {
 	return _shell.children[0];
 }*/
 
+
+/***/ }),
+/* 13 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ editDiagram)
+/* harmony export */ });
+/* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+
+
+
+function editDiagram(self, elem, tOb) {
+	elem.innerHTML = "";
+	const 
+		editPanel   = _getEditPanelDom(self),
+		editButtons = editPanel.querySelector(`.${self.clPref}-edit-buttons`),
+		navButtons  = editPanel.querySelector(`.${self.clPref}-nav-buttons`),
+		diagram     = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<div class="executed"><div>`),
+		// diagram     = buildDiagram(self, elem, tOb),
+		editStage   = {
+			tOb
+		},
+		history   = [editStage];
+
+		elem.append(editPanel,diagram);
+		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb);
+
+	editButtons.onclick = function (ev) {
+		const pr = self.clPref;
+		const {node, range} = editStage;
+
+		let t = ev.target;
+		do {
+			if (t.classList.contains(`${pr}-edit-split`)) {
+				node.split(range.startOffset, range.endOffset);
+			} else 
+			if (t.classList.contains(`${pr}-edit-sub-div`)) {
+				node.subDiv(range.startOffset, range.endOffset);
+			} else 
+			if (t.classList.contains(`${pr}-edit-strip`)) {
+				node.strip(range.startOffset, range.endOffset);
+			} else 
+			if (t.classList.contains(`${pr}-edit-join`)) {
+				node.join(range.startOffset, range.endOffset);
+			} else 
+				continue;
+			break;
+
+		} while (t != this && (t = t.parentElement));
+
+		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb);
+	};
+
+	document.onselectionchange = function (ev) {
+		// selWasChanged = true;
+
+		const 
+			sel = window.getSelection(),
+			sR = sel.rangeCount ? sel.getRangeAt(0) : null,
+			aC = sR?.commonAncestorContainer,
+			part = (function () {
+				let el = aC;
+				do {
+					if (el.classList?.contains(`${self.clPref}-part`))
+						return el;
+				} while (el = el.parentElement);
+			})(),
+			serialN = parseInt(part.dataset.serialN),
+			node = (function () {
+				let finded;
+				_lib_js__WEBPACK_IMPORTED_MODULE_0__.forEachRecur(node => {
+					console.log(`node`, node);
+					if (node.serialN == serialN)
+						finded = node;
+				}, tOb);
+				return finded;
+			})();
+		editStage.part = part;
+		editStage.node = node;
+		editStage.range = sR;
+		console.log(`\n1. part`, part, "\n2. region", sR, "\n3. node", node);
+	};
+
+}
+
+
+function editLoop(self, editPanel, diagram, edirStage, history) {
+	// body...
+}
+
+
+function _getEditPanelDom(self) {
+	const pr = self.clPref;
+	return _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`
+		<div class="${pr}-edit-panel" style="white-space: normal;">
+			<div class="${pr}-edit-panel__btn-block ${pr}-navi-buttons" style="float: left;">
+				<button class="${pr}-nav-undo" >⤶</button>
+				<button class="${pr}-nav-redo" >⤷</button>
+				&nbsp;&nbsp;
+				<button class="${pr}-nav-left" >⮜</button>
+				<button class="${pr}-nav-up"   >⮝</button>
+				<button class="${pr}-nav-right">⮞</button>
+				<button class="${pr}-nav-down" >⮟</button>
+			</div>
+			<div class="-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
+				<button class="${pr}-edit-split"     >split</button>
+				<button class="${pr}-edit-sub-div"   >subDiv</button>
+				<button class="${pr}-edit-strip"     >strip</button>
+				<button class="${pr}-edit-join"      >join</button>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	`);
+}
 
 /***/ })
 /******/ 	]);

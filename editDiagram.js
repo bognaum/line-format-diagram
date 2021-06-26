@@ -1,4 +1,5 @@
-import * as lib from "./lib.js";
+import * as lib     from "./lib.js";
+import buildDiagram from "./buildDiagram.js";
 
 export default function editDiagram(self, elem, tOb) {
 	elem.innerHTML = "";
@@ -6,15 +7,19 @@ export default function editDiagram(self, elem, tOb) {
 		editPanel   = _getEditPanelDom(self),
 		editButtons = editPanel.querySelector(`.${self.clPref}-edit-buttons`),
 		navButtons  = editPanel.querySelector(`.${self.clPref}-nav-buttons`),
-		diagram     = ,
+		diagram     = lib.eHTML(`<div class="executed"><div>`),
+		// diagram     = buildDiagram(self, elem, tOb),
 		editStage   = {
 			tOb
 		},
 		history   = [editStage];
 
+		elem.append(editPanel,diagram);
+		buildDiagram(self, diagram, editStage.tOb);
+
 	editButtons.onclick = function (ev) {
 		const pr = self.clPref;
-		const {node, range} = editState;
+		const {node, range} = editStage;
 
 		let t = ev.target;
 		do {
@@ -35,7 +40,7 @@ export default function editDiagram(self, elem, tOb) {
 
 		} while (t != this && (t = t.parentElement));
 
-		diagram.innerHTML = getInnerHTML(self, tOb);
+		buildDiagram(self, diagram, editStage.tOb);
 	};
 
 	document.onselectionchange = function (ev) {
@@ -55,16 +60,16 @@ export default function editDiagram(self, elem, tOb) {
 			serialN = parseInt(part.dataset.serialN),
 			node = (function () {
 				let finded;
-				forEachRecur(node => {
+				lib.forEachRecur(node => {
 					console.log(`node`, node);
 					if (node.serialN == serialN)
 						finded = node;
 				}, tOb);
 				return finded;
 			})();
-		editState.part = part;
-		editState.node = node;
-		editState.range = sR;
+		editStage.part = part;
+		editStage.node = node;
+		editStage.range = sR;
 		console.log(`\n1. part`, part, "\n2. region", sR, "\n3. node", node);
 	};
 
@@ -78,7 +83,7 @@ function editLoop(self, editPanel, diagram, edirStage, history) {
 
 function _getEditPanelDom(self) {
 	const pr = self.clPref;
-	return eHTML(`
+	return lib.eHTML(`
 		<div class="${pr}-edit-panel" style="white-space: normal;">
 			<div class="${pr}-edit-panel__btn-block ${pr}-navi-buttons" style="float: left;">
 				<button class="${pr}-nav-undo" >⤶</button>

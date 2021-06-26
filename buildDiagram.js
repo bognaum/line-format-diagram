@@ -2,6 +2,7 @@ import * as lib from "./lib.js";
 import JsonEHl  from "./json-err-hl/json-err-hl.js";
 
 export default function buildDiagram(self, elem, tOb) {
+	elem.classList.add(self.clPref);
 	const opts = Object.assign({
 		style:  "",
 		bdColor: "",
