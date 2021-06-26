@@ -434,7 +434,7 @@ function toJSON(self) {
 	delete ob.parent;
 	delete ob.serialN;
 
-	return JSON.stringify(ob, null, 4);
+	return ob;
 }
 
 function getClone(self) {
@@ -2015,13 +2015,15 @@ function editDiagram(self, elem, tOb) {
 		editButtons = editPanel.querySelector(`.${self.clPref}-edit-buttons`),
 		navButtons  = editPanel.querySelector(`.${self.clPref}-nav-buttons`),
 		diagram     = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<div class="executed"><div>`),
+		codeField   = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<pre></pre>`),
 		editStage   = {
 			tOb: tOb.clone,
 		},
 		history   = [editStage];
 
-		elem.append(editPanel,diagram);
+		elem.append(editPanel,diagram, codeField);
 		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb.clone);
+		codeField.textContent = JSON.stringify(tOb, null, 4);
 
 	editButtons.onclick = function (ev) {
 		const pr = self.clPref;
@@ -2047,6 +2049,7 @@ function editDiagram(self, elem, tOb) {
 		} while (t != this && (t = t.parentElement));
 
 		(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, diagram, editStage.tOb.clone);
+		codeField.textContent = JSON.stringify(tOb, null, 4);
 	};
 
 	document.onselectionchange = function (ev) {
@@ -2076,7 +2079,7 @@ function editDiagram(self, elem, tOb) {
 		editStage.part = part;
 		editStage.node = node;
 		editStage.range = sR;
-		console.log(`\n1. part`, part, "\n2. region", sR, "\n3. node", node);
+		console.log("\naC", aC, `\n1. part`, part, "\n2. region", sR, "\n3. node", node);
 	};
 
 }
@@ -2109,6 +2112,10 @@ function _getEditPanelDom(self) {
 			<div style="clear: both;"></div>
 		</div>
 	`);
+}
+
+function _getCodeFieldDom(self) {
+	return _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<pre></pre>`);
 }
 
 /***/ })

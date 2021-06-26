@@ -198,7 +198,7 @@ function toJSON(self) {
 	delete ob.parent;
 	delete ob.serialN;
 
-	return JSON.stringify(ob, null, 4);
+	return ob;
 }
 
 function getClone(self) {
