@@ -156,7 +156,7 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 
 					for (let i = level + 1; i < tLevels.length; i++) {
 						let hFZ = _getHFZ(tLevels[i]);
-						str += `<div class="${clPref}-grid-node-liner" style="${hFZ}"></div>`; 
+						str += `<div class="${clPref}-grid-v-liner" style="${hFZ}"></div>`; 
 					}
 					
 					sPartN ++;
