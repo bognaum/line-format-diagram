@@ -2005,7 +2005,55 @@ function _fromJson(json) {
 
 
 /***/ }),
-/* 13 */,
+/* 13 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ setSelectionEvent)
+/* harmony export */ });
+/* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+
+function setSelectionEvent(self) {
+	// document.onselectionchange = function (ev) {
+	document.addEventListener("selectionchange", function (ev) {
+
+		const 
+			sel = window.getSelection(),
+			rng = sel.rangeCount ? sel.getRangeAt(0) : null,
+			aC = rng?.commonAncestorContainer,
+			part = (function () {
+				let el = aC;
+				do {
+					if (el.classList?.contains(`${self.clPref}-part`))
+						return el;
+				} while (el = el.parentElement);
+			})(),
+			serialN = part && parseInt(part.dataset.serialN),
+			node = (function () {
+				let finded, sN = -1;
+				_lib_js__WEBPACK_IMPORTED_MODULE_0__.forEachRecur(node => {
+					if (++ sN == serialN)
+						finded = node;
+				}, self.editStage.tOb);
+				return finded;
+			})();
+		self.editStage.part = part;
+		self.editStage.node = node;
+		self.editStage.range = rng;
+		console.log(
+			"\n1. sel", sel, 
+			"\n2. region", rng, 
+			`\n3. aC`, aC, 
+			`\n4. part`, part, 
+			"\n5. node", node,
+		);
+	});
+}
+
+/***/ }),
 /* 14 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2017,6 +2065,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _selection_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
+
 
 
 
@@ -2055,7 +2105,7 @@ function constructor(self, clPref, elem, tOb) {
 
 	editLoop.commit(self);
 
-	setSelectionEvent(self);
+	(0,_selection_event_js__WEBPACK_IMPORTED_MODULE_3__.default)(self);
 
 }
 
@@ -2090,42 +2140,6 @@ function setBtnEnableDisable(self) {
 	pane.querySelector(`.${pr}-nav-redo`)[
 		(hist.i == hist.length - 1) ? "setAttribute" : "removeAttribute"
 	]("disabled", true);
-}
-
-function setSelectionEvent(self) {
-	document.onselectionchange = function (ev) {
-
-		const 
-			sel = window.getSelection(),
-			rng = sel.rangeCount ? sel.getRangeAt(0) : null,
-			aC = rng?.commonAncestorContainer,
-			part = (function () {
-				let el = aC;
-				do {
-					if (el.classList?.contains(`${self.clPref}-part`))
-						return el;
-				} while (el = el.parentElement);
-			})(),
-			serialN = part && parseInt(part.dataset.serialN),
-			node = (function () {
-				let finded, sN = -1;
-				_lib_js__WEBPACK_IMPORTED_MODULE_0__.forEachRecur(node => {
-					if (++ sN == serialN)
-						finded = node;
-				}, self.editStage.tOb);
-				return finded;
-			})();
-		self.editStage.part = part;
-		self.editStage.node = node;
-		self.editStage.range = rng;
-		console.log(
-			"\n1. sel", sel, 
-			"\n2. region", rng, 
-			`\n3. aC`, aC, 
-			`\n4. part`, part, 
-			"\n5. node", node,
-		);
-	};
 }
 
 function _getEditPanelDom(self) {
