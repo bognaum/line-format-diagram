@@ -36,7 +36,6 @@ function constructor(self, clPref, elem, tOb) {
 	editLoop.commit(self);
 
 	setEditEvents(self);
-	setNavEvents(self);
 
 }
 
@@ -74,32 +73,6 @@ function setBtnEnableDisable(self) {
 }
 
 function setEditEvents(self) {
-	self.editButtons.onclick = function (ev) {
-		const pr = self.clPref;
-		const {node, range} = self.editStage;
-
-		let t = ev.target;
-		do {
-			if (t.classList.contains(`${pr}-edit-split`)) {
-				node.split(range.startOffset, range.endOffset);
-			} else 
-			if (t.classList.contains(`${pr}-edit-sub-div`)) {
-				node.subDiv(range.startOffset, range.endOffset);
-			} else 
-			if (t.classList.contains(`${pr}-edit-strip`)) {
-				node.strip(range.startOffset, range.endOffset);
-			} else 
-			if (t.classList.contains(`${pr}-edit-join`)) {
-				node.join(range.startOffset, range.endOffset);
-			} else 
-				continue;
-			break;
-
-		} while (t != this && (t = t.parentElement));
-
-		editLoop.commit(self);
-	};
-
 	document.onselectionchange = function (ev) {
 		// selWasChanged = true;
 
@@ -136,26 +109,74 @@ function setEditEvents(self) {
 	};
 }
 
-function setNavEvents(self) {
+function _getEditPanelDom(self) {
 	const pr = self.clPref;
-	const {editStage, history} = self;
-	self.navButtons.onclick = function (ev) {
+	
+	const dom = lib.eHTML(`
+		<div class="${pr}-edit-panel" style="white-space: normal;">
+			<div class="${pr}-edit-panel__btn-block ${pr}-history-buttons" style="float: left;">
+				<button class="${pr}-nav-undo" >⤶</button>
+				<button class="${pr}-nav-redo" >⤷</button>
+				&nbsp;&nbsp;
+			</div>
+			<div class="${pr}-edit-panel__btn-block ${pr}-nav-buttons" style="float: left;">
+				<button class="${pr}-nav-left" >⮜</button>
+				<button class="${pr}-nav-up"   >⮝</button>
+				<button class="${pr}-nav-right">⮞</button>
+				<button class="${pr}-nav-down" >⮟</button>
+			</div>
+			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
+				<button class="${pr}-edit-split"     >split</button>
+				<button class="${pr}-edit-sub-div"   >subDiv</button>
+				<button class="${pr}-edit-strip"     >strip</button>
+				<button class="${pr}-edit-join"      >join</button>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	`);
 
-		// not bubbled
+	dom.querySelector(`.${pr}-edit-buttons`).onclick = function(ev) {
+		const {node, range} = self.editStage;
+
+		if (ev.target.classList.contains(`${pr}-edit-split`)) {
+			node.split(range.startOffset, range.endOffset);
+		} else 
+		if (ev.target.classList.contains(`${pr}-edit-sub-div`)) {
+			node.subDiv(range.startOffset, range.endOffset);
+		} else 
+		if (ev.target.classList.contains(`${pr}-edit-strip`)) {
+			node.strip(range.startOffset, range.endOffset);
+		} else 
+		if (ev.target.classList.contains(`${pr}-edit-join`)) {
+			node.join(range.startOffset, range.endOffset);
+		}  
+		editLoop.commit(self);
+	};
+
+	dom.querySelector(`.${pr}-history-buttons`).onclick = function (ev) {
+		const {editStage, history} = self;
+
 		if        (ev.target.classList.contains(`${pr}-nav-undo`)) {
+			console.log("OK");
 			if (history[history.i - 1]) {
 				editStage.tOb = history[-- history.i].clone;
 				setBtnEnableDisable(self);
 				editLoop(self);
 			}
 		} else if (ev.target.classList.contains(`${pr}-nav-redo`)) {
+			console.log("OK");
 			if (history[history.i + 1]) {
 				editStage.tOb = history[++ history.i].clone;
 				setBtnEnableDisable(self);
 				editLoop(self);
 			}
+		}
 
-		} else if (ev.target.classList.contains(`${pr}-nav-left`)) {
+	};
+
+	dom.querySelector(`.${pr}-nav-buttons`).onclick = function (ev) {
+
+		if        (ev.target.classList.contains(`${pr}-nav-left`)) {
 			// ...
 		} else if (ev.target.classList.contains(`${pr}-nav-up`)) {
 			// ...
@@ -165,34 +186,8 @@ function setNavEvents(self) {
 			// ...
 		}
 
-		// parallel not bubbled
-		if (ev.target.classList.contains('fff')) {}
 	};
-}
-
-
-function _getEditPanelDom(self) {
-	const pr = self.clPref;
-	return lib.eHTML(`
-		<div class="${pr}-edit-panel" style="white-space: normal;">
-			<div class="${pr}-edit-panel__btn-block ${pr}-nav-buttons" style="float: left;">
-				<button class="${pr}-nav-undo" >⤶</button>
-				<button class="${pr}-nav-redo" >⤷</button>
-				&nbsp;&nbsp;
-				<button class="${pr}-nav-left" >⮜</button>
-				<button class="${pr}-nav-up"   >⮝</button>
-				<button class="${pr}-nav-right">⮞</button>
-				<button class="${pr}-nav-down" >⮟</button>
-			</div>
-			<div class="-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
-				<button class="${pr}-edit-split"     >split</button>
-				<button class="${pr}-edit-sub-div"   >subDiv</button>
-				<button class="${pr}-edit-strip"     >strip</button>
-				<button class="${pr}-edit-join"      >join</button>
-			</div>
-			<div style="clear: both;"></div>
-		</div>
-	`);
+	return dom;
 }
 
 function _getCodeEditBlockDom(self) {
