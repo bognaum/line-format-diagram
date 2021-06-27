@@ -137,17 +137,18 @@ function _getEditPanelDom(self) {
 
 	dom.querySelector(`.${pr}-edit-buttons`).onclick = function(ev) {
 		const {node, range} = self.editStage;
+		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
-		if (ev.target.classList.contains(`${pr}-edit-split`)) {
+		if (tClass(`${pr}-edit-split`)) {
 			node.split(range.startOffset, range.endOffset);
 		} else 
 		if (ev.target.classList.contains(`${pr}-edit-sub-div`)) {
 			node.subDiv(range.startOffset, range.endOffset);
 		} else 
-		if (ev.target.classList.contains(`${pr}-edit-strip`)) {
+		if (tClass(`${pr}-edit-strip`)) {
 			node.strip(range.startOffset, range.endOffset);
 		} else 
-		if (ev.target.classList.contains(`${pr}-edit-join`)) {
+		if (tClass(`${pr}-edit-join`)) {
 			node.join(range.startOffset, range.endOffset);
 		}  
 		editLoop.commit(self);
@@ -155,15 +156,16 @@ function _getEditPanelDom(self) {
 
 	dom.querySelector(`.${pr}-history-buttons`).onclick = function (ev) {
 		const {editStage, history} = self;
+		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
-		if        (ev.target.classList.contains(`${pr}-nav-undo`)) {
+		if        (tClass(`${pr}-nav-undo`)) {
 			console.log("OK");
 			if (history[history.i - 1]) {
 				editStage.tOb = history[-- history.i].clone;
 				setBtnEnableDisable(self);
 				editLoop(self);
 			}
-		} else if (ev.target.classList.contains(`${pr}-nav-redo`)) {
+		} else if (tClass(`${pr}-nav-redo`)) {
 			console.log("OK");
 			if (history[history.i + 1]) {
 				editStage.tOb = history[++ history.i].clone;
@@ -175,14 +177,15 @@ function _getEditPanelDom(self) {
 	};
 
 	dom.querySelector(`.${pr}-nav-buttons`).onclick = function (ev) {
+		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
-		if        (ev.target.classList.contains(`${pr}-nav-left`)) {
+		if        (tClass(`${pr}-nav-left`)) {
 			// ...
-		} else if (ev.target.classList.contains(`${pr}-nav-up`)) {
+		} else if (tClass(`${pr}-nav-up`)) {
 			// ...
-		} else if (ev.target.classList.contains(`${pr}-nav-right`)) {
+		} else if (tClass(`${pr}-nav-right`)) {
 			// ...
-		} else if (ev.target.classList.contains(`${pr}-nav-down`)) {
+		} else if (tClass(`${pr}-nav-down`)) {
 			// ...
 		}
 
