@@ -13,10 +13,11 @@ function constructor(self, clPref, elem, tOb) {
 	self.clPref      = clPref;
 	self.tOb         = tOb;
 	self.editPanel   = _getEditPanelDom(self);
+	self.codeEditBlock = _getCodeEditBlockDom(self);
 	self.editButtons = self.editPanel.querySelector(`.${self.clPref}-edit-buttons`);
 	self.navButtons  = self.editPanel.querySelector(`.${self.clPref}-nav-buttons`);
 	self.diagram     = lib.eHTML(`<div class="executed"><div>`);
-	self.codeField   = lib.eHTML(`<pre></pre>`);
+	self.codeField   = self.codeEditBlock.querySelector(`.${self.clPref}-code-field`);
 	self.editStage   = {
 			tOb:     tOb.clone,
 		};
@@ -27,8 +28,10 @@ function constructor(self, clPref, elem, tOb) {
 	elem.append(
 		self.editPanel, 
 		self.diagram, 
-		self.codeField
+		self.codeEditBlock,
 	);
+
+	console.log(`self.codeEditBlock`, self.codeEditBlock);
 
 	editLoop.commit(self);
 
@@ -192,6 +195,22 @@ function _getEditPanelDom(self) {
 	`);
 }
 
-function _getCodeFieldDom(self) {
-	return lib.eHTML(`<pre></pre>`);
+function _getCodeEditBlockDom(self) {
+	const pr = self.clPref;
+	return lib.eHTML(`
+		<div class="${pr}-code-edit-block">
+			<div class="${pr}-code-edit-panel">
+				<div style="float: left;">
+					<button class="${pr}-blank">Blank</button>
+					<button class="${pr}-apply">Apply</button>
+					<button class="${pr}-discard">Discard</button>
+				</div>
+				<div style="float: right;">
+					<button class="${pr}-to-clipboard">To Clipboard</button>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+			<pre class="${pr}-code-field" contenteditable="true"></pre>
+		</div>
+	`);
 }
