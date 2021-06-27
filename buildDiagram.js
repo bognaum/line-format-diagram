@@ -17,12 +17,11 @@ export default function buildDiagram(self, elem, tOb) {
 
 	elem.innerHTML = htmlStr;
 }
+
 function _getLevels(tOb) {
 	const 
 		tLevels = [],
 		bLevels = [];
-
-	let serialN = 0;
 
 	recursive(tOb, 0);
 	bLevels.push(1);
@@ -39,7 +38,6 @@ function _getLevels(tOb) {
 		} else if (tOb.ch) {
 
 			const node = tOb;
-			node.serialN = serialN ++;
 
 			if ("td" in node) {
 				const 
@@ -73,8 +71,8 @@ function _getLevels(tOb) {
 function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 	let 
 		bLevels = _bLevels.map(v => v),
-		str    = "",
-		sPartN = 0;
+		str     = "",
+		serialN = -1;
 
 	recursive(templ, 0);
 	return str;
@@ -106,7 +104,7 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			} else {}
 
 			str += `<div class="${clPref}-part ${showBdsClass} ${node.class}" ` + 
-				`style="${localBdColor}" data-serial-n="${node.serialN}">`;
+				`style="${localBdColor}" data-serial-n="${++ serialN}">`;
 			
 			if ("topDescr" in node)
 				str += [
@@ -159,8 +157,6 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 						let hFZ = _getHFZ(tLevels[i]);
 						str += `<div class="${clPref}-grid-v-liner" style="${hFZ}"></div>`; 
 					}
-					
-					sPartN ++;
 
 					str += [
 						`<div `,

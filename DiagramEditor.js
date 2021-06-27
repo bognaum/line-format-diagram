@@ -113,10 +113,9 @@ function setEditEvents(self) {
 			})(),
 			serialN = parseInt(part.dataset.serialN),
 			node = (function () {
-				let finded;
+				let finded, sN = -1;
 				lib.forEachRecur(node => {
-					console.log(`node`, node);
-					if (node.serialN == serialN)
+					if (++ sN == serialN)
 						finded = node;
 				}, self.editStage.tOb);
 				return finded;
