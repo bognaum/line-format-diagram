@@ -43,18 +43,11 @@ function commit(self) {
 	const {editStage, history} = self;
 	this(self);
 
-	const clone = editStage.tOb.clone;
-	if (clone.ch == editStage.tOb.ch)
-		throw new Error();
-
 	history.i ++;
 	history[history.i] = editStage.tOb.clone;
 	history.splice(history.i + 1, Infinity);
 
-	if (self.editStage.tOb.ch == self.history[0].ch)
-		throw new Error();
-
-	editStage.written = true;
+	setBtnEnableDisable(self);
 	console.log(`self.history`, self.history);
 }
 
@@ -63,6 +56,18 @@ function editLoop(self) {
 	self.codeField.textContent = JSON.stringify(self.editStage.tOb, null, 4);
 
 	console.log(`self.history`, self.history);
+}
+
+function setBtnEnableDisable(self) {
+	const {clPref :pr, history :hist, editPanel :pane} = self;
+
+	pane.querySelector(`.${pr}-nav-undo`)[
+		(hist.i <= 0) ? "setAttribute" : "removeAttribute"
+	]("disabled", true);
+
+	pane.querySelector(`.${pr}-nav-redo`)[
+		(hist.i == hist.length - 1) ? "setAttribute" : "removeAttribute"
+	]("disabled", true);
 }
 
 function setEditEvents(self) {
@@ -137,14 +142,14 @@ function setNavEvents(self) {
 		// not bubbled
 		if        (ev.target.classList.contains(`${pr}-nav-undo`)) {
 			if (history[history.i - 1]) {
-				console.log("undo");
 				editStage.tOb = history[-- history.i].clone;
+				setBtnEnableDisable(self);
 				editLoop(self);
 			}
 		} else if (ev.target.classList.contains(`${pr}-nav-redo`)) {
 			if (history[history.i + 1]) {
-				console.log("redo");
 				editStage.tOb = history[++ history.i].clone;
+				setBtnEnableDisable(self);
 				editLoop(self);
 			}
 
