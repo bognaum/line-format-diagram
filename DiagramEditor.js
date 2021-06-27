@@ -11,6 +11,7 @@ function constructor(self, clPref, elem, tOb) {
 	elem.innerHTML = "";
 
 	self.clPref      = clPref;
+	self.tOb         = tOb;
 	self.editPanel   = _getEditPanelDom(self);
 	self.editButtons = self.editPanel.querySelector(`.${self.clPref}-edit-buttons`);
 	self.navButtons  = self.editPanel.querySelector(`.${self.clPref}-nav-buttons`);
@@ -22,9 +23,19 @@ function constructor(self, clPref, elem, tOb) {
 	self.history   = [self.editStage];
 
 	elem.append(self.editPanel, self.diagram, self.codeField);
-	buildDiagram(self, self.diagram, self.editStage.tOb.clone);
-	self.codeField.textContent = JSON.stringify(tOb, null, 4);
+	editLoop(self);
 
+	setEvents(self);
+
+}
+
+
+function editLoop(self) {
+	buildDiagram(self, self.diagram, self.editStage.tOb.clone);
+	self.codeField.textContent = JSON.stringify(self.editStage.tOb, null, 4);
+}
+
+function setEvents(self) {
 	self.editButtons.onclick = function (ev) {
 		const pr = self.clPref;
 		const {node, range} = self.editStage;
@@ -48,8 +59,7 @@ function constructor(self, clPref, elem, tOb) {
 
 		} while (t != this && (t = t.parentElement));
 
-		buildDiagram(self, self.diagram, self.editStage.tOb.clone);
-		self.codeField.textContent = JSON.stringify(tOb, null, 4);
+		editLoop(self);
 	};
 
 	document.onselectionchange = function (ev) {
@@ -73,7 +83,7 @@ function constructor(self, clPref, elem, tOb) {
 					console.log(`node`, node);
 					if (node.serialN == serialN)
 						finded = node;
-				}, tOb);
+				}, self.editStage.tOb);
 				return finded;
 			})();
 		self.editStage.part = part;
@@ -81,12 +91,6 @@ function constructor(self, clPref, elem, tOb) {
 		self.editStage.range = sR;
 		console.log("\naC", aC, `\n1. part`, part, "\n2. region", sR, "\n3. node", node);
 	};
-
-}
-
-
-function editLoop(self) {
-	buildDiagram(self, self.diagram, self.editStage.tOb);
 }
 
 
