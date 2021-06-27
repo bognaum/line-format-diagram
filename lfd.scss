@@ -19,18 +19,20 @@ $link_line_color: #999;
 	user-select: none;
 	font-family: consolas, courier, monospace;
 	
-	&.executed *{
+	/*&.executed *{
 		display: inline-block;
 		text-align: center;
-	}
+	}*/
 
-	&:not(.executed) {
+	/*&:not(.executed) {
 		font-family: monospace;
 		white-space: pre;
 		text-align: left;
-	}
+	}*/
 
 	.#{$pref}-part {
+		display: inline-block;
+		text-align: center;
 		border-right: $v_line_th solid transparent;
 		border-left: $v_line_th solid transparent;
 		margin-right: -$v_line_th;
@@ -81,10 +83,12 @@ $link_line_color: #999;
 			margin: -1px;
 			display: block;
 			.#{$pref}-bottom-rel {
+				text-align: center;
 				display: block;
 				position: relative;
 				border-bottom: $link_line_th solid $link_line_color;
 				>.#{$pref}-rel-line {
+					display: inline-block;
 					position: absolute;
 					width: 10px;
 					border-left: $link_line_th solid $link_line_color;

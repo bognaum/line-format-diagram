@@ -1,5 +1,6 @@
 import * as lib     from "./lib.js";
 import buildDiagram from "./buildDiagram.js";
+import JsonEHl       from "./json-err-hl/json-err-hl.js";
 
 export default class DiagramEditor {
 	constructor (clPref, elem, tOb) { constructor(this, clPref, elem, tOb);}
@@ -16,7 +17,7 @@ function constructor(self, clPref, elem, tOb) {
 	self.codeEditBlock = _getCodeEditBlockDom(self);
 	self.editButtons = self.editPanel.querySelector(`.${self.clPref}-edit-buttons`);
 	self.navButtons  = self.editPanel.querySelector(`.${self.clPref}-nav-buttons`);
-	self.diagram     = lib.eHTML(`<div class="executed"><div>`);
+	self.diagram     = lib.eHTML(`<div class=""><div>`);
 	self.codeField   = self.codeEditBlock.querySelector(`.${self.clPref}-code-field`);
 	self.editStage   = {
 			tOb:     tOb.clone,
@@ -55,7 +56,7 @@ function commit(self) {
 
 function editLoop(self) {
 	buildDiagram(self, self.diagram, self.editStage.tOb);
-	self.codeField.textContent = JSON.stringify(self.editStage.tOb, null, 4);
+	self.codeField.textContent = _stringify(self.editStage.tOb);
 
 	console.log(`self.history`, self.history);
 }
@@ -195,11 +196,11 @@ function _getEditPanelDom(self) {
 
 function _getCodeEditBlockDom(self) {
 	const pr = self.clPref;
-	return lib.eHTML(`
+	const dom = lib.eHTML(`
 		<div class="${pr}-code-edit-block">
 			<div class="${pr}-code-edit-panel">
 				<div style="float: left;">
-					<button class="${pr}-blank">Blank</button>
+					<button class="${pr}-new-blank">New Blank</button>
 					<button class="${pr}-apply">Apply</button>
 					<button class="${pr}-discard">Discard</button>
 				</div>
@@ -211,4 +212,59 @@ function _getCodeEditBlockDom(self) {
 			<pre class="${pr}-code-field" contenteditable="true"></pre>
 		</div>
 	`);
+
+	dom.onclick = function (ev) {
+		const tClass = ev.target.classList.contains.bind(ev.target.classList);
+
+		if        (tClass(`${pr}-new-blank`)) {
+			const str = [
+				`{`,
+				`    "ch": [`,
+				`        {`,
+				`            "td": "main",`,
+				`            "ch": ""`,
+				`        }`,
+				`    ]`,
+				`}`,
+			].join("\n");
+			self.codeField.textContent = str;
+			self.editStage.tOb = JSON.parse(str);
+			editLoop.commit(self);
+		} else if (tClass(`${pr}-apply`)) {
+			const {object, error, text} = 
+				lib.tryParseJSON(self.codeField.textContent);
+			if (object) {
+				self.editStage.tOb = object.clone;
+				editLoop.commit(self);
+			} else if (error) {
+				const 
+					hl = new JsonEHl("e-s-json-err-hl"),
+					codeField = hl.getHighlighted(text);
+				self.diagram.innerHTML = "";
+				self.diagram.appendChild(codeField);
+				hl.scrollToFirstError(codeField);
+				console.error(`(!) \n`, self.diagram, "\n", jsonError);
+
+			}
+		} else if (tClass(`${pr}-discard`)) {
+			self.codeField.textContent = _stringify(self.editStage.tOb);
+		} else if (tClass(`${pr}-to-clipboard`)) {
+			const str = self.codeField.textContent;
+
+			const tA = document.createElement("textarea");
+			tA.value = str;
+			document.body.appendChild(tA);
+			tA.select();
+			document.execCommand("copy");
+			document.body.removeChild(tA);
+		}
+
+	};
+
+	return dom;
+}
+
+
+function _stringify(tOb) {
+	return JSON.stringify(tOb, null, 4);
 }

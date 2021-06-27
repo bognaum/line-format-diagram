@@ -5,15 +5,19 @@
   margin: 20px 5px;
   padding: 20px 5px;
   user-select: none;
-  font-family: consolas, courier, monospace; }
-  .line-format-diagram.executed * {
-    display: inline-block;
-    text-align: center; }
-  .line-format-diagram:not(.executed) {
-    font-family: monospace;
-    white-space: pre;
-    text-align: left; }
+  font-family: consolas, courier, monospace;
+  /*&.executed *{
+		display: inline-block;
+		text-align: center;
+	}*/
+  /*&:not(.executed) {
+		font-family: monospace;
+		white-space: pre;
+		text-align: left;
+	}*/ }
   .line-format-diagram .line-format-diagram-part {
+    display: inline-block;
+    text-align: center;
     border-right: 1px solid transparent;
     border-left: 1px solid transparent;
     margin-right: -1px; }
@@ -50,10 +54,12 @@
       margin: -1px;
       display: block; }
       .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel {
+        text-align: center;
         display: block;
         position: relative;
         border-bottom: 1px solid #999; }
         .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel > .line-format-diagram-rel-line {
+          display: inline-block;
           position: absolute;
           width: 10px;
           border-left: 1px solid #999;

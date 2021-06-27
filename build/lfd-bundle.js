@@ -1555,106 +1555,119 @@ __webpack_require__.r(__webpack_exports__);
 function setStyle(clPref) {
 
 	const cssCode = `
-	.line-format-diagram {
-	  font-size: 14px;
-	  white-space: nowrap;
-	  color: #333;
-	  margin: 20px 5px;
-	  padding: 20px 5px;
-	  user-select: none;
-	  font-family: consolas, courier, monospace; }
-	  .line-format-diagram.executed * {
-	    display: inline-block;
-	    text-align: center; }
-	  .line-format-diagram:not(.executed) {
-	    font-family: monospace;
-	    white-space: pre;
-	    text-align: left; }
-	  .line-format-diagram .line-format-diagram-part {
-	    border-right: 1px solid transparent;
-	    border-left: 1px solid transparent;
-	    margin-right: -1px; }
-	    .line-format-diagram .line-format-diagram-part .line-format-diagram-grid-v-liner {
-	      margin: 0 1px;
-	      display: flex;
-	      align-items: center;
-	      justify-content: center;
-	      height: 50px; }
-	    .line-format-diagram .line-format-diagram-part .line-format-diagram-description:hover {
-	      user-select: text; }
-	    .line-format-diagram .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-h-line {
-	      border-top: 1px solid #999;
-	      flex-grow: 10; }
-	    .line-format-diagram .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-td-block {
-	      flex-grow: 1; }
-	    .line-format-diagram .line-format-diagram-part .line-format-diagram-line-text {
-	      font-size: 20px;
-	      font-weight: bold;
-	      color: #333;
-	      white-space: pre;
-	      background-clip: padding-box;
-	      border-left: 1px solid transparent;
-	      border-right: 1px solid transparent;
-	      margin: -1px;
-	      margin-top: 5px;
-	      font-family: consolas, courier, monospace;
-	      user-select: text; }
-	    .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr {
-	      border-left: 1px solid transparent;
-	      border-right: 1px solid transparent;
-	      border-color: #999;
-	      padding: 5px 1px;
-	      margin: -1px;
-	      display: block; }
-	      .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel {
-	        display: block;
-	        position: relative;
-	        border-bottom: 1px solid #999; }
-	        .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel > .line-format-diagram-rel-line {
-	          position: absolute;
-	          width: 10px;
-	          border-left: 1px solid #999;
-	          border-bottom: 1px solid #999;
-	          padding-bottom: calc(5px + .5em); }
-	          .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel > .line-format-diagram-rel-line > .line-format-diagram-bottom-descr {
-	            position: absolute;
-	            left: 100%;
-	            white-space: pre;
-	            border: 1px solid #999;
-	            text-align: left; }
-	  .line-format-diagram .line-format-diagram-part.show-borders {
-	    border-color: #999; }
-	    .line-format-diagram .line-format-diagram-part.show-borders .sps-line-text {
-	      border-color: #999; }
-	  .line-format-diagram .line-format-diagram-grid-v-liner + .line-format-diagram-part {
-	    margin-left: -1px; }
-	  .line-format-diagram .line-format-diagram-grid-bv-liner {
-	    padding: 5px;
-	    border: 4px solid transparent;
-	    display: block; }
+		.line-format-diagram {
+		  font-size: 14px;
+		  white-space: nowrap;
+		  color: #333;
+		  margin: 20px 5px;
+		  padding: 20px 5px;
+		  user-select: none;
+		  font-family: consolas, courier, monospace;
+		  /*&.executed *{
 
-	.line-format-diagram.top-lines .line-format-diagram-part .line-format-diagram-grid-v-liner {
-	  margin-top: 5px;
-	  border-top: 1px solid transparent; }
+				display: inline-block;
 
-	.line-format-diagram.top-lines .line-format-diagram-part .line-format-diagram-top-descr {
-	  border-top: 1px solid #999;
-	  align-items: flex-start; }
-	  .line-format-diagram.top-lines .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-h-line {
-	    border: none; }
+				text-align: center;
 
-	.line-format-diagram.bottom-lines .line-format-diagram-part .line-format-diagram-grid-v-liner {
-	  margin-bottom: 5px;
-	  border-bottom: 1px solid transparent; }
+			}*/
+		  /*&:not(.executed) {
 
-	.line-format-diagram.bottom-lines .line-format-diagram-part .line-format-diagram-top-descr {
-	  border-bottom: 1px solid #999;
-	  margin-top: -5px;
-	  align-items: flex-end; }
-	  .line-format-diagram.bottom-lines .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-h-line {
-	    border: none; }
+				font-family: monospace;
 
-	 `.replace(/\bline-format-diagram/g, clPref);
+				white-space: pre;
+
+				text-align: left;
+
+			}*/ }
+		  .line-format-diagram .line-format-diagram-part {
+		    display: inline-block;
+		    text-align: center;
+		    border-right: 1px solid transparent;
+		    border-left: 1px solid transparent;
+		    margin-right: -1px; }
+		    .line-format-diagram .line-format-diagram-part .line-format-diagram-grid-v-liner {
+		      margin: 0 1px;
+		      display: flex;
+		      align-items: center;
+		      justify-content: center;
+		      height: 50px; }
+		    .line-format-diagram .line-format-diagram-part .line-format-diagram-description:hover {
+		      user-select: text; }
+		    .line-format-diagram .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-h-line {
+		      border-top: 1px solid #999;
+		      flex-grow: 10; }
+		    .line-format-diagram .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-td-block {
+		      flex-grow: 1; }
+		    .line-format-diagram .line-format-diagram-part .line-format-diagram-line-text {
+		      font-size: 20px;
+		      font-weight: bold;
+		      color: #333;
+		      white-space: pre;
+		      background-clip: padding-box;
+		      border-left: 1px solid transparent;
+		      border-right: 1px solid transparent;
+		      margin: -1px;
+		      margin-top: 5px;
+		      font-family: consolas, courier, monospace;
+		      user-select: text; }
+		    .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr {
+		      border-left: 1px solid transparent;
+		      border-right: 1px solid transparent;
+		      border-color: #999;
+		      padding: 5px 1px;
+		      margin: -1px;
+		      display: block; }
+		      .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel {
+		        text-align: center;
+		        display: block;
+		        position: relative;
+		        border-bottom: 1px solid #999; }
+		        .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel > .line-format-diagram-rel-line {
+		          display: inline-block;
+		          position: absolute;
+		          width: 10px;
+		          border-left: 1px solid #999;
+		          border-bottom: 1px solid #999;
+		          padding-bottom: calc(5px + .5em); }
+		          .line-format-diagram .line-format-diagram-part .line-format-diagram-bottom-rel-wr .line-format-diagram-bottom-rel > .line-format-diagram-rel-line > .line-format-diagram-bottom-descr {
+		            position: absolute;
+		            left: 100%;
+		            white-space: pre;
+		            border: 1px solid #999;
+		            text-align: left; }
+		  .line-format-diagram .line-format-diagram-part.show-borders {
+		    border-color: #999; }
+		    .line-format-diagram .line-format-diagram-part.show-borders .sps-line-text {
+		      border-color: #999; }
+		  .line-format-diagram .line-format-diagram-grid-v-liner + .line-format-diagram-part {
+		    margin-left: -1px; }
+		  .line-format-diagram .line-format-diagram-grid-bv-liner {
+		    padding: 5px;
+		    border: 4px solid transparent;
+		    display: block; }
+
+		.line-format-diagram.top-lines .line-format-diagram-part .line-format-diagram-grid-v-liner {
+		  margin-top: 5px;
+		  border-top: 1px solid transparent; }
+
+		.line-format-diagram.top-lines .line-format-diagram-part .line-format-diagram-top-descr {
+		  border-top: 1px solid #999;
+		  align-items: flex-start; }
+		  .line-format-diagram.top-lines .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-h-line {
+		    border: none; }
+
+		.line-format-diagram.bottom-lines .line-format-diagram-part .line-format-diagram-grid-v-liner {
+		  margin-bottom: 5px;
+		  border-bottom: 1px solid transparent; }
+
+		.line-format-diagram.bottom-lines .line-format-diagram-part .line-format-diagram-top-descr {
+		  border-bottom: 1px solid #999;
+		  margin-top: -5px;
+		  align-items: flex-end; }
+		  .line-format-diagram.bottom-lines .line-format-diagram-part .line-format-diagram-top-descr .line-format-diagram-h-line {
+		    border: none; }
+
+	`.replace(/\bline-format-diagram/g, clPref);
 
 	const styleClassName = `${clPref}__theme-style`;
 
@@ -2003,6 +2016,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+
 
 
 
@@ -2021,7 +2036,7 @@ function constructor(self, clPref, elem, tOb) {
 	self.codeEditBlock = _getCodeEditBlockDom(self);
 	self.editButtons = self.editPanel.querySelector(`.${self.clPref}-edit-buttons`);
 	self.navButtons  = self.editPanel.querySelector(`.${self.clPref}-nav-buttons`);
-	self.diagram     = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<div class="executed"><div>`);
+	self.diagram     = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<div class=""><div>`);
 	self.codeField   = self.codeEditBlock.querySelector(`.${self.clPref}-code-field`);
 	self.editStage   = {
 			tOb:     tOb.clone,
@@ -2060,7 +2075,7 @@ function commit(self) {
 
 function editLoop(self) {
 	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, self.diagram, self.editStage.tOb);
-	self.codeField.textContent = JSON.stringify(self.editStage.tOb, null, 4);
+	self.codeField.textContent = _stringify(self.editStage.tOb);
 
 	console.log(`self.history`, self.history);
 }
@@ -2200,11 +2215,11 @@ function _getEditPanelDom(self) {
 
 function _getCodeEditBlockDom(self) {
 	const pr = self.clPref;
-	return _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`
+	const dom = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`
 		<div class="${pr}-code-edit-block">
 			<div class="${pr}-code-edit-panel">
 				<div style="float: left;">
-					<button class="${pr}-blank">Blank</button>
+					<button class="${pr}-new-blank">New Blank</button>
 					<button class="${pr}-apply">Apply</button>
 					<button class="${pr}-discard">Discard</button>
 				</div>
@@ -2216,8 +2231,62 @@ function _getCodeEditBlockDom(self) {
 			<pre class="${pr}-code-field" contenteditable="true"></pre>
 		</div>
 	`);
+
+	dom.onclick = function (ev) {
+		const tClass = ev.target.classList.contains.bind(ev.target.classList);
+
+		if        (tClass(`${pr}-new-blank`)) {
+			const str = [
+				`{`,
+				`    "ch": [`,
+				`        {`,
+				`            "td": "main",`,
+				`            "ch": ""`,
+				`        }`,
+				`    ]`,
+				`}`,
+			].join("\n");
+			self.codeField.textContent = str;
+			self.editStage.tOb = JSON.parse(str);
+			editLoop.commit(self);
+		} else if (tClass(`${pr}-apply`)) {
+			const {object, error, text} = 
+				_lib_js__WEBPACK_IMPORTED_MODULE_0__.tryParseJSON(self.codeField.textContent);
+			if (object) {
+				self.editStage.tOb = object.clone;
+				editLoop.commit(self);
+			} else if (error) {
+				const 
+					hl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__.default("e-s-json-err-hl"),
+					codeField = hl.getHighlighted(text);
+				self.diagram.innerHTML = "";
+				self.diagram.appendChild(codeField);
+				hl.scrollToFirstError(codeField);
+				console.error(`(!) \n`, self.diagram, "\n", jsonError);
+
+			}
+		} else if (tClass(`${pr}-discard`)) {
+			self.codeField.textContent = _stringify(self.editStage.tOb);
+		} else if (tClass(`${pr}-to-clipboard`)) {
+			const str = self.codeField.textContent;
+
+			const tA = document.createElement("textarea");
+			tA.value = str;
+			document.body.appendChild(tA);
+			tA.select();
+			document.execCommand("copy");
+			document.body.removeChild(tA);
+		}
+
+	};
+
+	return dom;
 }
 
+
+function _stringify(tOb) {
+	return JSON.stringify(tOb, null, 4);
+}
 
 /***/ })
 /******/ 	]);
