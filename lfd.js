@@ -1,8 +1,8 @@
-import * as lib     from "./lib.js";
-import JsonEHl      from "./json-err-hl/json-err-hl.js";
-import setStyle     from "./set-style.js";
-import buildDiagram from "./buildDiagram.js";
-import editDiagram  from "./editDiagram.js";
+import * as lib      from "./lib.js";
+import JsonEHl       from "./json-err-hl/json-err-hl.js";
+import setStyle      from "./set-style.js";
+import buildDiagram  from "./buildDiagram.js";
+import DiagramEditor from "./DiagramEditor.js";
 
 const version = "6.0.2";
 
@@ -25,7 +25,8 @@ function edit(self, elem) {
 	const template = elem.textContent;
 	const {object :tOb, error :jsonError} = lib.tryParseJSON(template);
 	if (tOb)
-		return editDiagram(self, elem, tOb);
+		new DiagramEditor(self.clPref, elem, tOb);
+		// return editDiagram(self, elem, tOb);
 	else if (jsonError) {
 		elem.classList.remove("executing", "executed", "exec-error");
 		elem.classList.add("exec-error");

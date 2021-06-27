@@ -1,26 +1,33 @@
 import * as lib     from "./lib.js";
 import buildDiagram from "./buildDiagram.js";
 
-export default function editDiagram(self, elem, tOb) {
+export default class DiagramEditor {
+	constructor (clPref, elem, tOb) { constructor(this, clPref, elem, tOb);}
+
+
+}
+
+function constructor(self, clPref, elem, tOb) {
 	elem.innerHTML = "";
-	const 
-		editPanel   = _getEditPanelDom(self),
-		editButtons = editPanel.querySelector(`.${self.clPref}-edit-buttons`),
-		navButtons  = editPanel.querySelector(`.${self.clPref}-nav-buttons`),
-		diagram     = lib.eHTML(`<div class="executed"><div>`),
-		codeField   = lib.eHTML(`<pre></pre>`),
-		editStage   = {
+
+	self.clPref      = clPref;
+	self.editPanel   = _getEditPanelDom(self);
+	self.editButtons = self.editPanel.querySelector(`.${self.clPref}-edit-buttons`);
+	self.navButtons  = self.editPanel.querySelector(`.${self.clPref}-nav-buttons`);
+	self.diagram     = lib.eHTML(`<div class="executed"><div>`);
+	self.codeField   = lib.eHTML(`<pre></pre>`);
+	self.editStage   = {
 			tOb: tOb.clone,
 		},
-		history   = [editStage];
+	self.history   = [self.editStage];
 
-		elem.append(editPanel,diagram, codeField);
-		buildDiagram(self, diagram, editStage.tOb.clone);
-		codeField.textContent = JSON.stringify(tOb, null, 4);
+	elem.append(self.editPanel, self.diagram, self.codeField);
+	buildDiagram(self, self.diagram, self.editStage.tOb.clone);
+	self.codeField.textContent = JSON.stringify(tOb, null, 4);
 
-	editButtons.onclick = function (ev) {
+	self.editButtons.onclick = function (ev) {
 		const pr = self.clPref;
-		const {node, range} = editStage;
+		const {node, range} = self.editStage;
 
 		let t = ev.target;
 		do {
@@ -41,8 +48,8 @@ export default function editDiagram(self, elem, tOb) {
 
 		} while (t != this && (t = t.parentElement));
 
-		buildDiagram(self, diagram, editStage.tOb.clone);
-		codeField.textContent = JSON.stringify(tOb, null, 4);
+		buildDiagram(self, self.diagram, self.editStage.tOb.clone);
+		self.codeField.textContent = JSON.stringify(tOb, null, 4);
 	};
 
 	document.onselectionchange = function (ev) {
@@ -69,17 +76,17 @@ export default function editDiagram(self, elem, tOb) {
 				}, tOb);
 				return finded;
 			})();
-		editStage.part = part;
-		editStage.node = node;
-		editStage.range = sR;
+		self.editStage.part = part;
+		self.editStage.node = node;
+		self.editStage.range = sR;
 		console.log("\naC", aC, `\n1. part`, part, "\n2. region", sR, "\n3. node", node);
 	};
 
 }
 
 
-function editLoop(self, edirStage, history) {
-	buildDiagram(self, diagram, editStage.tOb);
+function editLoop(self) {
+	buildDiagram(self, self.diagram, self.editStage.tOb);
 }
 
 
