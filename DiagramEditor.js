@@ -19,14 +19,21 @@ function constructor(self, clPref, elem, tOb) {
 	self.codeField   = lib.eHTML(`<pre></pre>`);
 	self.editStage   = {
 			tOb:     tOb.clone,
-			// written: null,
-		},
+		};
 	self.history   = [];
+	self.history.i = -1;
 
-	elem.append(self.editPanel, self.diagram, self.codeField);
+
+	elem.append(
+		self.editPanel, 
+		self.diagram, 
+		self.codeField
+	);
+
 	editLoop.commit(self);
 
-	setEvents(self);
+	setEditEvents(self);
+	setNavEvents(self);
 
 }
 
@@ -35,17 +42,30 @@ editLoop.commit = commit;
 function commit(self) {
 	const {editStage, history} = self;
 	this(self);
-	history.push(editStage.tOb.clone);
+
+	const clone = editStage.tOb.clone;
+	if (clone.ch == editStage.tOb.ch)
+		throw new Error();
+
+	history.i ++;
+	history[history.i] = editStage.tOb.clone;
+	history.splice(history.i + 1, Infinity);
+
+	if (self.editStage.tOb.ch == self.history[0].ch)
+		throw new Error();
+
 	editStage.written = true;
-	console.log(`history`, history);
+	console.log(`self.history`, self.history);
 }
 
 function editLoop(self) {
-	buildDiagram(self, self.diagram, self.editStage.tOb.clone);
+	buildDiagram(self, self.diagram, self.editStage.tOb);
 	self.codeField.textContent = JSON.stringify(self.editStage.tOb, null, 4);
+
+	console.log(`self.history`, self.history);
 }
 
-function setEvents(self) {
+function setEditEvents(self) {
 	self.editButtons.onclick = function (ev) {
 		const pr = self.clPref;
 		const {node, range} = self.editStage;
@@ -99,7 +119,47 @@ function setEvents(self) {
 		self.editStage.part = part;
 		self.editStage.node = node;
 		self.editStage.range = sR;
-		console.log("\naC", aC, `\n1. part`, part, "\n2. region", sR, "\n3. node", node);
+		console.log(
+			"\n1. aC", aC, 
+			`\n2. part`, part, 
+			`\n3. part`, part, 
+			"\n4. region", sR, 
+			"\n5. node", node,
+		);
+	};
+}
+
+function setNavEvents(self) {
+	const pr = self.clPref;
+	const {editStage, history} = self;
+	self.navButtons.onclick = function (ev) {
+
+		// not bubbled
+		if        (ev.target.classList.contains(`${pr}-nav-undo`)) {
+			if (history[history.i - 1]) {
+				console.log("undo");
+				editStage.tOb = history[-- history.i].clone;
+				editLoop(self);
+			}
+		} else if (ev.target.classList.contains(`${pr}-nav-redo`)) {
+			if (history[history.i + 1]) {
+				console.log("redo");
+				editStage.tOb = history[++ history.i].clone;
+				editLoop(self);
+			}
+
+		} else if (ev.target.classList.contains(`${pr}-nav-left`)) {
+			// ...
+		} else if (ev.target.classList.contains(`${pr}-nav-up`)) {
+			// ...
+		} else if (ev.target.classList.contains(`${pr}-nav-right`)) {
+			// ...
+		} else if (ev.target.classList.contains(`${pr}-nav-down`)) {
+			// ...
+		}
+
+		// parallel not bubbled
+		if (ev.target.classList.contains('fff')) {}
 	};
 }
 
@@ -108,7 +168,7 @@ function _getEditPanelDom(self) {
 	const pr = self.clPref;
 	return lib.eHTML(`
 		<div class="${pr}-edit-panel" style="white-space: normal;">
-			<div class="${pr}-edit-panel__btn-block ${pr}-navi-buttons" style="float: left;">
+			<div class="${pr}-edit-panel__btn-block ${pr}-nav-buttons" style="float: left;">
 				<button class="${pr}-nav-undo" >⤶</button>
 				<button class="${pr}-nav-redo" >⤷</button>
 				&nbsp;&nbsp;

@@ -12,8 +12,8 @@ export default class Node {
 	isArr        (    ) { return isArr       (this      );}
 
 	toJSON       (    ) { return toJSON      (this      );}
-	get chIndex () { return getChIndex(this)}
-	get clone   () { return getClone  (this)}
+	get chIndex () { return getChIndex(this); }
+	get clone   () { return getClone  (this); }
 }
 
 /*function wrap (self) {
@@ -206,8 +206,8 @@ function getClone(self) {
 	delete clone.parent;
 	delete clone.serialN;
 
-	if(isArr(self)) {
-		clone.ch = self.ch.map(getColone);
+	if(typeof self.ch == "object") {
+		clone.ch = self.ch.map(getClone);
 		clone.ch.forEach(v => v.parent = clone);
 	}
 
