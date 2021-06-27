@@ -36,7 +36,7 @@ function constructor(self, clPref, elem, tOb) {
 
 	editLoop.commit(self);
 
-	setEditEvents(self);
+	setSelectionEvent(self);
 
 }
 
@@ -73,7 +73,7 @@ function setBtnEnableDisable(self) {
 	]("disabled", true);
 }
 
-function setEditEvents(self) {
+function setSelectionEvent(self) {
 	document.onselectionchange = function (ev) {
 		// selWasChanged = true;
 
