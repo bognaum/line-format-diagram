@@ -75,12 +75,11 @@ function setBtnEnableDisable(self) {
 
 function setSelectionEvent(self) {
 	document.onselectionchange = function (ev) {
-		// selWasChanged = true;
 
 		const 
 			sel = window.getSelection(),
-			sR = sel.rangeCount ? sel.getRangeAt(0) : null,
-			aC = sR?.commonAncestorContainer,
+			rng = sel.rangeCount ? sel.getRangeAt(0) : null,
+			aC = rng?.commonAncestorContainer,
 			part = (function () {
 				let el = aC;
 				do {
@@ -88,7 +87,7 @@ function setSelectionEvent(self) {
 						return el;
 				} while (el = el.parentElement);
 			})(),
-			serialN = parseInt(part.dataset.serialN),
+			serialN = part && parseInt(part.dataset.serialN),
 			node = (function () {
 				let finded, sN = -1;
 				lib.forEachRecur(node => {
@@ -99,12 +98,12 @@ function setSelectionEvent(self) {
 			})();
 		self.editStage.part = part;
 		self.editStage.node = node;
-		self.editStage.range = sR;
+		self.editStage.range = rng;
 		console.log(
-			"\n1. aC", aC, 
-			`\n2. part`, part, 
-			`\n3. part`, part, 
-			"\n4. region", sR, 
+			"\n1. sel", sel, 
+			"\n2. region", rng, 
+			`\n3. aC`, aC, 
+			`\n4. part`, part, 
 			"\n5. node", node,
 		);
 	};
