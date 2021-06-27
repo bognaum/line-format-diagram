@@ -18,17 +18,27 @@ function constructor(self, clPref, elem, tOb) {
 	self.diagram     = lib.eHTML(`<div class="executed"><div>`);
 	self.codeField   = lib.eHTML(`<pre></pre>`);
 	self.editStage   = {
-			tOb: tOb.clone,
+			tOb:     tOb.clone,
+			// written: null,
 		},
-	self.history   = [self.editStage];
+	self.history   = [];
 
 	elem.append(self.editPanel, self.diagram, self.codeField);
-	editLoop(self);
+	editLoop.commit(self);
 
 	setEvents(self);
 
 }
 
+editLoop.commit = commit;
+
+function commit(self) {
+	const {editStage, history} = self;
+	this(self);
+	history.push(editStage.tOb.clone);
+	editStage.written = true;
+	console.log(`history`, history);
+}
 
 function editLoop(self) {
 	buildDiagram(self, self.diagram, self.editStage.tOb.clone);
@@ -59,7 +69,7 @@ function setEvents(self) {
 
 		} while (t != this && (t = t.parentElement));
 
-		editLoop(self);
+		editLoop.commit(self);
 	};
 
 	document.onselectionchange = function (ev) {
