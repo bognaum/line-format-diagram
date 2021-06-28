@@ -24,14 +24,11 @@ export default class Node {
 	self.parent.ch.splice(self.chIndex, 1, wr);
 }*/
 function strip (self) {
-	checkToParent(self);
 	if (isArr(...self.ch))
 		self.parent.ch.splice(self.chIndex, 1, self.ch);
-	checkToParent(self);
 }
 
 function join (self, a, b) {
-	checkToParent(self);
 	if (isArr(self)) {
 		const joined = self.ch.slice(a, b);
 		if (isArr(...joined)) {
@@ -63,7 +60,6 @@ function join (self, a, b) {
 			self.parent.ch.splice(n, 1);
 		}
 
-	checkToParent(self);
 }
 
 /*
@@ -89,7 +85,6 @@ function joinLeft (self) {
 }*/
 
 function split (self, a, b) {
-	checkToParent(self);
 	const 
 		parts = [
 			self.ch.slice(0, a),
@@ -107,11 +102,9 @@ function split (self, a, b) {
 				}));
 
 	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
-	checkToParent(self);
 }
 
 function subDiv (self, a, b) {
-	checkToParent(self);
 	const 
 		strings = [
 			self.ch.slice(0, a),
@@ -129,7 +122,6 @@ function subDiv (self, a, b) {
 				}));
 
 	self.ch = newChildren;
-	checkToParent(self);
 }
 
 /*function detachRight (self, a) {

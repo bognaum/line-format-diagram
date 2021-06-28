@@ -261,14 +261,11 @@ class Node {
 	self.parent.ch.splice(self.chIndex, 1, wr);
 }*/
 function strip (self) {
-	checkToParent(self);
 	if (isArr(...self.ch))
 		self.parent.ch.splice(self.chIndex, 1, self.ch);
-	checkToParent(self);
 }
 
 function join (self, a, b) {
-	checkToParent(self);
 	if (isArr(self)) {
 		const joined = self.ch.slice(a, b);
 		if (isArr(...joined)) {
@@ -300,7 +297,6 @@ function join (self, a, b) {
 			self.parent.ch.splice(n, 1);
 		}
 
-	checkToParent(self);
 }
 
 /*
@@ -326,7 +322,6 @@ function joinLeft (self) {
 }*/
 
 function split (self, a, b) {
-	checkToParent(self);
 	const 
 		parts = [
 			self.ch.slice(0, a),
@@ -344,11 +339,9 @@ function split (self, a, b) {
 				}));
 
 	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
-	checkToParent(self);
 }
 
 function subDiv (self, a, b) {
-	checkToParent(self);
 	const 
 		strings = [
 			self.ch.slice(0, a),
@@ -366,7 +359,6 @@ function subDiv (self, a, b) {
 				}));
 
 	self.ch = newChildren;
-	checkToParent(self);
 }
 
 /*function detachRight (self, a) {
@@ -2006,120 +1998,9 @@ function _fromJson(json) {
 
 /***/ }),
 /* 13 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ setSelectionEvent)
-/* harmony export */ });
-/* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-
-
-function setSelectionEvent(self) {
-	// document.onselectionchange = function (ev) {
-	document.addEventListener("selectionchange", function (ev) {
-
-		const 
-			sel = window.getSelection(),
-			rng = sel.rangeCount ? sel.getRangeAt(0) : null,
-			cAC = rng?.commonAncestorContainer,
-			rootPart = (function () {
-				let el = cAC;
-				do {
-					if (el.classList?.contains(`${self.clPref}-part`))
-						return el;
-				} while (el = el.parentElement);
-			})();
-		console.log(
-			"\n1. sel", sel, 
-			"\n2. region", rng, 
-			`\n3. cAC`, cAC, 
-			`\n4. rootPart`, rootPart, 
-		);
-		if (! rootPart)
-			return;
-		const
-			serialN = rootPart && parseInt(rootPart.dataset.serialN),
-			node = (function () {
-				let finded, sN = -1;
-				_lib_js__WEBPACK_IMPORTED_MODULE_0__.forEachRecur(node => {
-					if (++ sN == serialN)
-						finded = node;
-				}, self.editStage.tOb);
-				return finded;
-			})();
-		self.editStage.rootPart = rootPart;
-		self.editStage.node = node;
-		self.editStage.range = rng;
-		console.log(
-			"\n5. node", node,
-		);
-	});
-}
-/*
-function domEl(elA) {
-	return {
-		isAncestorOf: function(elB) {
-			return recur(elB);
-			function recur(el) {
-				if (elA == el) 
-					return true;
-				if (el.parentElement)
-					return recur(el.parentElement);
-			}
-		},
-		isDecendantOf: function(elB) {
-			return recur(elA);
-			function recur(el) {
-				if (elB == el) 
-					return true;
-				if (el.parentElement)
-					return recur(el.parentElement);
-			}
-		},
-		iheritsTo: function(elB) {
-			return recur(elA);
-			function recur(el) {
-				if (elB == el) 
-					return true;
-				if (el.parentElement)
-					return recur(el.parentElement);
-			}
-		},
-		enableClass: function(...args) {elA.classList.add(...args)},
-		disableClass: function(...args) {elA.classList.remove(...args)},
-		setClass: function(className, status=true) {
-			status ? elA.classList.add(className) : elA.classList.remove(className);
-		},
-		hasClass: function(...args) {return elA.classList.contains(...args)},
-	};
-}
-
-function getThisPart(el) {
-	return recur(el);
-	function recur(el) {
-		if (isPart(el)) 
-			return el;
-		if (el.parentElement)
-			return recur(el.parentElement);
-	}
-}
-
-function isPart(el) {
-	return el.classList.contains(`${self.clPref}-part`);
-}
-
-function getDomPath(el) {
-	const path = [];
-	recur(el);
-	return path;
-	function recur(el) {
-		path.unchift(el);
-		if (el.parentElement)
-			recur(el.parentElement);
-	}
-}*/
+throw new Error("Module parse failed: Unexpected token (115:2)\nYou may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders\n| \t\t\t}\n| \t\t}\n> \t\tenableClass: function(...args) {elA.classList.add(...args)},\n| \t\tdisableClass: function(...args) {elA.classList.remove(...args)},\n| \t\tsetClass: function(className, status=true) {");
 
 /***/ }),
 /* 14 */
@@ -2134,6 +2015,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _selection_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
+/* harmony import */ var _selection_event_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_selection_event_js__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
@@ -2173,7 +2055,7 @@ function constructor(self, clPref, elem, tOb) {
 
 	editLoop.commit(self);
 
-	(0,_selection_event_js__WEBPACK_IMPORTED_MODULE_3__.default)(self);
+	_selection_event_js__WEBPACK_IMPORTED_MODULE_3___default()(self);
 
 }
 
@@ -2397,6 +2279,18 @@ function _stringify(tOb) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports

@@ -23,6 +23,10 @@ export default function setSelectionEvent(self) {
 		);
 		if (! rootPart)
 			return;
+		console.log(`getDomPath(rng.startContainer)`, getDomPath(rng.startContainer));
+		console.log(`getDomPath(rng.endContainer)`, getDomPath(rng.endContainer));
+		console.log(`pathFrom(rootPart).to(rng.startContainer)`, pathFrom(rootPart).to(rng.startContainer));
+		console.log(`pathFrom(rootPart).to(rng.endContainer)`, pathFrom(rootPart).to(rng.endContainer));
 		const
 			serialN = rootPart && parseInt(rootPart.dataset.serialN),
 			node = (function () {
@@ -41,7 +45,28 @@ export default function setSelectionEvent(self) {
 		);
 	});
 }
-/*
+
+function pathFrom(elA) {
+	return {
+		to: function(elB) {
+			const path = [];
+			if (recur(elB))
+				return path;
+			else 
+				return null;
+			function recur(el) {
+				path.unshift(el);
+				if (el == elA)
+					return true;
+				else if (el.parentElement)
+					return recur(el.parentElement);
+				else
+					return false;
+			}
+		}
+	};
+}
+
 function domEl(elA) {
 	return {
 		isAncestorOf: function(elB) {
@@ -71,6 +96,22 @@ function domEl(elA) {
 					return recur(el.parentElement);
 			}
 		},
+		pathTo: function(elB) {
+			const path = [];
+			if (recur(elB))
+				return path;
+			else 
+				return null;
+			function recur(el) {
+				path.unshift(el);
+				if (el == elA)
+					return true;
+				else if (el.parentElement)
+					return recur(el.parentElement);
+				else
+					return false;
+			}
+		}
 		enableClass: function(...args) {elA.classList.add(...args)},
 		disableClass: function(...args) {elA.classList.remove(...args)},
 		setClass: function(className, status=true) {
@@ -99,8 +140,8 @@ function getDomPath(el) {
 	recur(el);
 	return path;
 	function recur(el) {
-		path.unchift(el);
+		path.unshift(el);
 		if (el.parentElement)
 			recur(el.parentElement);
 	}
-}*/
+}
