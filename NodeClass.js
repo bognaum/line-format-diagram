@@ -12,6 +12,8 @@ export default class Node {
 	isArr        (    ) { return isArr       (this      );}
 
 	toJSON       (    ) { return toJSON      (this      );}
+	getSerial    (    ) { return getSerial   (this      );}
+	getBySerial  (sN  ) { return getBySerial (this, sN  );}
 	get chIndex () { return getChIndex(this); }
 	get clone   () { return getClone  (this); }
 }
@@ -217,6 +219,30 @@ function checkToParent(self) {
 					debugger;
 			}
 	});
+}
+
+function getBySerial(self, serialN) {
+	const root = getRoot(self);
+	let node, sN = 0;
+	forEachRecur((v) => {
+		if (serialN == sN)
+			node = v;
+		else
+			sN ++;
+	}, root);
+	return node;
+}
+
+function getSerial(self) {
+	const root = getRoot(self);
+	let serialN, sN = 0;
+	forEachRecur((v) => {
+		if (v == self)
+			serialN = sN;
+		else
+			sN ++;
+	}, root);
+	return serialN;
 }
 
 function forEachRecur(preCb, ob, postCb) {

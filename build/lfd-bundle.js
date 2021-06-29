@@ -21,7 +21,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _set_style_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
-/* harmony import */ var _DiagramEditor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
+/* harmony import */ var _DiagramEditor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
 
 
 
@@ -249,6 +249,8 @@ class Node {
 	isArr        (    ) { return isArr       (this      );}
 
 	toJSON       (    ) { return toJSON      (this      );}
+	getSerial    (    ) { return getSerial   (this      );}
+	getBySerial  (sN  ) { return getBySerial (this, sN  );}
 	get chIndex () { return getChIndex(this); }
 	get clone   () { return getClone  (this); }
 }
@@ -454,6 +456,30 @@ function checkToParent(self) {
 					debugger;
 			}
 	});
+}
+
+function getBySerial(self, serialN) {
+	const root = getRoot(self);
+	let node, sN = 0;
+	forEachRecur((v) => {
+		if (serialN == sN)
+			node = v;
+		else
+			sN ++;
+	}, root);
+	return node;
+}
+
+function getSerial(self) {
+	const root = getRoot(self);
+	let serialN, sN = 0;
+	forEachRecur((v) => {
+		if (v == self)
+			serialN = sN;
+		else
+			sN ++;
+	}, root);
+	return serialN;
 }
 
 function forEachRecur(preCb, ob, postCb) {
@@ -1998,12 +2024,6 @@ function _fromJson(json) {
 
 /***/ }),
 /* 13 */
-/***/ (() => {
-
-throw new Error("Module parse failed: Unexpected token (115:2)\nYou may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders\n| \t\t\t}\n| \t\t}\n> \t\tenableClass: function(...args) {elA.classList.add(...args)},\n| \t\tdisableClass: function(...args) {elA.classList.remove(...args)},\n| \t\tsetClass: function(className, status=true) {");
-
-/***/ }),
-/* 14 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2014,8 +2034,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _selection_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
-/* harmony import */ var _selection_event_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_selection_event_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _selection_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(14);
 
 
 
@@ -2055,7 +2074,7 @@ function constructor(self, clPref, elem, tOb) {
 
 	editLoop.commit(self);
 
-	_selection_event_js__WEBPACK_IMPORTED_MODULE_3___default()(self);
+	(0,_selection_event_js__WEBPACK_IMPORTED_MODULE_3__.default)(self);
 
 }
 
@@ -2119,20 +2138,20 @@ function _getEditPanelDom(self) {
 	`);
 
 	dom.querySelector(`.${pr}-edit-buttons`).onclick = function(ev) {
-		const {node, range} = self.editStage;
+		const {rootNode, range} = self.editStage;
 		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
 		if (tClass(`${pr}-edit-split`)) {
-			node.split(range.startOffset, range.endOffset);
+			rootNode.split(range.startOffset, range.endOffset);
 		} else 
 		if (ev.target.classList.contains(`${pr}-edit-sub-div`)) {
-			node.subDiv(range.startOffset, range.endOffset);
+			rootNode.subDiv(range.startOffset, range.endOffset);
 		} else 
 		if (tClass(`${pr}-edit-strip`)) {
-			node.strip(range.startOffset, range.endOffset);
+			rootNode.strip(range.startOffset, range.endOffset);
 		} else 
 		if (tClass(`${pr}-edit-join`)) {
-			node.join(range.startOffset, range.endOffset);
+			rootNode.join(range.startOffset, range.endOffset);
 		}  
 		editLoop.commit(self);
 	};
@@ -2251,6 +2270,227 @@ function _stringify(tOb) {
 	return JSON.stringify(tOb, null, 4);
 }
 
+/***/ }),
+/* 14 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ setSelectionEvent)
+/* harmony export */ });
+/* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+
+function setSelectionEvent(self) {
+	// document.onselectionchange = function (ev) {
+	document.addEventListener("selectionchange", function (ev) {
+
+		const 
+			sel = window.getSelection(),
+			rng = sel.rangeCount ? sel.getRangeAt(0) : null,
+			cAC = rng?.commonAncestorContainer,
+			rootPart = (function () {
+				let el = cAC;
+				do {
+					if (el.classList?.contains(`${self.clPref}-part`))
+						return el;
+				} while (el = el.parentElement);
+			})();
+		console.log(
+			"\n1. sel", sel, 
+			"\n2. region", rng, 
+			`\n3. cAC`, cAC, 
+			`\n4. rootPart`, rootPart, 
+		);
+		if (! rootPart)
+			return;
+		console.log(`getDomPath(rng.startContainer)`, getDomPath(rng.startContainer));
+		console.log(`getDomPath(rng.endContainer)`, getDomPath(rng.endContainer));
+		console.log(`pathFrom(rootPart).to(rng.startContainer)`, pathFrom(rootPart).to(rng.startContainer));
+		console.log(`pathFrom(rootPart).to(rng.endContainer)`, pathFrom(rootPart).to(rng.endContainer));
+		const
+			serialN = rootPart && parseInt(rootPart.dataset.serialN),
+			rootNode = self.editStage.tOb.getBySerial(serialN);
+		self.editStage.rootPart = rootPart;
+		self.editStage.rootNode = rootNode;
+		self.editStage.range = rng;
+		console.log(
+			"\n5. rootNode", rootNode,
+		);
+
+		defineSelArgs(self);
+	});
+}
+
+function defineSelArgs(self) {
+	const $el = $elem(self);
+	const 
+		sel = window.getSelection(),
+		range = sel.getRangeAt(0),
+		{
+			commonAncestorContainer :rootEl ,
+			startContainer          :startEl,
+			endContainer            :endEl  ,
+		} = range;
+
+	const 
+		rootPart = $el(rootEl).part,
+		rootNode = self.tOb.getBySerial(rootPart.dataset.serialN);
+
+	let a, b;
+
+	if (startEl == endEl) {
+		a = range.startOffset;
+		b = range.endOffset;
+	} else {
+		a = (function () {
+			let el = startEl;
+			do {
+				if (el.parentElement == root)
+					return el;
+			} while (el = el.parentElement);
+		})();
+		b = (function () {
+			let el = endEl;
+			do {
+				if (el.parentElement == root)
+					return el;
+			} while (el = el.parentElement);
+		})();
+
+		a = $el(a).chIndex;
+		b = $el(b).chIndex;
+	}
+	self.editStage.selArgs = {
+		rootNode,
+		a,
+		b,
+	}
+}
+
+function pathFrom(elA) {
+	return {
+		to: function(elB) {
+			const path = [];
+			if (recur(elB))
+				return path;
+			else 
+				return null;
+			function recur(el) {
+				path.unshift(el);
+				if (el == elA)
+					return true;
+				else if (el.parentElement)
+					return recur(el.parentElement);
+				else
+					return false;
+			}
+		}
+	};
+}
+
+function $elem(self) {
+	return function $el (elA) {
+		return {
+			$el,
+			isAncestorOf: function(elB) {
+				return recur(elB);
+				function recur(el) {
+					if (elA == el) 
+						return true;
+					if (el.parentElement)
+						return recur(el.parentElement);
+				}
+			},
+			isDecendantOf: function(elB) {
+				return recur(elA);
+				function recur(el) {
+					if (elB == el) 
+						return true;
+					if (el.parentElement)
+						return recur(el.parentElement);
+				}
+			},
+			iheritsTo: function(elB) {
+				return recur(elA);
+				function recur(el) {
+					if (elB == el) 
+						return true;
+					if (el.parentElement)
+						return recur(el.parentElement);
+				}
+			},
+			pathTo: function(elB) {
+				const path = [];
+				if (recur(elB))
+					return path;
+				else 
+					return null;
+				function recur(el) {
+					path.unshift(el);
+					if (el == elA)
+						return true;
+					else if (el.parentElement)
+						return recur(el.parentElement);
+					else
+						return false;
+				}
+			},
+			enableClass: function(...args) {elA.classList.add(...args)},
+			disableClass: function(...args) {elA.classList.remove(...args)},
+			setClass: function(className, status=true) {
+				status ? elA.classList.add(className) : elA.classList.remove(className);
+			},
+			hasClass: function(...args) {return elA.classList.contains(...args)},
+			get isPart() { return elA.classList?.contains(`${self.clPref}-part`); },
+			get part() {
+				const self = this;
+				return recur(elA);
+				function recur(el) {
+					if (self.$el(el).isPart) 
+						return el;
+					if (el.parentElement)
+						return recur(el.parentElement);
+				}
+			},
+			get chIndex() {
+				const 
+					pEl = this.parentElement,
+					len = pEl.length;
+				for (let i = 0; i < len; i ++)
+					if (pEl[i] == this)
+						return i;
+			},
+		};
+	}
+}
+
+function getThisPart(el) {
+	return recur(el);
+	function recur(el) {
+		if (isPart(el)) 
+			return el;
+		if (el.parentElement)
+			return recur(el.parentElement);
+	}
+}
+
+function isPart(el) {
+	return el.classList.contains(`${self.clPref}-part`);
+}
+
+function getDomPath(el) {
+	const path = [];
+	recur(el);
+	return path;
+	function recur(el) {
+		path.unshift(el);
+		if (el.parentElement)
+			recur(el.parentElement);
+	}
+}
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -2279,18 +2519,6 @@ function _stringify(tOb) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
