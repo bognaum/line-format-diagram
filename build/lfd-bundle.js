@@ -462,10 +462,10 @@ function getBySerial(self, serialN) {
 	const root = getRoot(self);
 	let node, sN = 0;
 	forEachRecur((v) => {
-		if (serialN == sN)
+		if (serialN == sN) 
 			node = v;
-		else
-			sN ++;
+
+		sN ++;
 	}, root);
 	return node;
 }
@@ -2095,8 +2095,6 @@ function commit(self) {
 function editLoop(self) {
 	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, self.diagram, self.editStage.tOb);
 	self.codeField.textContent = _stringify(self.editStage.tOb);
-
-	console.log(`self.history`, self.history);
 }
 
 function setBtnEnableDisable(self) {

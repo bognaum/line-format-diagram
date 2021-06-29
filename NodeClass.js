@@ -225,10 +225,10 @@ function getBySerial(self, serialN) {
 	const root = getRoot(self);
 	let node, sN = 0;
 	forEachRecur((v) => {
-		if (serialN == sN)
+		if (serialN == sN) 
 			node = v;
-		else
-			sN ++;
+
+		sN ++;
 	}, root);
 	return node;
 }

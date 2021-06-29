@@ -58,8 +58,6 @@ function commit(self) {
 function editLoop(self) {
 	buildDiagram(self, self.diagram, self.editStage.tOb);
 	self.codeField.textContent = _stringify(self.editStage.tOb);
-
-	console.log(`self.history`, self.history);
 }
 
 function setBtnEnableDisable(self) {
