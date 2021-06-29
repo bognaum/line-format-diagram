@@ -101,20 +101,20 @@ function _getEditPanelDom(self) {
 	`);
 
 	dom.querySelector(`.${pr}-edit-buttons`).onclick = function(ev) {
-		const {rootNode, range} = self.editStage;
+		const {rootNode, a, b} = self.editStage.selArgs;
 		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
 		if (tClass(`${pr}-edit-split`)) {
-			rootNode.split(range.startOffset, range.endOffset);
+			rootNode.split(a, b);
 		} else 
 		if (ev.target.classList.contains(`${pr}-edit-sub-div`)) {
-			rootNode.subDiv(range.startOffset, range.endOffset);
+			rootNode.subDiv(a, b);
 		} else 
 		if (tClass(`${pr}-edit-strip`)) {
-			rootNode.strip(range.startOffset, range.endOffset);
+			rootNode.strip(a, b);
 		} else 
 		if (tClass(`${pr}-edit-join`)) {
-			rootNode.join(range.startOffset, range.endOffset);
+			rootNode.join(a, b);
 		}  
 		editLoop.commit(self);
 	};

@@ -54,7 +54,7 @@ function defineSelArgs(self) {
 
 	const 
 		rootPart = $el(rootEl).part,
-		rootNode = self.tOb.getBySerial(rootPart.dataset.serialN);
+		rootNode = self.editStage.tOb.getBySerial(rootPart.dataset.serialN);
 
 	let a, b;
 
@@ -85,6 +85,7 @@ function defineSelArgs(self) {
 		a,
 		b,
 	}
+	console.log(`self.editStage`, self.editStage);
 }
 
 function pathFrom(elA) {
