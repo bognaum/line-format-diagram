@@ -23,20 +23,20 @@ function defineSelArgs(self) {
 		rootPart = $el(rootEl).part,
 		rootNode = self.editStage.tOb.getBySerial(rootPart.dataset.serialN);
 
-	let a, b;
+	let a, b, aEl, bEl;
 
 	if (startEl == endEl) {
 		a = range.startOffset;
 		b = range.endOffset;
 	} else {
-		a = (function () {
+		aEl = (function () {
 			let el = startEl;
 			do {
 				if (el.parentElement == rootPart)
 					return el;
 			} while (el = el.parentElement);
 		})();
-		b = (function () {
+		bEl = (function () {
 			let el = endEl;
 			do {
 				if (el.parentElement == rootPart)
@@ -44,12 +44,14 @@ function defineSelArgs(self) {
 			} while (el = el.parentElement);
 		})();
 
-		a = $el(a).chIndex;
-		b = $el(b).chIndex;
+		a = $el(aEl).chIndex;
+		b = $el(bEl).chIndex;
 	}
 	self.editStage.selArgs = {
 		rootNode,
 		rootPart,
+		aEl,
+		bEl,
 		a,
 		b,
 	}
