@@ -2303,10 +2303,10 @@ function setSelectionEvent(self) {
 		);
 		if (! rootPart)
 			return;
-		console.log(`getDomPath(rng.startContainer)`, getDomPath(rng.startContainer));
+		/*console.log(`getDomPath(rng.startContainer)`, getDomPath(rng.startContainer));
 		console.log(`getDomPath(rng.endContainer)`, getDomPath(rng.endContainer));
 		console.log(`pathFrom(rootPart).to(rng.startContainer)`, pathFrom(rootPart).to(rng.startContainer));
-		console.log(`pathFrom(rootPart).to(rng.endContainer)`, pathFrom(rootPart).to(rng.endContainer));
+		console.log(`pathFrom(rootPart).to(rng.endContainer)`, pathFrom(rootPart).to(rng.endContainer));*/
 		const
 			serialN = rootPart && parseInt(rootPart.dataset.serialN),
 			rootNode = self.editStage.tOb.getBySerial(serialN);
@@ -2345,14 +2345,14 @@ function defineSelArgs(self) {
 		a = (function () {
 			let el = startEl;
 			do {
-				if (el.parentElement == root)
+				if (el.parentElement == rootPart)
 					return el;
 			} while (el = el.parentElement);
 		})();
 		b = (function () {
 			let el = endEl;
 			do {
-				if (el.parentElement == root)
+				if (el.parentElement == rootPart)
 					return el;
 			} while (el = el.parentElement);
 		})();
@@ -2455,10 +2455,10 @@ function $elem(self) {
 			},
 			get chIndex() {
 				const 
-					pEl = this.parentElement,
-					len = pEl.length;
+					pEl = elA.parentElement,
+					len = pEl.children.length;
 				for (let i = 0; i < len; i ++)
-					if (pEl[i] == this)
+					if (pEl.children[i] == elA)
 						return i;
 			},
 		};
