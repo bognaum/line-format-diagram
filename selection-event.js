@@ -49,9 +49,15 @@ function defineSelArgs(self) {
 	}
 	self.editStage.selArgs = {
 		rootNode,
+		rootPart,
 		a,
 		b,
 	}
+
+	self.diagram.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
+		v.style.boxShadow = "";
+	});
+	rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
 	console.log(`self.editStage`, self.editStage);
 }
 
