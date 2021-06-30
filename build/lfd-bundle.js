@@ -2269,7 +2269,7 @@ function defineSelArgs(self) {
 		} = range;
 
 	const 
-		rootPart = $el(rootEl).part,
+		rootPart = getPart(self, rootEl),
 		rootNode = rootPart ? 
 			self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
 
@@ -2315,89 +2315,27 @@ function defineSelArgs(self) {
 	rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
 	let n = 0;
 	console.log("");
-	console.log(++ n, "range", range);
+	console.log(++ n, "range"   , range   );
 	console.log(++ n, "rootPart", rootPart);
 	console.log(++ n, "rootNode", rootNode);
-	console.log(++ n, "aEl", aEl);
-	console.log(++ n, "a", a);
-	console.log(++ n, "bEl", bEl);
-	console.log(++ n, "b", b);
+	console.log(++ n, "aEl"     , aEl     );
+	console.log(++ n, "a"       , a       );
+	console.log(++ n, "bEl"     , bEl     );
+	console.log(++ n, "b"       , b       );
 }
 
-function $elem(self) {
-	return function $el (elA) {
-		return {
-			$el,
-			isAncestorOf: function(elB) {
-				return recur(elB);
-				function recur(el) {
-					if (elA == el) 
-						return true;
-					if (el.parentElement)
-						return recur(el.parentElement);
-				}
-			},
-			isDecendantOf: function(elB) {
-				return recur(elA);
-				function recur(el) {
-					if (elB == el) 
-						return true;
-					if (el.parentElement)
-						return recur(el.parentElement);
-				}
-			},
-			iheritsTo: function(elB) {
-				return recur(elA);
-				function recur(el) {
-					if (elB == el) 
-						return true;
-					if (el.parentElement)
-						return recur(el.parentElement);
-				}
-			},
-			pathTo: function(elB) {
-				const path = [];
-				if (recur(elB))
-					return path;
-				else 
-					return null;
-				function recur(el) {
-					path.unshift(el);
-					if (el == elA)
-						return true;
-					else if (el.parentElement)
-						return recur(el.parentElement);
-					else
-						return false;
-				}
-			},
-			enableClass: function(...args) {elA.classList.add(...args)},
-			disableClass: function(...args) {elA.classList.remove(...args)},
-			setClass: function(className, status=true) {
-				status ? elA.classList.add(className) : elA.classList.remove(className);
-			},
-			hasClass: function(...args) {return elA.classList.contains(...args)},
-			get isPart() { return elA.classList?.contains(`${self.clPref}-part`); },
-			get part() {
-				const self = this;
-				return recur(elA);
-				function recur(el) {
-					if (self.$el(el).isPart) 
-						return el;
-					if (el.parentElement)
-						return recur(el.parentElement);
-				}
-			},
-			get chIndex() {
-				const 
-					pEl = elA.parentElement,
-					len = pEl.children.length;
-				for (let i = 0; i < len; i ++)
-					if (pEl.children[i] == elA)
-						return i;
-			},
-		};
+function getPart(self, el) {
+	return recur(el);
+	function recur(el) {
+		if (isPart(self, el)) 
+			return el;
+		if (el.parentElement)
+			return recur(el.parentElement);
 	}
+}
+
+function isPart(self, el) {
+	return el.classList?.contains(`${self.clPref}-part`);
 }
 
 /***/ })
