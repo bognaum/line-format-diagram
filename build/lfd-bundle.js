@@ -2025,9 +2025,9 @@ function editLoop(self) {
 	self.diagram.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
 		createOnEditField(self, v, "bd");
 	});
-	self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
+	/*self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
-	});
+	});*/
 }
 
 function createOnEditField(self, el, fieldName) {
@@ -2300,11 +2300,22 @@ function defineSelArgs(self) {
 		v.style.boxShadow = "";
 		v.style.background = "";
 	});
+
+	self.diagram.querySelectorAll(`*`).forEach((v) => {
+		v.style.boxShadow = "";
+		v.style.background = "";
+	});
 	rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
-	if (aEl) 
+	if (aEl) {
+		let el = aEl;
+		do {
+			el.style.background = "rgba(100,200,100,.3";
+		} while (el != bEl && (el = el.nextElementSibling));
+	}
+	/*if (aEl) 
 		aEl.style.background = "rgba(100,200,100,.3";
 	if (bEl) 
-		bEl.style.background = "rgba(100,200,100,.3";
+		bEl.style.background = "rgba(100,200,100,.3";*/
 
 	let n = 0;
 	console.groupCollapsed("defineSelArgs");

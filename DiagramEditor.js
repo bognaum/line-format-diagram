@@ -64,9 +64,9 @@ function editLoop(self) {
 	self.diagram.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
 		createOnEditField(self, v, "bd");
 	});
-	self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
+	/*self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
-	});
+	});*/
 }
 
 function createOnEditField(self, el, fieldName) {

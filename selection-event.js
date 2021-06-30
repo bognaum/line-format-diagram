@@ -63,11 +63,22 @@ function defineSelArgs(self) {
 		v.style.boxShadow = "";
 		v.style.background = "";
 	});
+
+	self.diagram.querySelectorAll(`*`).forEach((v) => {
+		v.style.boxShadow = "";
+		v.style.background = "";
+	});
 	rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
-	if (aEl) 
+	if (aEl) {
+		let el = aEl;
+		do {
+			el.style.background = "rgba(100,200,100,.3";
+		} while (el != bEl && (el = el.nextElementSibling));
+	}
+	/*if (aEl) 
 		aEl.style.background = "rgba(100,200,100,.3";
 	if (bEl) 
-		bEl.style.background = "rgba(100,200,100,.3";
+		bEl.style.background = "rgba(100,200,100,.3";*/
 
 	let n = 0;
 	console.groupCollapsed("defineSelArgs");
