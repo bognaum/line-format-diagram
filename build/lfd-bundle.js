@@ -1946,55 +1946,6 @@ function _getHFZ(lineCount) {
 	return `height: ${lineCount * 1.5}em; font-size: 1em; `;
 }
 
-/*function _tryParseJSON (json) {
-	try {
-		return {
-			object: JSON.parse(json)
-		};
-	} catch (err) {
-		return {
-			text: json,
-			error: err,
-		}
-	}
-}*/
-
-/*function _tryParseJSON (json) {
-	try {
-		const object = _fromJson(json)
-		return {object};
-	} catch (err) {
-		return {
-			text: json,
-			error: err,
-		}
-	}
-}
-
-function _fromJson(json) {
-	return JSON.parse(json, function(k, v) {
-		if (typeof (k * 1) == "number" && typeof v == "object" && "ch" in v) {
-			const node = new Node(v);
-			if (node.ch instanceof Array)
-				node.ch.forEach(v => v.parent = node);
-			return node;
-		} else
-			return v;
-	});
-}*/
-
-
-/*function eHTML(code, shell=null) {
-	const _shell = 
-		! shell                  ? document.createElement("div") :
-		typeof shell == "string" ? document.createElement(shell) :
-		typeof shell == "object" ? shell :
-			null;
-	_shell.innerHTML = code;
-	return _shell.children[0];
-}*/
-
-
 /***/ }),
 /* 13 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
@@ -2047,6 +1998,9 @@ function constructor(self, clPref, elem, tOb) {
 
 	(0,_selection_event_js__WEBPACK_IMPORTED_MODULE_3__.default)(self);
 
+	// self.diagram.setAttribute("contenteditable", "true");
+	// self.diagram.oninput = console.log;
+
 }
 
 editLoop.commit = commit;
@@ -2065,6 +2019,40 @@ function commit(self) {
 function editLoop(self) {
 	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, self.diagram, self.editStage.tOb);
 	self.codeField.textContent = _stringify(self.editStage.tOb);
+	self.diagram.querySelectorAll(`.${self.clPref}-td-block`).forEach((v,i,a) => {
+		createOnEditField(self, v, "td");
+	});
+	self.diagram.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
+		createOnEditField(self, v, "bd");
+	});
+	self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
+		createOnEditField(self, v, "ch");
+	});
+}
+
+function createOnEditField(self, el, fieldName) {
+	el.setAttribute("contenteditable", "true");
+	el.oninput = function(ev) {
+		const 
+			part = getPart(self, this),
+			node = self.editStage.tOb.getBySerial(part.dataset.serialN);
+		node[fieldName] = this.textContent;
+		self.codeField.textContent = _stringify(self.editStage.tOb);
+	}
+}
+
+function getPart(self, el) {
+	return recur(el);
+	function recur(el) {
+		if (isPart(self, el)) 
+			return el;
+		if (el.parentElement)
+			return recur(el.parentElement);
+	}
+}
+
+function isPart(self, el) {
+	return el.classList?.contains(`${self.clPref}-part`);
 }
 
 function setBtnEnableDisable(self) {
@@ -2258,7 +2246,6 @@ function setSelectionEvent(self) {
 }
 
 function defineSelArgs(self) {
-	const $el = $elem(self);
 	const 
 		sel = window.getSelection(),
 		range = sel.getRangeAt(0),
@@ -2311,9 +2298,16 @@ function defineSelArgs(self) {
 
 	self.diagram.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
 		v.style.boxShadow = "";
+		v.style.background = "";
 	});
 	rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
+	if (aEl) 
+		aEl.style.background = "rgba(100,200,100,.3";
+	if (bEl) 
+		bEl.style.background = "rgba(100,200,100,.3";
+
 	let n = 0;
+	console.groupCollapsed("defineSelArgs");
 	console.log("");
 	console.log(++ n, "range"   , range   );
 	console.log(++ n, "rootPart", rootPart);
@@ -2322,6 +2316,7 @@ function defineSelArgs(self) {
 	console.log(++ n, "a"       , a       );
 	console.log(++ n, "bEl"     , bEl     );
 	console.log(++ n, "b"       , b       );
+	console.groupEnd();
 }
 
 function getPart(self, el) {

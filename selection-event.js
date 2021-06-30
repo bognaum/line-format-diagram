@@ -9,7 +9,6 @@ export default function setSelectionEvent(self) {
 }
 
 function defineSelArgs(self) {
-	const $el = $elem(self);
 	const 
 		sel = window.getSelection(),
 		range = sel.getRangeAt(0),
@@ -62,9 +61,16 @@ function defineSelArgs(self) {
 
 	self.diagram.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
 		v.style.boxShadow = "";
+		v.style.background = "";
 	});
 	rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
+	if (aEl) 
+		aEl.style.background = "rgba(100,200,100,.3";
+	if (bEl) 
+		bEl.style.background = "rgba(100,200,100,.3";
+
 	let n = 0;
+	console.groupCollapsed("defineSelArgs");
 	console.log("");
 	console.log(++ n, "range"   , range   );
 	console.log(++ n, "rootPart", rootPart);
@@ -73,6 +79,7 @@ function defineSelArgs(self) {
 	console.log(++ n, "a"       , a       );
 	console.log(++ n, "bEl"     , bEl     );
 	console.log(++ n, "b"       , b       );
+	console.groupEnd();
 }
 
 function getPart(self, el) {

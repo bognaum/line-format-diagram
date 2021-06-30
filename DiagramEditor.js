@@ -37,6 +37,9 @@ function constructor(self, clPref, elem, tOb) {
 
 	setSelectionEvent(self);
 
+	// self.diagram.setAttribute("contenteditable", "true");
+	// self.diagram.oninput = console.log;
+
 }
 
 editLoop.commit = commit;
@@ -55,6 +58,40 @@ function commit(self) {
 function editLoop(self) {
 	buildDiagram(self, self.diagram, self.editStage.tOb);
 	self.codeField.textContent = _stringify(self.editStage.tOb);
+	self.diagram.querySelectorAll(`.${self.clPref}-td-block`).forEach((v,i,a) => {
+		createOnEditField(self, v, "td");
+	});
+	self.diagram.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
+		createOnEditField(self, v, "bd");
+	});
+	self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
+		createOnEditField(self, v, "ch");
+	});
+}
+
+function createOnEditField(self, el, fieldName) {
+	el.setAttribute("contenteditable", "true");
+	el.oninput = function(ev) {
+		const 
+			part = getPart(self, this),
+			node = self.editStage.tOb.getBySerial(part.dataset.serialN);
+		node[fieldName] = this.textContent;
+		self.codeField.textContent = _stringify(self.editStage.tOb);
+	}
+}
+
+function getPart(self, el) {
+	return recur(el);
+	function recur(el) {
+		if (isPart(self, el)) 
+			return el;
+		if (el.parentElement)
+			return recur(el.parentElement);
+	}
+}
+
+function isPart(self, el) {
+	return el.classList?.contains(`${self.clPref}-part`);
 }
 
 function setBtnEnableDisable(self) {
