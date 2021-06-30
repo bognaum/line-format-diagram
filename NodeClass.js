@@ -189,25 +189,7 @@ function wrap(self, a, b) {
 	}
 }
 
-function subDiv (self, a, b) {
-	const 
-		strings = [
-			self.ch.slice(0, a),
-			self.ch.slice(a, b),
-			self.ch.slice(b   ),
-		],
-		newChildren = [];
 
-	for (let str of strings) 
-		if (str.length)
-			newChildren.push(new self.constructor ({
-					td: "X",
-					ch: str,
-					parent: self,
-				}));
-
-	self.ch = newChildren;
-}
 
 /*function detachRight (self, a) {
 	const 

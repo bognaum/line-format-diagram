@@ -426,25 +426,7 @@ function wrap(self, a, b) {
 	}
 }
 
-function subDiv (self, a, b) {
-	const 
-		strings = [
-			self.ch.slice(0, a),
-			self.ch.slice(a, b),
-			self.ch.slice(b   ),
-		],
-		newChildren = [];
 
-	for (let str of strings) 
-		if (str.length)
-			newChildren.push(new self.constructor ({
-					td: "X",
-					ch: str,
-					parent: self,
-				}));
-
-	self.ch = newChildren;
-}
 
 /*function detachRight (self, a) {
 	const 
@@ -2209,7 +2191,6 @@ function _getEditPanelDom(self) {
 			</div>
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
 				<button class="${pr}-edit-split"     >split</button>
-				<button class="${pr}-edit-sub-div"   >subDiv</button>
 				<button class="${pr}-edit-wrap"      >wrap</button>
 				<button class="${pr}-edit-strip"     >strip</button>
 				<button class="${pr}-edit-join"      >join</button>
@@ -2225,9 +2206,6 @@ function _getEditPanelDom(self) {
 		if (tClass(`${pr}-edit-split`)) {
 			rootNode.split(a, b);
 		} else 
-		if (ev.target.classList.contains(`${pr}-edit-sub-div`)) {
-			rootNode.subDiv(a, b);
-		} else
 		if (ev.target.classList.contains(`${pr}-edit-wrap`)) {
 			rootNode.wrap(a, b);
 		} else 
