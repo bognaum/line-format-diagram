@@ -242,6 +242,7 @@ class Node {
 	
 	split        (a, b) { return split       (this, a, b);}
 	subDiv       (a, b) { return subDiv      (this, a, b);}
+	wrap         (a, b) { return wrap        (this, a, b);}
 	strip        (    ) { return strip       (this      );}
 	join         (a, b) { return join        (this, a, b);}
 
@@ -341,6 +342,41 @@ function split (self, a, b) {
 				}));
 
 	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
+}
+
+function wrap(self, a, b) {
+	console.log(`a, b`, a, b);
+	const 
+		parts = [
+			self.ch.slice(0, a),
+			self.ch.slice(a, b),
+			self.ch.slice(b   ),
+		],
+		newChildren = [];
+
+	if (isStr(self.ch)) {
+
+		for (let str of parts) 
+			if (str.length)
+				newChildren.push(new self.constructor ({
+						td: "W",
+						ch: str,
+						parent: self,
+					}));
+
+		self.ch = newChildren;
+	} else if (isArr(self.ch)) {
+		const wrNode = new Node({
+			td: "Wr",
+			ch: parts[1],
+			parent: self,
+		});
+		initChildren(wrNode);
+		newChildren.push(...parts[0], wrNode, ...parts[2]);
+		self.ch = newChildren;
+	} else {
+		throw new Error();
+	}
 }
 
 function subDiv (self, a, b) {
@@ -1806,10 +1842,10 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 	recursive(templ, 0);
 	return str;
 
-	function recursive(templ, level=0, inheritStyle="") {
+	function recursive(templ, level=0, inheritStyle="", partChIndex=0) {
 		if (templ instanceof Array) {
-			for (let node of templ) 
-				recursive(node, level, inheritStyle);
+			for (let [index, node] of templ.entries()) 
+				recursive(node, level, inheritStyle, index);
 		} else if (templ.ch) {
 
 			const node = Object.assign({
@@ -1833,7 +1869,9 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			} else {}
 
 			str += `<div class="${clPref}-part ${showBdsClass} ${node.class}" ` + 
-				`style="${localBdColor}" data-serial-n="${++ serialN}">`;
+				`style="${localBdColor}" ` +
+				`data-serial-n="${++ serialN}"` +
+				`data-part-ch-index="${partChIndex}">`;
 			
 			if ("topDescr" in node)
 				str += [
@@ -2125,6 +2163,7 @@ function _getEditPanelDom(self) {
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
 				<button class="${pr}-edit-split"     >split</button>
 				<button class="${pr}-edit-sub-div"   >subDiv</button>
+				<button class="${pr}-edit-wrap"      >wrap</button>
 				<button class="${pr}-edit-strip"     >strip</button>
 				<button class="${pr}-edit-join"      >join</button>
 			</div>
@@ -2141,6 +2180,9 @@ function _getEditPanelDom(self) {
 		} else 
 		if (ev.target.classList.contains(`${pr}-edit-sub-div`)) {
 			rootNode.subDiv(a, b);
+		} else
+		if (ev.target.classList.contains(`${pr}-edit-wrap`)) {
+			rootNode.wrap(a, b);
 		} else 
 		if (tClass(`${pr}-edit-strip`)) {
 			rootNode.strip(a, b);
@@ -2319,8 +2361,8 @@ function defineSelArgs(self) {
 			} while (el = el.parentElement);
 		})();
 
-		a = $el(aEl).chIndex;
-		b = $el(bEl).chIndex;
+		a = parseInt(aEl.dataset.partChIndex);
+		b = parseInt(bEl.dataset.partChIndex) + 1;
 	}
 	self.editStage.selArgs = {
 		rootNode,

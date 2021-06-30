@@ -5,6 +5,7 @@ export default class Node {
 	
 	split        (a, b) { return split       (this, a, b);}
 	subDiv       (a, b) { return subDiv      (this, a, b);}
+	wrap         (a, b) { return wrap        (this, a, b);}
 	strip        (    ) { return strip       (this      );}
 	join         (a, b) { return join        (this, a, b);}
 
@@ -104,6 +105,41 @@ function split (self, a, b) {
 				}));
 
 	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
+}
+
+function wrap(self, a, b) {
+	console.log(`a, b`, a, b);
+	const 
+		parts = [
+			self.ch.slice(0, a),
+			self.ch.slice(a, b),
+			self.ch.slice(b   ),
+		],
+		newChildren = [];
+
+	if (isStr(self.ch)) {
+
+		for (let str of parts) 
+			if (str.length)
+				newChildren.push(new self.constructor ({
+						td: "W",
+						ch: str,
+						parent: self,
+					}));
+
+		self.ch = newChildren;
+	} else if (isArr(self.ch)) {
+		const wrNode = new Node({
+			td: "Wr",
+			ch: parts[1],
+			parent: self,
+		});
+		initChildren(wrNode);
+		newChildren.push(...parts[0], wrNode, ...parts[2]);
+		self.ch = newChildren;
+	} else {
+		throw new Error();
+	}
 }
 
 function subDiv (self, a, b) {

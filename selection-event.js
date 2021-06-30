@@ -44,8 +44,8 @@ function defineSelArgs(self) {
 			} while (el = el.parentElement);
 		})();
 
-		a = $el(aEl).chIndex;
-		b = $el(bEl).chIndex;
+		a = parseInt(aEl.dataset.partChIndex);
+		b = parseInt(bEl.dataset.partChIndex) + 1;
 	}
 	self.editStage.selArgs = {
 		rootNode,

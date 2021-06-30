@@ -77,10 +77,10 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 	recursive(templ, 0);
 	return str;
 
-	function recursive(templ, level=0, inheritStyle="") {
+	function recursive(templ, level=0, inheritStyle="", partChIndex=0) {
 		if (templ instanceof Array) {
-			for (let node of templ) 
-				recursive(node, level, inheritStyle);
+			for (let [index, node] of templ.entries()) 
+				recursive(node, level, inheritStyle, index);
 		} else if (templ.ch) {
 
 			const node = Object.assign({
@@ -104,7 +104,9 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			} else {}
 
 			str += `<div class="${clPref}-part ${showBdsClass} ${node.class}" ` + 
-				`style="${localBdColor}" data-serial-n="${++ serialN}">`;
+				`style="${localBdColor}" ` +
+				`data-serial-n="${++ serialN}"` +
+				`data-part-ch-index="${partChIndex}">`;
 			
 			if ("topDescr" in node)
 				str += [
