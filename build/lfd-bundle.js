@@ -256,54 +256,11 @@ class Node {
 	get clone   () { return getClone  (this); }
 }
 
-/*function wrap (self) {
-	const wr = new Node({
-		td: "X",
-		ch: self
-	});
-	self.parent.ch.splice(self.chIndex, 1, wr);
-}*/
 function strip (self) {
 	if (isArr(self.ch)) {
 		self.parent.ch.splice(self.chIndex, 1, ...self.ch);
 		initChildren(self.parent);
 	}
-}
-
-function join1 (self, a, b) {
-	if (isArr(self.ch)) {
-		const joined = self.ch.slice(a, b);
-		if (isArr(...joined.map(v => v.ch))) {
-			const 
-				startPoint = joined[0].chIndex,
-				pasted = [];
-			for (let v of joined)
-				pasted.push(...v.ch);
-			for (let v of pasted) 
-				v.parent = self;
-			console.log(`pasted`, pasted);
-			self.ch.splice(startPoint, joined.length, ...pasted);
-		} else if (isStr(...joined.map(v => v.ch))) {
-			const 
-				startPoint = joined[0].chIndex,
-				pastedStr = joined.reduce((a,v) => a += v.ch, ""),
-				pastedNode = new Node({
-					td: "J",
-					ch: pastedStr,
-					parent: self,
-				});
-			self.ch.splice(startPoint, joined.length, pastedNode);
-		}
-	}
-	const 
-		n = self.chIndex + 1,
-		right = self.parent.ch[n];
-	if (right)
-		if (isArr(self, right) || isStr(self, right)) {
-			self.ch = self.ch.concat(right.ch);
-			self.parent.ch.splice(n, 1);
-		}
-
 }
 
 function join (self, a, b) {
@@ -345,27 +302,6 @@ function join (self, a, b) {
 
 }
 
-/*
-function joinRight (self) {
-	const 
-		n = self.chIndex + 1,
-		right = self.parent.ch[n];
-	if (right)
-		if (isArr(self, right) || isStr(self, right)) {
-			self.ch = self.ch.concat(right.ch);
-			self.parent.ch.splice(n, 1);
-		}
-}
-function joinLeft (self) {
-	const 
-		n = self.chIndex - 1,
-		left = self.parent.ch[n];
-	if (left)
-		if (isArr(self, left) || isStr(self, left)) {
-			self.ch = left.ch.concat(self.ch);
-			self.parent.ch.splice(n, 1);
-		}
-}*/
 
 function split (self, a, b) {
 	const 
@@ -428,42 +364,6 @@ function wrap(self, a, b) {
 		throw new Error();
 	}
 }
-
-
-
-/*function detachRight (self, a) {
-	const 
-		left  = self.ch.slice(0, a),
-		right = self.ch.slice(a   );
-	if (left.length && right.length) {
-		self.ch = left;
-		insertRight(self, new Node({
-			td: "X",
-			ch: right,
-		}));
-	}
-}
-
-function detachLeft (self, a) {
-	const 
-		left  = self.ch.slice(0, a),
-		right = self.ch.slice(a   );
-	if (left.length && right.length) {
-		insertLeft(self, new Node({
-			td: "X",
-			ch: left,
-		}));
-		self.ch = right;
-	}
-}*/
-
-/*function insertRight (self, ...nodes) {
-	self.parent.ch.splice(self.chIndex + 1, 0, ...nodes)
-}
-
-function insertLeft (self, ...nodes) {
-	self.parent.ch.splice(self.chIndex, 0, ...nodes)
-}*/
 
 function getChIndex (self) {
 	if (self.parent) 
