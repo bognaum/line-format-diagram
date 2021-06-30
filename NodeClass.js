@@ -159,6 +159,8 @@ function toJSON(self) {
 	const ob = Object.assign({}, self);
 	delete ob.parent;
 	delete ob.serialN;
+	delete ob.topDescr;
+	delete ob.bottomDescr;
 
 	return ob;
 }
@@ -167,6 +169,8 @@ function getClone(self) {
 	const  clone = new Node(self);
 	delete clone.parent;
 	delete clone.serialN;
+	delete clone.topDescr;
+	delete clone.bottomDescr;
 
 	if(typeof self.ch == "object") {
 		clone.ch = self.ch.map(getClone);
