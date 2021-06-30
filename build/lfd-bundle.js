@@ -2194,9 +2194,10 @@ function _getEditPanelDom(self) {
 			</div>
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
 				<button class="${pr}-edit-split"     >split</button>
+				<button class="${pr}-edit-join"      >join</button>
+				&nbsp;
 				<button class="${pr}-edit-wrap"      >wrap</button>
 				<button class="${pr}-edit-strip"     >strip</button>
-				<button class="${pr}-edit-join"      >join</button>
 			</div>
 			<div style="clear: both;"></div>
 		</div>
