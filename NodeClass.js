@@ -91,7 +91,6 @@ function split (self, a, b) {
 }
 
 function wrap(self, a, b) {
-	console.log(`a, b`, a, b);
 	const 
 		parts = [
 			self.ch.slice(0, a),

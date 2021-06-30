@@ -328,7 +328,6 @@ function split (self, a, b) {
 }
 
 function wrap(self, a, b) {
-	console.log(`a, b`, a, b);
 	const 
 		parts = [
 			self.ch.slice(0, a),
@@ -2271,7 +2270,11 @@ function defineSelArgs(self) {
 
 	const 
 		rootPart = $el(rootEl).part,
-		rootNode = self.editStage.tOb.getBySerial(rootPart.dataset.serialN);
+		rootNode = rootPart ? 
+			self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
+
+	if (! rootPart)
+		return;
 
 	let a, b, aEl, bEl;
 
@@ -2310,7 +2313,15 @@ function defineSelArgs(self) {
 		v.style.boxShadow = "";
 	});
 	rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
-	console.log(`self.editStage`, self.editStage);
+	let n = 0;
+	console.log("");
+	console.log(++ n, "range", range);
+	console.log(++ n, "rootPart", rootPart);
+	console.log(++ n, "rootNode", rootNode);
+	console.log(++ n, "aEl", aEl);
+	console.log(++ n, "a", a);
+	console.log(++ n, "bEl", bEl);
+	console.log(++ n, "b", b);
 }
 
 function $elem(self) {
