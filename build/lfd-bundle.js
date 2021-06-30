@@ -331,15 +331,18 @@ function split (self, a, b) {
 			self.ch.slice(a, b),
 			self.ch.slice(b   ),
 		],
+		tds = [self.td || "X", "S", self.td || "X"],
 		newChildren = [];
 
 	for (let p of parts) 
-		if (p.length)
+		if (p.length) {
+			const td = tds.shift();
 			newChildren.push(new self.constructor ({
-					td: "X",
+					td,
 					ch: p,
 					parent: self.parent,
 				}));
+		}
 
 	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
 }
@@ -352,17 +355,20 @@ function wrap(self, a, b) {
 			self.ch.slice(a, b),
 			self.ch.slice(b   ),
 		],
+		tds = ["X","W","X"],
 		newChildren = [];
 
 	if (isStr(self.ch)) {
 
-		for (let str of parts) 
+		for (let str of parts) {
+			const td = tds.shift();
 			if (str.length)
 				newChildren.push(new self.constructor ({
-						td: "W",
+						td,
 						ch: str,
 						parent: self,
 					}));
+		}
 
 		self.ch = newChildren;
 	} else if (isArr(self.ch)) {
