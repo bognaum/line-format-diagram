@@ -33,8 +33,6 @@ function constructor(self, clPref, elem, tOb) {
 		self.codeEditBlock,
 	);
 
-	console.log(`self.codeEditBlock`, self.codeEditBlock);
-
 	editLoop.commit(self);
 
 	setSelectionEvent(self);
@@ -52,7 +50,6 @@ function commit(self) {
 	history.splice(history.i + 1, Infinity);
 
 	setBtnEnableDisable(self);
-	console.log(`self.history`, self.history);
 }
 
 function editLoop(self) {
@@ -122,14 +119,12 @@ function _getEditPanelDom(self) {
 		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
 		if        (tClass(`${pr}-nav-undo`)) {
-			console.log("OK");
 			if (history[history.i - 1]) {
 				editStage.tOb = history[-- history.i].clone;
 				setBtnEnableDisable(self);
 				editLoop(self);
 			}
 		} else if (tClass(`${pr}-nav-redo`)) {
-			console.log("OK");
 			if (history[history.i + 1]) {
 				editStage.tOb = history[++ history.i].clone;
 				setBtnEnableDisable(self);
