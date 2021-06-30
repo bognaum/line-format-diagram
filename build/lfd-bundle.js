@@ -268,23 +268,64 @@ function strip (self) {
 		self.parent.ch.splice(self.chIndex, 1, self.ch);
 }
 
-function join (self, a, b) {
-	if (isArr(self)) {
+function join1 (self, a, b) {
+	if (isArr(self.ch)) {
 		const joined = self.ch.slice(a, b);
-		if (isArr(...joined)) {
+		if (isArr(...joined.map(v => v.ch))) {
 			const 
 				startPoint = joined[0].chIndex,
 				pasted = [];
 			for (let v of joined)
-				pasted.push(...v);
-			for (let v of pasted)
+				pasted.push(...v.ch);
+			for (let v of pasted) 
 				v.parent = self;
+			console.log(`pasted`, pasted);
 			self.ch.splice(startPoint, joined.length, ...pasted);
-		} else if (isStr(...joined)) {
+		} else if (isStr(...joined.map(v => v.ch))) {
 			const 
 				startPoint = joined[0].chIndex,
-				pastedStr = joined.reguce((a,v) => a += v.ch, ""),
+				pastedStr = joined.reduce((a,v) => a += v.ch, ""),
 				pastedNode = new Node({
+					td: "J",
+					ch: pastedStr,
+					parent: self,
+				});
+			self.ch.splice(startPoint, joined.length, pastedNode);
+		}
+	}
+	const 
+		n = self.chIndex + 1,
+		right = self.parent.ch[n];
+	if (right)
+		if (isArr(self, right) || isStr(self, right)) {
+			self.ch = self.ch.concat(right.ch);
+			self.parent.ch.splice(n, 1);
+		}
+
+}
+
+function join (self, a, b) {
+	if (isArr(self.ch)) {
+		const joined = self.ch.slice(a, b);
+		if (isArr(...joined.map(v => v.ch))) {
+			const 
+				startPoint = joined[0].chIndex,
+				pasted = new Node({
+					td: "J",
+					parent: self,
+					ch: [],
+				});
+			for (let v of joined)
+				pasted.ch.push(...v.ch);
+			for (let v of pasted.ch) 
+				v.parent = pasted;
+			self.ch.splice(startPoint, joined.length, pasted);
+		} else if (isStr(...joined.map(v => v.ch))) {
+			const 
+				startPoint = joined[0].chIndex,
+				pastedStr = joined.reduce((a,v) => a += v.ch, ""),
+				pastedNode = new Node({
+					td: "J",
 					ch: pastedStr,
 					parent: self,
 				});
