@@ -375,15 +375,16 @@ function split (self, a, b) {
 		tds = [self.td || "X", "S", self.td || "X"],
 		newChildren = [];
 
-	for (let p of parts) 
-		if (p.length) {
-			const td = tds.shift();
+	for (let p of parts) {
+		const td = tds.shift();
+		if (p.length) 
 			newChildren.push(new self.constructor ({
 					td,
 					ch: p,
 					parent: self.parent,
 				}));
-		}
+	}
+		
 
 	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
 }
