@@ -27,8 +27,10 @@ export default class Node {
 	self.parent.ch.splice(self.chIndex, 1, wr);
 }*/
 function strip (self) {
-	if (isArr(...self.ch))
-		self.parent.ch.splice(self.chIndex, 1, self.ch);
+	if (isArr(self.ch)) {
+		self.parent.ch.splice(self.chIndex, 1, ...self.ch);
+		initChildren(self.parent);
+	}
 }
 
 function join1 (self, a, b) {
