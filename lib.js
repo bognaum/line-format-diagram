@@ -56,7 +56,9 @@ function fromJson(json) {
 			return v;
 	});
 
-	if (ob instanceof Array)
+	if (typeof ob == "string")
+		return new Node({ch: ob});
+	else if (ob instanceof Array)
 		return new Node({ch: ob});
 	else 
 		return ob;

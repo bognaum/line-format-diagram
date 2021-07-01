@@ -5,8 +5,6 @@ import setSelectionEvent from "./selection-event.js";
 
 export default class DiagramEditor {
 	constructor (clPref, elem, tOb) { constructor(this, clPref, elem, tOb);}
-
-
 }
 
 function constructor(self, clPref, elem, tOb) {
@@ -100,10 +98,13 @@ function setBtnEnableDisable(self) {
 	pane.querySelector(`.${pr}-nav-undo`)[
 		(hist.i <= 0) ? "setAttribute" : "removeAttribute"
 	]("disabled", true);
+	pane.querySelector(`.${pr}-nav-undo .count`).textContent = hist.i;
 
 	pane.querySelector(`.${pr}-nav-redo`)[
 		(hist.i == hist.length - 1) ? "setAttribute" : "removeAttribute"
 	]("disabled", true);
+	pane.querySelector(`.${pr}-nav-redo .count`).textContent = 
+		hist.length - 1 - hist.i;
 }
 
 function _getEditPanelDom(self) {
@@ -112,8 +113,8 @@ function _getEditPanelDom(self) {
 	const dom = lib.eHTML(`
 		<div class="${pr}-edit-panel" style="white-space: normal;">
 			<div class="${pr}-edit-panel__btn-block ${pr}-history-buttons" style="float: left;">
-				<button class="${pr}-nav-undo" >⤶</button>
-				<button class="${pr}-nav-redo" >⤷</button>
+				<button class="${pr}-nav-undo" >&nbsp;⤶ <span class="count"></span></button>
+				<button class="${pr}-nav-redo" >&nbsp;<span class="count"></span> ⤷</button>
 				&nbsp;&nbsp;
 			</div>
 			<div class="${pr}-edit-panel__btn-block ${pr}-nav-buttons" style="float: left;">
@@ -152,24 +153,33 @@ function _getEditPanelDom(self) {
 		editLoop.commit(self);
 	};
 
+	dom.querySelector(`.${pr}-nav-undo`).onclick = function(ev) {}
+	dom.querySelector(`.${pr}-nav-redo`).onclick = function(ev) {}
+
 	dom.querySelector(`.${pr}-history-buttons`).onclick = function (ev) {
 		const {editStage, history} = self;
 		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
-		if        (tClass(`${pr}-nav-undo`)) {
-			if (history[history.i - 1]) {
-				editStage.tOb = history[-- history.i].clone;
-				setBtnEnableDisable(self);
-				editLoop(self);
-			}
-		} else if (tClass(`${pr}-nav-redo`)) {
-			if (history[history.i + 1]) {
-				editStage.tOb = history[++ history.i].clone;
-				setBtnEnableDisable(self);
-				editLoop(self);
-			}
-		}
+		let t = ev.target;
+		do {
 
+			if        (t.classList.contains(`${pr}-nav-undo`)) {
+				if (history[history.i - 1]) {
+					editStage.tOb = history[-- history.i].clone;
+					setBtnEnableDisable(self);
+					editLoop(self);
+				}
+			} else if (t.classList.contains(`${pr}-nav-redo`)) {
+				if (history[history.i + 1]) {
+					editStage.tOb = history[++ history.i].clone;
+					setBtnEnableDisable(self);
+					editLoop(self);
+				}
+			}else 
+				continue;
+			break;
+
+		} while (t != this && (t = t.parentElement));
 	};
 
 	dom.querySelector(`.${pr}-nav-buttons`).onclick = function (ev) {
@@ -195,9 +205,10 @@ function _getCodeEditBlockDom(self) {
 		<div class="${pr}-code-edit-block">
 			<div class="${pr}-code-edit-panel">
 				<div style="float: left;">
-					<button class="${pr}-new-blank">New Blank</button>
 					<button class="${pr}-apply">Apply</button>
+					&nbsp;
 					<button class="${pr}-discard">Discard</button>
+					<button class="${pr}-new-blank">New Blank</button>
 				</div>
 				<div style="float: right;">
 					<button class="${pr}-to-clipboard">To Clipboard</button>
@@ -238,7 +249,7 @@ function _getCodeEditBlockDom(self) {
 				self.diagram.innerHTML = "";
 				self.diagram.appendChild(codeField);
 				hl.scrollToFirstError(codeField);
-				console.error(`(!) \n`, self.diagram, "\n", jsonError);
+				console.error(`(!) \n`, self.diagram, "\n", error);
 
 			}
 		} else if (tClass(`${pr}-discard`)) {
