@@ -2247,13 +2247,17 @@ function setSelectionEvent(self) {
 
 function defineSelArgs(self) {
 	const 
-		sel = window.getSelection(),
-		range = sel.getRangeAt(0),
+		sel = window.getSelection();
+	const
+		rangeA = sel.getRangeAt(0),
+		rangeB = sel.getRangeAt(sel.rangeCount - 1),
 		{
 			commonAncestorContainer :rootEl ,
 			startContainer          :startEl,
+		} = rangeA,
+		{
 			endContainer            :endEl  ,
-		} = range;
+		} = rangeB;
 
 	const 
 		rootPart = getPart(self, rootEl),
@@ -2266,8 +2270,8 @@ function defineSelArgs(self) {
 	let a, b, aEl, bEl;
 
 	if (startEl == endEl) {
-		a = range.startOffset;
-		b = range.endOffset;
+		a = rangeA.startOffset;
+		b = rangeB.endOffset;
 	} else {
 		aEl = (function () {
 			let el = startEl;
@@ -2286,6 +2290,9 @@ function defineSelArgs(self) {
 
 		a = parseInt(aEl.dataset.partChIndex);
 		b = parseInt(bEl.dataset.partChIndex) + 1;
+
+		/*a = aEl ? parseInt(aEl.dataset.partChIndex) : range.startOffset;
+		b = bEl ? parseInt(bEl.dataset.partChIndex) + 1 : range.endOffset;*/
 	}
 	self.editStage.selArgs = {
 		rootNode,
@@ -2320,7 +2327,8 @@ function defineSelArgs(self) {
 	let n = 0;
 	console.groupCollapsed("defineSelArgs");
 	console.log("");
-	console.log(++ n, "range"   , range   );
+	console.log(++ n, "rangeA"  , rangeA  );
+	console.log(++ n, "rangeB"  , rangeB  );
 	console.log(++ n, "rootPart", rootPart);
 	console.log(++ n, "rootNode", rootNode);
 	console.log(++ n, "aEl"     , aEl     );
