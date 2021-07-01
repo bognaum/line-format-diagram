@@ -4,10 +4,9 @@ export default class Node {
 	}
 	
 	split        (a, b) { return split       (this, a, b);}
-	subDiv       (a, b) { return subDiv      (this, a, b);}
-	wrap         (a, b) { return wrap        (this, a, b);}
-	strip        (    ) { return strip       (this      );}
 	join         (a, b) { return join        (this, a, b);}
+	wrap         (a, b) { return wrap        (this, a, b);}
+	unwrap       (    ) { return unwrap      (this      );}
 
 	isStr        (    ) { return isStr       (this      );}
 	isArr        (    ) { return isArr       (this      );}
@@ -19,7 +18,7 @@ export default class Node {
 	get clone   () { return getClone  (this); }
 }
 
-function strip (self) {
+function unwrap (self) {
 	if (isArr(self.ch)) {
 		self.parent.ch.splice(self.chIndex, 1, ...self.ch);
 		initChildren(self.parent);

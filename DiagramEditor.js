@@ -127,7 +127,7 @@ function _getEditPanelDom(self) {
 				<button class="${pr}-edit-join"      >join</button>
 				&nbsp;
 				<button class="${pr}-edit-wrap"      >wrap</button>
-				<button class="${pr}-edit-strip"     >strip</button>
+				<button class="${pr}-edit-unwrap"    >unwrap</button>
 			</div>
 			<div style="clear: both;"></div>
 		</div>
@@ -143,8 +143,8 @@ function _getEditPanelDom(self) {
 		if (ev.target.classList.contains(`${pr}-edit-wrap`)) {
 			rootNode.wrap(a, b);
 		} else 
-		if (tClass(`${pr}-edit-strip`)) {
-			rootNode.strip(a, b);
+		if (tClass(`${pr}-edit-unwrap`)) {
+			rootNode.unwrap(a, b);
 		} else 
 		if (tClass(`${pr}-edit-join`)) {
 			rootNode.join(a, b);
