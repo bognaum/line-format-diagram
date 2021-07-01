@@ -75,7 +75,16 @@ function defineSelArgs(self) {
 			if (aEl) {
 				let el = aEl;
 				do {
-					el.style.background = "rgba(100,200,100,.3";
+					el.style.background = `
+						repeating-linear-gradient(
+							135deg, 
+							rgba(126,126,126,.2) 0, 
+							rgba(126,126,126,.2) 5px, 
+							transparent          5px, 
+							transparent          10px
+						)
+					`;
+					// el.style.background = "rgba(100,200,100,.3)";
 				} while (el != bEl && (el = el.nextElementSibling));
 			}
 			/*if (aEl) 
