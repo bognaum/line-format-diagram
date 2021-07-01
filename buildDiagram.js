@@ -46,13 +46,15 @@ function _getLevels(tOb) {
 				if (tLevels[level] < n)
 					tLevels[level] = n;
 				node.topDescr = lines.join("<br/>");
+			} else {
+				delete node.topDescr;
 			}
 
 			if (node.ch)
 				if (typeof node.ch != "string")
 					recursive(node.ch, level + 1);
 
-			if (node.bd)
+			if (node.bd) {
 				if (typeof node.ch == "string") {
 					const 
 						lines = node.bd.split("\n"),
@@ -64,6 +66,9 @@ function _getLevels(tOb) {
 					node.errors = node.errors || [];
 					node.errors.push("'node.bd' is deleted.");
 				}
+			} else {
+				delete node.bottomDescr;
+			}
 		}
 	}
 }

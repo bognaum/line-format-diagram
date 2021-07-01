@@ -1750,13 +1750,15 @@ function _getLevels(tOb) {
 				if (tLevels[level] < n)
 					tLevels[level] = n;
 				node.topDescr = lines.join("<br/>");
+			} else {
+				delete node.topDescr;
 			}
 
 			if (node.ch)
 				if (typeof node.ch != "string")
 					recursive(node.ch, level + 1);
 
-			if (node.bd)
+			if (node.bd) {
 				if (typeof node.ch == "string") {
 					const 
 						lines = node.bd.split("\n"),
@@ -1768,6 +1770,9 @@ function _getLevels(tOb) {
 					node.errors = node.errors || [];
 					node.errors.push("'node.bd' is deleted.");
 				}
+			} else {
+				delete node.bottomDescr;
+			}
 		}
 	}
 }
@@ -2089,6 +2094,9 @@ function _getEditPanelDom(self) {
 				<button class="${pr}-nav-down" >⮟</button>
 			</div>
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
+				<button class="${pr}-edit-td"        >td</button>
+				<button class="${pr}-edit-bd"        >bd</button>
+				&nbsp;
 				<button class="${pr}-edit-split"     >split</button>
 				<button class="${pr}-edit-join"      >join</button>
 				&nbsp;
@@ -2103,6 +2111,12 @@ function _getEditPanelDom(self) {
 		const {rootNode, a, b} = self.editStage.selArgs;
 		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
+		if (tClass(`${pr}-edit-td`)) {
+			rootNode.td ? delete rootNode.td : rootNode.td = "X";
+		} else 
+		if (tClass(`${pr}-edit-bd`)) {
+			rootNode.bd ? delete rootNode.bd : rootNode.bd = "X";
+		} else 
 		if (tClass(`${pr}-edit-split`)) {
 			rootNode.split(a, b);
 		} else 
