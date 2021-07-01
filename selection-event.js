@@ -27,6 +27,10 @@ function defineSelArgs(self) {
 			rootPart = getPart(self, rootEl),
 			rootNode = rootPart ? 
 				self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
+		if (rootNode && typeof rootNode.ch == "string") {
+			self.partTextField.editedNode = rootNode;
+			self.partTextField.value      = rootNode.ch;
+		}
 
 		if (rootPart) {
 			let a, b, aEl, bEl;

@@ -1987,6 +1987,7 @@ function constructor(self, clPref, elem, tOb) {
 	self.editButtons = self.editPanel.querySelector(`.${self.clPref}-edit-buttons`);
 	self.navButtons  = self.editPanel.querySelector(`.${self.clPref}-nav-buttons`);
 	self.diagram     = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<div class=""><div>`);
+	self.partTextField = self.editPanel.querySelector(`.${self.clPref}-edit-part-text-field`);
 	self.codeField   = self.codeEditBlock.querySelector(`.${self.clPref}-code-field`);
 	self.editStage   = {
 			tOb:     tOb.clone,
@@ -2035,6 +2036,8 @@ function editLoop(self) {
 	/*self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
 	});*/
+	self.partTextField.value = "";
+	self.partTextField.editedNode = null;
 }
 
 function createOnEditField(self, el, fieldName) {
@@ -2104,6 +2107,12 @@ function _getEditPanelDom(self) {
 				<button class="${pr}-edit-unwrap"    >unwrap</button>
 			</div>
 			<div style="clear: both;"></div>
+			<br>
+			<div>
+				<input class="${pr}-edit-part-text-field" 
+					style="width: calc(100% - 6px); text-align: center;">
+			</div>
+			<br>
 		</div>
 	`);
 
@@ -2175,6 +2184,23 @@ function _getEditPanelDom(self) {
 		}
 
 	};
+
+	dom.querySelector(`.${pr}-edit-part-text-field`).onfocus = function(ev) {
+		this.tsartValue = this.value
+	}
+
+	dom.querySelector(`.${pr}-edit-part-text-field`).oninput = function (ev) {
+		const node = this.editedNode;
+		if (typeof this.editedNode?.ch != "string")
+			throw new Error();
+		this.editedNode.ch = this.value;
+		self.codeField.textContent = _stringify(self.editStage.tOb);
+	}
+
+	dom.querySelector(`.${pr}-edit-part-text-field`).onblur = function(ev) {
+		if (this.tsartValue != this.value)
+			editLoop.commit(self);
+	}
 	return dom;
 }
 
@@ -2293,6 +2319,10 @@ function defineSelArgs(self) {
 			rootPart = getPart(self, rootEl),
 			rootNode = rootPart ? 
 				self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
+		if (rootNode && typeof rootNode.ch == "string") {
+			self.partTextField.editedNode = rootNode;
+			self.partTextField.value      = rootNode.ch;
+		}
 
 		if (rootPart) {
 			let a, b, aEl, bEl;
