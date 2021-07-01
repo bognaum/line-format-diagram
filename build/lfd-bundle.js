@@ -2247,6 +2247,10 @@ function setSelectionEvent(self) {
 function defineSelArgs(self) {
 	const 
 		sel = window.getSelection();
+	if (! sel.rangeCount) {
+		self.editStage.selArgs = {};
+		return;
+	}
 	const
 		rangeA = sel.getRangeAt(0),
 		rangeB = sel.getRangeAt(sel.rangeCount - 1),
@@ -2263,8 +2267,10 @@ function defineSelArgs(self) {
 		rootNode = rootPart ? 
 			self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
 
-	if (! rootPart)
+	if (! rootPart) {
+		self.editStage.selArgs = {};
 		return;
+	}
 
 	let a, b, aEl, bEl;
 
@@ -2289,9 +2295,6 @@ function defineSelArgs(self) {
 
 		a = parseInt(aEl.dataset.partChIndex);
 		b = parseInt(bEl.dataset.partChIndex) + 1;
-
-		/*a = aEl ? parseInt(aEl.dataset.partChIndex) : range.startOffset;
-		b = bEl ? parseInt(bEl.dataset.partChIndex) + 1 : range.endOffset;*/
 	}
 	self.editStage.selArgs = {
 		rootNode,
