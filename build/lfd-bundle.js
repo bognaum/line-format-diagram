@@ -2042,6 +2042,13 @@ function editLoop(self) {
 
 function createOnEditField(self, el, fieldName) {
 	el.setAttribute("contenteditable", "true");
+	el.onfocus = function(ev) {
+		this.oldValue = this.textContent;
+	}
+	el.onblur = function(ev) {
+		if (this.oldValue != this.textContent)
+			editLoop.commit(self);
+	}
 	el.oninput = function(ev) {
 		const 
 			part = getPart(self, this),
