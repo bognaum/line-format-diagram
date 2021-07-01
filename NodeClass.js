@@ -22,6 +22,9 @@ function unwrap (self) {
 	if (isArr(self.ch)) {
 		self.parent.ch.splice(self.chIndex, 1, ...self.ch);
 		initChildren(self.parent);
+	} else if (isStr(self.ch) && self.parent.ch.length == 1) {
+		self.parent.ch = self.ch;
+		initChildren(self.parent);
 	}
 }
 
