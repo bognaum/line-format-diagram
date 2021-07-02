@@ -2097,12 +2097,12 @@ function _getEditPanelDom(self) {
 				<button class="${pr}-nav-redo" >&nbsp;<span class="count"></span> ⤷</button>
 				&nbsp;&nbsp;
 			</div>
-			<div class="${pr}-edit-panel__btn-block ${pr}-nav-buttons" style="float: left;">
+			<!-- <div class="${pr}-edit-panel__btn-block ${pr}-nav-buttons" style="float: left;">
 				<button class="${pr}-nav-left" >⮜</button>
 				<button class="${pr}-nav-up"   >⮝</button>
 				<button class="${pr}-nav-right">⮞</button>
 				<button class="${pr}-nav-down" >⮟</button>
-			</div>
+			</div> -->
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
 				<button class="${pr}-edit-td"        >td</button>
 				<button class="${pr}-edit-bd"        >bd</button>
@@ -2177,7 +2177,7 @@ function _getEditPanelDom(self) {
 		} while (t != this && (t = t.parentElement));
 	};
 
-	dom.querySelector(`.${pr}-nav-buttons`).onclick = function (ev) {
+	/*dom.querySelector(`.${pr}-nav-buttons`).onclick = function (ev) {
 		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
 		if        (tClass(`${pr}-nav-left`)) {
@@ -2190,7 +2190,7 @@ function _getEditPanelDom(self) {
 			// ...
 		}
 
-	};
+	};*/
 
 	dom.querySelector(`.${pr}-edit-part-text-field`).onfocus = function(ev) {
 		this.tsartValue = this.value
