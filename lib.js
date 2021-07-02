@@ -6,8 +6,23 @@ export {
 	fromJson,
 	eHTML,
 	eHTMLDF,
+	getPart,
+	isPart,
 };
 
+function getPart(self, el) {
+	return recur(el);
+	function recur(el) {
+		if (isPart(self, el)) 
+			return el;
+		if (el.parentElement)
+			return recur(el.parentElement);
+	}
+}
+
+function isPart(self, el) {
+	return el.classList?.contains(`${self.clPref}-part`);
+}
 
 function setStatusMark(el, className) {
 	const classes = ["executing", "executed", "exec-error"];

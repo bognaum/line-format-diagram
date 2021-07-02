@@ -149,13 +149,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "tryParseJSON": () => (/* binding */ tryParseJSON),
 /* harmony export */   "fromJson": () => (/* binding */ fromJson),
 /* harmony export */   "eHTML": () => (/* binding */ eHTML),
-/* harmony export */   "eHTMLDF": () => (/* binding */ eHTMLDF)
+/* harmony export */   "eHTMLDF": () => (/* binding */ eHTMLDF),
+/* harmony export */   "getPart": () => (/* binding */ getPart),
+/* harmony export */   "isPart": () => (/* binding */ isPart)
 /* harmony export */ });
 /* harmony import */ var _NodeClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
 
 
 
+function getPart(self, el) {
+	return recur(el);
+	function recur(el) {
+		if (isPart(self, el)) 
+			return el;
+		if (el.parentElement)
+			return recur(el.parentElement);
+	}
+}
+
+function isPart(self, el) {
+	return el.classList?.contains(`${self.clPref}-part`);
+}
 
 function setStatusMark(el, className) {
 	const classes = ["executing", "executed", "exec-error"];
@@ -2051,25 +2066,11 @@ function createOnEditField(self, el, fieldName) {
 	}
 	el.oninput = function(ev) {
 		const 
-			part = getPart(self, this),
+			part = _lib_js__WEBPACK_IMPORTED_MODULE_0__.getPart(self, this),
 			node = self.editStage.tOb.getBySerial(part.dataset.serialN);
 		node[fieldName] = this.textContent;
 		self.codeField.textContent = _stringify(self.editStage.tOb);
 	}
-}
-
-function getPart(self, el) {
-	return recur(el);
-	function recur(el) {
-		if (isPart(self, el)) 
-			return el;
-		if (el.parentElement)
-			return recur(el.parentElement);
-	}
-}
-
-function isPart(self, el) {
-	return el.classList?.contains(`${self.clPref}-part`);
 }
 
 function setBtnEnableDisable(self) {
@@ -2117,7 +2118,11 @@ function _getEditPanelDom(self) {
 			<br>
 			<div>
 				<input class="${pr}-edit-part-text-field" 
-					style="width: calc(100% - 6px); text-align: center;">
+					style="
+						width: calc(100% - 6px); 
+						text-align: center;
+						font-family: consolas, monospace;
+					">
 			</div>
 			<br>
 		</div>

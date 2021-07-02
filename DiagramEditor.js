@@ -81,25 +81,11 @@ function createOnEditField(self, el, fieldName) {
 	}
 	el.oninput = function(ev) {
 		const 
-			part = getPart(self, this),
+			part = lib.getPart(self, this),
 			node = self.editStage.tOb.getBySerial(part.dataset.serialN);
 		node[fieldName] = this.textContent;
 		self.codeField.textContent = _stringify(self.editStage.tOb);
 	}
-}
-
-function getPart(self, el) {
-	return recur(el);
-	function recur(el) {
-		if (isPart(self, el)) 
-			return el;
-		if (el.parentElement)
-			return recur(el.parentElement);
-	}
-}
-
-function isPart(self, el) {
-	return el.classList?.contains(`${self.clPref}-part`);
 }
 
 function setBtnEnableDisable(self) {
@@ -147,7 +133,11 @@ function _getEditPanelDom(self) {
 			<br>
 			<div>
 				<input class="${pr}-edit-part-text-field" 
-					style="width: calc(100% - 6px); text-align: center;">
+					style="
+						width: calc(100% - 6px); 
+						text-align: center;
+						font-family: consolas, monospace;
+					">
 			</div>
 			<br>
 		</div>
