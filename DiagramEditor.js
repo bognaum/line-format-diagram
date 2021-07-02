@@ -247,7 +247,9 @@ function _getCodeEditBlockDom(self) {
 				</div>
 				<div style="clear: both;"></div>
 			</div>
-			<pre class="${pr}-code-field" contenteditable="true"></pre>
+			<div style="padding: 5px 100px;">
+				<pre class="${pr}-code-field" contenteditable="true"></pre>
+			</div>
 		</div>
 	`);
 

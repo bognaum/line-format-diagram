@@ -754,7 +754,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-	version: "5.2.3",
+	version: "5.3.0",
 	describeAPI: _describeAPI_js__WEBPACK_IMPORTED_MODULE_0__.default,
 	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default,
 });
@@ -983,25 +983,25 @@ function rule(callb) {
 	return _rule_;
 }
 
-function token(templ) {
+function token(...templs) {
 	const _token_ = function _token_(pc) {
-		return pc.match(templ);
+		return pc.match(...templs);
 	}
 	Object.setPrototypeOf(_token_, Analyzer_proto);
 	return _token_;
 }
 
-function nToken(templ) {
+function nToken(...templs) {
 	const _notToken_ = function _notToken_(pc) {
-		return pc.notMatch(templ);
+		return pc.notMatch(...templs);
 	}
 	Object.setPrototypeOf(_notToken_, Analyzer_proto);
 	return _notToken_;
 }
 
-function spToken(templ) {
+function spToken(...templs) {
 	const _space_wrapped_token_ = function(pc) {
-		return seq(token(/\s+/y).q("*"), token(templ), token(/\s+/y).q("*"),)(pc);
+		return seq(token(/\s+/y).q("*"), token(...templs), token(/\s+/y).q("*"),)(pc);
 	}
 	Object.setPrototypeOf(_space_wrapped_token_, Analyzer_proto);
 	return _space_wrapped_token_;
@@ -1403,37 +1403,30 @@ class ParseContext {
 		this.monitor = pc.monitor;
 		// this.debugDomain = pc.debugDomain;
 	}
-	match (templ) {
-		const {mSubstr, len} = this._getMatchSubstr(templ);
-
-		if (mSubstr) {
-			this.i += len;
-			push(this.mSlot, mSubstr);
-			this.monitor = this.i+ " : "+this.text.substr(this.i, 20)
-			return mSubstr;
-		} else
-			return "";
+	match (...templs) {
+		for (let t of templs) {
+			const {mSubstr, len} = this._getMatchSubstr(t);
+			if (mSubstr) {
+				this.i += len;
+				push(this.mSlot, mSubstr);
+				this.monitor = this.i+ " : "+this.text.substr(this.i, 20)
+				return mSubstr;
+			}
+		} 
+		return "";
 	}
-	notMatch (templ) {
-		const {mSubstr, len} = this._getMatchSubstr(templ);
-
-		if (mSubstr) {
-			return false;
-		} else {
-			const simbol = this.text[this.i];
-			push(this.mSlot, simbol);
-			this.i += 1;
-			this.monitor = this.i+ " : "+this.text.substr(this.i, 20);
-			return simbol;
+	notMatch (...templs) {
+		for (let t of templs) {
+			const {mSubstr, len} = this._getMatchSubstr(t);
+			if (mSubstr) 
+				return false;
 		}
 
-
-		const hpc = this.createHypo();
-		if (! hpc.match(templ)) {
-			this.match(this.text[this.i]);
-			return true;
-		} else
-			return false;
+		const simbol = this.text[this.i];
+		push(this.mSlot, simbol);
+		this.i += 1;
+		this.monitor = this.i+ " : "+this.text.substr(this.i, 20);
+		return simbol;
 	}
 	createHypo () {
 		const 
@@ -2232,7 +2225,9 @@ function _getCodeEditBlockDom(self) {
 				</div>
 				<div style="clear: both;"></div>
 			</div>
-			<pre class="${pr}-code-field" contenteditable="true"></pre>
+			<div style="padding: 5px 100px;">
+				<pre class="${pr}-code-field" contenteditable="true"></pre>
+			</div>
 		</div>
 	`);
 
