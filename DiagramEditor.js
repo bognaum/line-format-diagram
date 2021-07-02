@@ -247,10 +247,10 @@ function _getCodeEditBlockDom(self) {
 		<div class="${pr}-code-edit-block">
 			<div class="${pr}-code-edit-panel">
 				<div style="float: left;">
-					<button class="${pr}-apply">Apply</button>
-					&nbsp;
+					<!-- <button class="${pr}-apply">Apply</button>
+					&nbsp; -->
 					<button class="${pr}-discard">Discard</button>
-					<button class="${pr}-new-blank">New Blank</button>
+					<!-- <button class="${pr}-new-blank">New Blank</button> -->
 				</div>
 				<div style="float: right;">
 					<button class="${pr}-to-clipboard">To Clipboard</button>
@@ -261,10 +261,33 @@ function _getCodeEditBlockDom(self) {
 		</div>
 	`);
 
+	dom.querySelector(`.${pr}-code-field`).onfocus = function(ev) {
+		this.oldValue = this.textContent;
+	};
+	dom.querySelector(`.${pr}-code-field`).onblur = function(ev) {
+		if (this.oldValue != this.textContent) {
+			const {object, error, text} = 
+				lib.tryParseJSON(self.codeField.textContent);
+			// editLoop.commit(self);
+			if (object) {
+				self.editStage.tOb = object.clone;
+				editLoop.commit(self);
+			} else if (error) {
+				const 
+					hl = new JsonEHl("e-s-json-err-hl"),
+					codeField = hl.getHighlighted(text);
+				self.diagram.innerHTML = "";
+				self.diagram.appendChild(codeField);
+				hl.scrollToFirstError(codeField);
+				console.error(`(!) \n`, self.diagram, "\n", error);
+			}
+		}
+	};
+
 	dom.onclick = function (ev) {
 		const tClass = ev.target.classList.contains.bind(ev.target.classList);
 
-		if        (tClass(`${pr}-new-blank`)) {
+		/*if        (tClass(`${pr}-new-blank`)) {
 			const str = [
 				`{`,
 				`    "ch": [`,
@@ -294,8 +317,11 @@ function _getCodeEditBlockDom(self) {
 				console.error(`(!) \n`, self.diagram, "\n", error);
 
 			}
-		} else if (tClass(`${pr}-discard`)) {
-			self.codeField.textContent = _stringify(self.editStage.tOb);
+		} else*/ if (tClass(`${pr}-discard`)) {
+			const codeField = dom.querySelector(`.${pr}-code-field`);
+			codeField.focus();
+			codeField.textContent = codeField.oldValue = _stringify(self.editStage.tOb);
+			editLoop(self);
 		} else if (tClass(`${pr}-to-clipboard`)) {
 			const str = self.codeField.textContent;
 
