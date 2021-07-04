@@ -4,7 +4,7 @@ import setStyle      from "./set-style.js";
 import buildDiagram  from "./buildDiagram.js";
 import DiagramEditor from "./DiagramEditor.js";
 
-const version = "7.0.0-alpha";
+const version = "7.0.1-alpha";
 
 export default class LineFormatDiagram {
 	constructor (clPref="line-format-diagram") {
