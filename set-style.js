@@ -5,8 +5,8 @@ export default function setStyle(clPref) {
 		  font-size: 14px;
 		  white-space: nowrap;
 		  color: #333;
-		  margin: 20px 5px;
-		  padding: 20px 5px;
+		  margin: 10px 5px;
+		  padding: 10px 5px;
 		  user-select: none;
 		  font-family: consolas, courier, monospace;
 		  /*&.executed *{
