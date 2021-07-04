@@ -24,7 +24,8 @@ function _getLevels(tOb) {
 		bLevels = [];
 
 	recursive(tOb, 0);
-	bLevels.push(1);
+	if (bLevels.length)
+		bLevels.push(1);
 	return {tLevels, bLevels};
 
 	function recursive(tOb, level=0) {
