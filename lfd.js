@@ -1,6 +1,6 @@
 import * as lib      from "./lib.js";
 import JsonEHl       from "./json-err-hl/json-err-hl.js";
-import setStyle      from "./set-style.js";
+import setStyle      from "./CSS/lfd.scss.js";
 import buildDiagram  from "./buildDiagram.js";
 import DiagramEditor from "./DiagramEditor.js";
 

@@ -1,5 +1,7 @@
 const path = require('path');
 
+require("./CSS/watch.js");
+
 module.exports = {
 	context: __dirname,
 	entry: './wp-enter-point.js',
