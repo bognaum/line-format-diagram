@@ -1,6 +1,6 @@
 {
   "name": "line-format-diagram",
-  "version": "4.0.0",
+  "version": "7.0.2-alpha",
   "description": "",
   "main": "lfd.js",
   "directories": {
