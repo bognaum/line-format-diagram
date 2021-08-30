@@ -1,19 +1,19 @@
 const 
 	nodemon$ = require("nodemon"),
-  path$    = require("path");
+	path$    = require("path");
 
 nodemon$({
-  script: path$.resolve(__dirname, 'compile.js'),
-  ext: 'scss'
+	script: path$.resolve(__dirname, 'compile.js'),
+	ext: 'scss'
 });
 
 nodemon$.on('start', function () {
-  console.log('\n -', getTime(), '\n    Started:', __dirname, ' \n');
+	console.log('\n -', getTime(), '\n    Started:', __dirname, ' \n');
 }).on('quit', function () {
-  console.log('\n -', getTime(), '\n    Quit:', __dirname, ' \n');
-  process.exit();
+	console.log('\n -', getTime(), '\n    Quit:', __dirname, ' \n');
+	process.exit();
 }).on('restart', function (files) {
-  console.log('\n -', getTime(), '\n    Restarted due to: ', files, '\n');
+	console.log('\n -', getTime(), '\n    Restarted due to: ', files, '\n');
 });
 
 function getTime() {
