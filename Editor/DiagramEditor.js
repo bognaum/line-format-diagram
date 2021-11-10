@@ -1,7 +1,7 @@
-import * as lib          from "./lib.js";
-import buildDiagram      from "./buildDiagram.js";
-import JsonEHl           from "./json-err-hl/json-err-hl.js";
-import getSelArgs        from "./Editor/getSelArgs.js";
+import * as lib          from "./../lib.js";
+import buildDiagram      from "./../buildDiagram.js";
+import JsonEHl           from "./../json-err-hl/json-err-hl.js";
+import getSelArgs        from "./getSelArgs.js";
 
 export default class DiagramEditor {
 	constructor (clPref, elem, tOb) { constructor(this, clPref, elem, tOb);}
@@ -12,8 +12,6 @@ function constructor(self, clPref, elem, tOb) {
 
 	self.clPref      = clPref;
 	self.tOb         = tOb;
-	// self.editPanel   = _getEditPanelDom(self);
-	// self.codeEditBlock = _getCodeEditBlockDom(self);
 	[self.dom, self.domApi, self.updateButtons] = _getAppDom(self); 
 	self.editStage   = {
 			tOb:     tOb.clone,

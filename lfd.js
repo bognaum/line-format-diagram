@@ -2,7 +2,7 @@ import * as lib      from "./lib.js";
 import JsonEHl       from "./json-err-hl/json-err-hl.js";
 import setStyle      from "./CSS/lfd.scss.js";
 import buildDiagram  from "./buildDiagram.js";
-import DiagramEditor from "./DiagramEditor.js";
+import DiagramEditor from "./Editor/DiagramEditor.js";
 
 const version = "7.0.2-alpha";
 

@@ -21,7 +21,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _CSS_lfd_scss_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
-/* harmony import */ var _DiagramEditor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
+/* harmony import */ var _Editor_DiagramEditor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
 
 
 
@@ -49,7 +49,7 @@ function edit(self, elem) {
 	const template = elem.textContent;
 	const {object :tOb, error :jsonError} = _lib_js__WEBPACK_IMPORTED_MODULE_0__.tryParseJSON(template);
 	if (tOb)
-		new _DiagramEditor_js__WEBPACK_IMPORTED_MODULE_4__.default(self.clPref, elem, tOb);
+		new _Editor_DiagramEditor_js__WEBPACK_IMPORTED_MODULE_4__.default(self.clPref, elem, tOb);
 		// return editDiagram(self, elem, tOb);
 	else if (jsonError) {
 		elem.classList.remove("executing", "executed", "exec-error");
@@ -2040,7 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _Editor_getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
+/* harmony import */ var _getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
 
 
 
@@ -2055,8 +2055,6 @@ function constructor(self, clPref, elem, tOb) {
 
 	self.clPref      = clPref;
 	self.tOb         = tOb;
-	// self.editPanel   = _getEditPanelDom(self);
-	// self.codeEditBlock = _getCodeEditBlockDom(self);
 	[self.dom, self.domApi, self.updateButtons] = _getAppDom(self); 
 	self.editStage   = {
 			tOb:     tOb.clone,
@@ -2073,7 +2071,7 @@ function constructor(self, clPref, elem, tOb) {
 		const 
 			clPref = self.clPref,
 			tOb    = self.editStage.tOb;
-		self.editStage.selArgs = (0,_Editor_getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__.default)(clPref, tOb);
+		self.editStage.selArgs = (0,_getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__.default)(clPref, tOb);
 		selectLoop(self);
 	});
 
