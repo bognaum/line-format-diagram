@@ -2055,13 +2055,9 @@ function constructor(self, clPref, elem, tOb) {
 
 	self.clPref      = clPref;
 	self.tOb         = tOb;
-	self.editPanel   = _getEditPanelDom(self);
-	self.codeEditBlock = _getCodeEditBlockDom(self);
-	self.editButtons = self.editPanel.querySelector(`.${self.clPref}-edit-buttons`);
-	self.navButtons  = self.editPanel.querySelector(`.${self.clPref}-nav-buttons`);
-	self.diagram     = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`<div class=""><div>`);
-	self.partTextField = self.editPanel.querySelector(`.${self.clPref}-edit-part-text-field`);
-	self.codeField   = self.codeEditBlock.querySelector(`.${self.clPref}-code-field`);
+	// self.editPanel   = _getEditPanelDom(self);
+	// self.codeEditBlock = _getCodeEditBlockDom(self);
+	[self.dom, self.domApi, self.updateButtons] = _getAppDom(self); 
 	self.editStage   = {
 			tOb:     tOb.clone,
 		};
@@ -2069,18 +2065,11 @@ function constructor(self, clPref, elem, tOb) {
 	self.history.i = -1;
 
 
-	elem.append(
-		self.editPanel, 
-		self.diagram, 
-		self.codeEditBlock,
-	);
+	elem.append(self.dom);
 
 	editLoop.commit(self);
 
 	(0,_selection_event_js__WEBPACK_IMPORTED_MODULE_3__.default)(self);
-
-	// self.diagram.setAttribute("contenteditable", "true");
-	// self.diagram.oninput = console.log;
 
 }
 
@@ -2094,23 +2083,23 @@ function commit(self) {
 	history[history.i] = editStage.tOb.clone;
 	history.splice(history.i + 1, Infinity);
 
-	setBtnEnableDisable(self);
+	self.updateButtons();
 }
 
 function editLoop(self) {
-	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, self.diagram, self.editStage.tOb);
-	self.codeField.textContent = _stringify(self.editStage.tOb);
-	self.diagram.querySelectorAll(`.${self.clPref}-td-block`).forEach((v,i,a) => {
+	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, self.domApi.diagram.el, self.editStage.tOb);
+	self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-td-block`).forEach((v,i,a) => {
 		createOnEditField(self, v, "td");
 	});
-	self.diagram.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
+	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
 		createOnEditField(self, v, "bd");
 	});
-	/*self.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
+	/*self.domApi.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
 	});*/
-	self.partTextField.value = "";
-	self.partTextField.editedNode = null;
+	self.domApi.editPartTextField.el.value = "";
+	self.domApi.editPartTextField.el.editedNode = null;
 }
 
 function createOnEditField(self, el, fieldName) {
@@ -2127,41 +2116,19 @@ function createOnEditField(self, el, fieldName) {
 			part = _lib_js__WEBPACK_IMPORTED_MODULE_0__.getPart(self, this),
 			node = self.editStage.tOb.getBySerial(part.dataset.serialN);
 		node[fieldName] = this.textContent;
-		self.codeField.textContent = _stringify(self.editStage.tOb);
+		self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
 	}
 }
 
-function setBtnEnableDisable(self) {
-	const {clPref :pr, history :hist, editPanel :pane} = self;
-
-	pane.querySelector(`.${pr}-nav-undo`)[
-		(hist.i <= 0) ? "setAttribute" : "removeAttribute"
-	]("disabled", true);
-	pane.querySelector(`.${pr}-nav-undo .count`).textContent = hist.i;
-
-	pane.querySelector(`.${pr}-nav-redo`)[
-		(hist.i == hist.length - 1) ? "setAttribute" : "removeAttribute"
-	]("disabled", true);
-	pane.querySelector(`.${pr}-nav-redo .count`).textContent = 
-		hist.length - 1 - hist.i;
-}
-
-function _getEditPanelDom(self) {
+function _getAppDom(self) {
 	const pr = self.clPref;
-	
-	const dom = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`
+	const dFragment = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTMLDF(`
 		<div class="${pr}-edit-panel" style="white-space: normal;">
 			<div class="${pr}-edit-panel__btn-block ${pr}-history-buttons" style="float: left;">
 				<button class="${pr}-nav-undo" >&nbsp;⤶ <span class="count"></span></button>
 				<button class="${pr}-nav-redo" >&nbsp;<span class="count"></span> ⤷</button>
 				&nbsp;&nbsp;
 			</div>
-			<!-- <div class="${pr}-edit-panel__btn-block ${pr}-nav-buttons" style="float: left;">
-				<button class="${pr}-nav-left" >⮜</button>
-				<button class="${pr}-nav-up"   >⮝</button>
-				<button class="${pr}-nav-right">⮞</button>
-				<button class="${pr}-nav-down" >⮟</button>
-			</div> -->
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
 				<button class="${pr}-edit-td"        >td</button>
 				<button class="${pr}-edit-bd"        >bd</button>
@@ -2184,99 +2151,9 @@ function _getEditPanelDom(self) {
 			</div>
 			<br>
 		</div>
-	`);
 
-	dom.querySelector(`.${pr}-edit-buttons`).onclick = function(ev) {
-		const {rootNode, a, b} = self.editStage.selArgs;
-		const tClass = ev.target.classList.contains.bind(ev.target.classList);
+		<div class="${pr}-diagram"></div>
 
-		if (tClass(`${pr}-edit-td`)) {
-			rootNode.td ? delete rootNode.td : rootNode.td = "X";
-		} else 
-		if (tClass(`${pr}-edit-bd`)) {
-			rootNode.bd ? delete rootNode.bd : rootNode.bd = "X";
-		} else 
-		if (tClass(`${pr}-edit-split`)) {
-			rootNode.split(a, b);
-		} else 
-		if (ev.target.classList.contains(`${pr}-edit-wrap`)) {
-			rootNode.wrap(a, b);
-		} else 
-		if (tClass(`${pr}-edit-unwrap`)) {
-			rootNode.unwrap(a, b);
-		} else 
-		if (tClass(`${pr}-edit-join`)) {
-			rootNode.join(a, b);
-		}  
-		editLoop.commit(self);
-	};
-
-	dom.querySelector(`.${pr}-nav-undo`).onclick = function(ev) {}
-	dom.querySelector(`.${pr}-nav-redo`).onclick = function(ev) {}
-
-	dom.querySelector(`.${pr}-history-buttons`).onclick = function (ev) {
-		const {editStage, history} = self;
-		const tClass = ev.target.classList.contains.bind(ev.target.classList);
-
-		let t = ev.target;
-		do {
-
-			if        (t.classList.contains(`${pr}-nav-undo`)) {
-				if (history[history.i - 1]) {
-					editStage.tOb = history[-- history.i].clone;
-					setBtnEnableDisable(self);
-					editLoop(self);
-				}
-			} else if (t.classList.contains(`${pr}-nav-redo`)) {
-				if (history[history.i + 1]) {
-					editStage.tOb = history[++ history.i].clone;
-					setBtnEnableDisable(self);
-					editLoop(self);
-				}
-			}else 
-				continue;
-			break;
-
-		} while (t != this && (t = t.parentElement));
-	};
-
-	/*dom.querySelector(`.${pr}-nav-buttons`).onclick = function (ev) {
-		const tClass = ev.target.classList.contains.bind(ev.target.classList);
-
-		if        (tClass(`${pr}-nav-left`)) {
-			// ...
-		} else if (tClass(`${pr}-nav-up`)) {
-			// ...
-		} else if (tClass(`${pr}-nav-right`)) {
-			// ...
-		} else if (tClass(`${pr}-nav-down`)) {
-			// ...
-		}
-
-	};*/
-
-	dom.querySelector(`.${pr}-edit-part-text-field`).onfocus = function(ev) {
-		this.tsartValue = this.value
-	}
-
-	dom.querySelector(`.${pr}-edit-part-text-field`).oninput = function (ev) {
-		const node = this.editedNode;
-		if (typeof this.editedNode?.ch != "string")
-			throw new Error();
-		this.editedNode.ch = this.value;
-		self.codeField.textContent = _stringify(self.editStage.tOb);
-	}
-
-	dom.querySelector(`.${pr}-edit-part-text-field`).onblur = function(ev) {
-		if (this.tsartValue != this.value)
-			editLoop.commit(self);
-	}
-	return dom;
-}
-
-function _getCodeEditBlockDom(self) {
-	const pr = self.clPref;
-	const dom = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTML(`
 		<div class="${pr}-code-edit-block">
 			<div class="${pr}-code-edit-panel">
 				<div style="float: left;">
@@ -2296,83 +2173,183 @@ function _getCodeEditBlockDom(self) {
 		</div>
 	`);
 
-	dom.querySelector(`.${pr}-code-field`).onfocus = function(ev) {
-		this.oldValue = this.textContent;
-	};
-	dom.querySelector(`.${pr}-code-field`).onblur = function(ev) {
-		if (this.oldValue != this.textContent) {
-			const {object, error, text} = 
-				_lib_js__WEBPACK_IMPORTED_MODULE_0__.tryParseJSON(self.codeField.textContent);
-			// editLoop.commit(self);
-			if (object) {
-				self.editStage.tOb = object.clone;
+	const domApi = {
+		navUndo             : {
+			el: dFragment.querySelector(`.${pr}-nav-undo`            ),
+			onclick: function(ev) {
+				const {editStage, history} = self;
+				if (history[history.i - 1]) {
+					editStage.tOb = history[-- history.i].clone;
+					self.updateButtons();
+					editLoop(self);
+				}
+			},
+			updateBtn: function() {
+				const hist = self.history;
+				this.el.disabled = (hist.i <= 0);
+				this.el.querySelector(`.count`).textContent = hist.i;
+			},
+		},
+		navRedo             : {
+			el: dFragment.querySelector(`.${pr}-nav-redo`            ),
+			onclick: function(ev) {
+				const {editStage, history} = self;
+				if (history[history.i + 1]) {
+					editStage.tOb = history[++ history.i].clone;
+					self.updateButtons();
+					editLoop(self);
+				}
+			},
+			updateBtn: function() {
+				const hist = self.history;
+				this.el.disabled = (hist.i == hist.length - 1);
+				this.el.querySelector(`.count`).textContent = 
+					hist.length - 1 - hist.i;
+			},
+		},
+		editTd              : {
+			el: dFragment.querySelector(`.${pr}-edit-td`             ),
+			onclick: function(ev) {
+				const {rootNode, a, b} = self.editStage.selArgs;
+				rootNode.td ? delete rootNode.td : rootNode.td = "X";
 				editLoop.commit(self);
-			} else if (error) {
-				const 
-					hl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__.default("e-s-json-err-hl"),
-					codeField = hl.getHighlighted(text);
-				self.diagram.innerHTML = "";
-				self.diagram.appendChild(codeField);
-				hl.scrollToFirstError(codeField);
-				console.error(`(!) \n`, self.diagram, "\n", error);
-			}
-		}
-	};
-
-	dom.onclick = function (ev) {
-		const tClass = ev.target.classList.contains.bind(ev.target.classList);
-
-		/*if        (tClass(`${pr}-new-blank`)) {
-			const str = [
-				`{`,
-				`    "ch": [`,
-				`        {`,
-				`            "td": "main",`,
-				`            "ch": ""`,
-				`        }`,
-				`    ]`,
-				`}`,
-			].join("\n");
-			self.codeField.textContent = str;
-			self.editStage.tOb = JSON.parse(str);
-			editLoop.commit(self);
-		} else if (tClass(`${pr}-apply`)) {
-			const {object, error, text} = 
-				lib.tryParseJSON(self.codeField.textContent);
-			if (object) {
-				self.editStage.tOb = object.clone;
+			},
+			updateBtn: function() {},
+		},
+		editBd              : {
+			el: dFragment.querySelector(`.${pr}-edit-bd`             ),
+			onclick: function(ev) {
+				const {rootNode, a, b} = self.editStage.selArgs;
+				rootNode.bd ? delete rootNode.bd : rootNode.bd = "X";
 				editLoop.commit(self);
-			} else if (error) {
-				const 
-					hl = new JsonEHl("e-s-json-err-hl"),
-					codeField = hl.getHighlighted(text);
-				self.diagram.innerHTML = "";
-				self.diagram.appendChild(codeField);
-				hl.scrollToFirstError(codeField);
-				console.error(`(!) \n`, self.diagram, "\n", error);
+			},
+			updateBtn: function() {},
+		},
+		editSplit           : {
+			el: dFragment.querySelector(`.${pr}-edit-split`          ),
+			onclick: function(ev) {
+				const {rootNode, a, b} = self.editStage.selArgs;
+				rootNode.split(a, b);
+				editLoop.commit(self);
+			},
+			updateBtn: function() {},
+		},
+		editJoin            : {
+			el: dFragment.querySelector(`.${pr}-edit-join`           ),
+			onclick: function(ev) {
+				const {rootNode, a, b} = self.editStage.selArgs;
+				rootNode.join(a, b);
+				editLoop.commit(self);
+			},
+			updateBtn: function() {},
+		},
+		editWrap            : {
+			el: dFragment.querySelector(`.${pr}-edit-wrap`           ),
+			onclick: function(ev) {
+				const {rootNode, a, b} = self.editStage.selArgs;
+				rootNode.wrap(a, b);
+				editLoop.commit(self);
+			},
+			updateBtn: function() {},
+		},
+		editUnwrap          : {
+			el: dFragment.querySelector(`.${pr}-edit-unwrap`         ),
+			onclick: function(ev) {
+				const {rootNode, a, b} = self.editStage.selArgs;
+				rootNode.unwrap(a, b);
+				editLoop.commit(self);
+			},
+			updateBtn: function() {},
+		},
+		editPartTextField   : {
+			el: dFragment.querySelector(`.${pr}-edit-part-text-field`),
+			onfocus: function(ev) {
+				this.tsartValue = this.value;
+			},
+			oninput: function(ev) {
+				const node = this.editedNode;
+				if (typeof this.editedNode?.ch != "string")
+					throw new Error();
+				this.editedNode.ch = this.value;
+				self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+			},
+			onblur: function(ev) {
+				if (this.tsartValue != this.value)
+					editLoop.commit(self);
+			},
+		},
+		diagram             : {
+			el: dFragment.querySelector(`.${pr}-diagram`             ),
+		},
+		discard             : {
+			el: dFragment.querySelector(`.${pr}-discard`             ),
+			onclick: function(ev) {
+				const codeField = self.domApi.codeField;
+				codeField.el.focus();
+				codeField.el.textContent = codeField.el.oldValue = _stringify(self.editStage.tOb);
+				editLoop(self);
+			},
+			updateBtn: function() {},
+		},
+		toClipboard         : {
+			el: dFragment.querySelector(`.${pr}-to-clipboard`        ),
+			onclick: function(ev) {
+				const str = self.domApi.codeField.el.textContent;
 
-			}
-		} else*/ if (tClass(`${pr}-discard`)) {
-			const codeField = dom.querySelector(`.${pr}-code-field`);
-			codeField.focus();
-			codeField.textContent = codeField.oldValue = _stringify(self.editStage.tOb);
-			editLoop(self);
-		} else if (tClass(`${pr}-to-clipboard`)) {
-			const str = self.codeField.textContent;
-
-			const tA = document.createElement("textarea");
-			tA.value = str;
-			document.body.appendChild(tA);
-			tA.select();
-			document.execCommand("copy");
-			document.body.removeChild(tA);
-		}
-
+				const tA = document.createElement("textarea");
+				tA.value = str;
+				document.body.appendChild(tA);
+				tA.select();
+				document.execCommand("copy");
+				document.body.removeChild(tA);
+			},
+			updateBtn: function() {},
+		},
+		codeField           : {
+			el: dFragment.querySelector(`.${pr}-code-field`          ),
+			onfocus: function(ev) {
+				this.oldValue = this.textContent;
+			},
+			onblur : function(ev) {
+				if (this.oldValue != this.textContent) {
+					const {object, error, text} = 
+						_lib_js__WEBPACK_IMPORTED_MODULE_0__.tryParseJSON(self.domApi.codeField.el.textContent);
+					// editLoop.commit(self);
+					if (object) {
+						self.editStage.tOb = object.clone;
+						editLoop.commit(self);
+					} else if (error) {
+						const 
+							hl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__.default("e-s-json-err-hl"),
+							codeField = hl.getHighlighted(text);
+						self.domApi.diagram.el.innerHTML = "";
+						self.domApi.diagram.el.appendChild(codeField);
+						hl.scrollToFirstError(codeField);
+						console.error(`(!) \n`, self.domApi.diagram.el, "\n", error);
+					}
+				}
+			},
+		},
 	};
 
-	return dom;
+	for (const i in domApi) {
+		const 
+			api = domApi[i],
+			el  = api.el;
+		el.api = api;
+		el.onclick = api.onclick;
+		el.oninput = api.oninput;
+		el.onblur  = api.onblur ;
+	}
+
+	return [dFragment, domApi, updateButtons];
+
+	function updateButtons() {
+		for (const i in domApi) 
+			if (domApi[i].updateBtn)
+				domApi[i].updateBtn();
+	}
 }
-
 
 function _stringify(tOb) {
 	return JSON.stringify(tOb, null, 4);
@@ -2418,8 +2395,8 @@ function defineSelArgs(self) {
 			rootNode = rootPart ? 
 				self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
 		if (rootNode && typeof rootNode.ch == "string") {
-			self.partTextField.editedNode = rootNode;
-			self.partTextField.value      = rootNode.ch;
+			self.domApi.editPartTextField.el.editedNode = rootNode;
+			self.domApi.editPartTextField.el.value      = rootNode.ch;
 		}
 
 		if (rootPart) {
@@ -2456,12 +2433,12 @@ function defineSelArgs(self) {
 				b,
 			}
 
-			self.diagram.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
+			self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
 				v.style.boxShadow = "";
 				v.style.background = "";
 			});
 
-			self.diagram.querySelectorAll(`*`).forEach((v) => {
+			self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
 				v.style.boxShadow = "";
 				v.style.background = "";
 			});

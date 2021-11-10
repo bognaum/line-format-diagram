@@ -28,8 +28,8 @@ function defineSelArgs(self) {
 			rootNode = rootPart ? 
 				self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
 		if (rootNode && typeof rootNode.ch == "string") {
-			self.partTextField.editedNode = rootNode;
-			self.partTextField.value      = rootNode.ch;
+			self.domApi.editPartTextField.el.editedNode = rootNode;
+			self.domApi.editPartTextField.el.value      = rootNode.ch;
 		}
 
 		if (rootPart) {
@@ -66,12 +66,12 @@ function defineSelArgs(self) {
 				b,
 			}
 
-			self.diagram.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
+			self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
 				v.style.boxShadow = "";
 				v.style.background = "";
 			});
 
-			self.diagram.querySelectorAll(`*`).forEach((v) => {
+			self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
 				v.style.boxShadow = "";
 				v.style.background = "";
 			});
