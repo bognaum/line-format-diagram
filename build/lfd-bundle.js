@@ -2417,12 +2417,12 @@ __webpack_require__.r(__webpack_exports__);
 
 function SelectionEventCallback(self) {
 	return function xxx(ev) {
-		self.editStage.selArgs = defineSelArgs(self);
+		self.editStage.selArgs = defineSelArgs(self.clPref, self.editStage.tOb);
 		selectLoop(self);
 	}
 }
 
-function defineSelArgs(self) {
+function defineSelArgs(clPref, tOb) {
 	const 
 		sel = window.getSelection();
 	if (sel.rangeCount) {
@@ -2438,9 +2438,8 @@ function defineSelArgs(self) {
 			} = rangeB;
 
 		const 
-			rootPart = getPart(self, rootEl),
-			rootNode = rootPart ? 
-				self.editStage.tOb.getBySerial(rootPart.dataset.serialN) : null;
+			rootPart = getPart(clPref, rootEl),
+			rootNode = rootPart ? tOb.getBySerial(rootPart.dataset.serialN) : null;
 
 		if (rootPart) {
 			let a, b, aEl, bEl;
@@ -2496,18 +2495,18 @@ function defineSelArgs(self) {
 }
 
 
-function getPart(self, el) {
+function getPart(clPref, el) {
 	return recur(el);
 	function recur(el) {
-		if (isPart(self, el)) 
+		if (isPart(clPref, el)) 
 			return el;
 		if (el.parentElement)
 			return recur(el.parentElement);
 	}
 }
 
-function isPart(self, el) {
-	return el.classList?.contains(`${self.clPref}-part`);
+function isPart(clPref, el) {
+	return el.classList?.contains(`${clPref}-part`);
 }
 
 
