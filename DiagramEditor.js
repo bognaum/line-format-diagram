@@ -1,7 +1,7 @@
 import * as lib          from "./lib.js";
 import buildDiagram      from "./buildDiagram.js";
 import JsonEHl           from "./json-err-hl/json-err-hl.js";
-import SelectionEventCallback from "./Editor/Selection-event-callback.js";
+import getSelArgs        from "./Editor/getSelArgs.js";
 
 export default class DiagramEditor {
 	constructor (clPref, elem, tOb) { constructor(this, clPref, elem, tOb);}
@@ -26,7 +26,13 @@ function constructor(self, clPref, elem, tOb) {
 
 	editLoop.commit(self);
 
-	document.addEventListener("selectionchange", new SelectionEventCallback(self));
+	document.addEventListener("selectionchange", function(ev) {
+		const 
+			clPref = self.clPref,
+			tOb    = self.editStage.tOb;
+		self.editStage.selArgs = getSelArgs(clPref, tOb);
+		selectLoop(self);
+	});
 
 }
 

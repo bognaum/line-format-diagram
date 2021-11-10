@@ -2040,7 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _Editor_Selection_event_callback_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
+/* harmony import */ var _Editor_getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
 
 
 
@@ -2069,7 +2069,13 @@ function constructor(self, clPref, elem, tOb) {
 
 	editLoop.commit(self);
 
-	document.addEventListener("selectionchange", new _Editor_Selection_event_callback_js__WEBPACK_IMPORTED_MODULE_3__.default(self));
+	document.addEventListener("selectionchange", function(ev) {
+		const 
+			clPref = self.clPref,
+			tOb    = self.editStage.tOb;
+		self.editStage.selArgs = (0,_Editor_getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__.default)(clPref, tOb);
+		selectLoop(self);
+	});
 
 }
 
@@ -2404,25 +2410,16 @@ function _stringify(tOb) {
 }
 
 /***/ }),
-/* 15 */
+/* 15 */,
+/* 16 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ SelectionEventCallback)
+/* harmony export */   "default": () => (/* binding */ getSelArgs)
 /* harmony export */ });
-/* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-
-
-function SelectionEventCallback(self) {
-	return function xxx(ev) {
-		self.editStage.selArgs = defineSelArgs(self.clPref, self.editStage.tOb);
-		selectLoop(self);
-	}
-}
-
-function defineSelArgs(clPref, tOb) {
+function getSelArgs(clPref, tOb) {
 	const 
 		sel = window.getSelection();
 	if (sel.rangeCount) {
@@ -2507,55 +2504,6 @@ function getPart(clPref, el) {
 
 function isPart(clPref, el) {
 	return el.classList?.contains(`${clPref}-part`);
-}
-
-
-
-
-function selectLoop(self) {
-	const {
-		rootNode,
-		rootPart,
-		aEl,
-		bEl,
-		a,
-		b,
-	} = self.editStage.selArgs;
-
-	if (rootNode && typeof rootNode.ch == "string") {
-		self.domApi.editPartTextField.el.editedNode = rootNode;
-		self.domApi.editPartTextField.el.value      = rootNode.ch;
-	} else {}
-
-	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
-		v.style.boxShadow = "";
-		v.style.background = "";
-	});
-
-	self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
-		v.style.boxShadow = "";
-		v.style.background = "";
-	});
-
-	if (rootPart) {
-		rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
-	}
-	if (aEl) {
-		let el = aEl;
-		do {
-			el.style.background = `
-				repeating-linear-gradient(
-					135deg, 
-					rgba(126,126,126,.2) 0, 
-					rgba(126,126,126,.2) 5px, 
-					transparent          5px, 
-					transparent          10px
-				)
-			`;
-			// el.style.background = "rgba(100,200,100,.3)";
-		} while (el != bEl && (el = el.nextElementSibling));
-	}
-	self.updateButtons();
 }
 
 /***/ })
