@@ -43,7 +43,7 @@ export default function getSelArgs(clPref, tOb) {
 				b = parseInt(bEl.dataset.partChIndex) + 1;
 			}
 
-			let n = 0;
+			/*let n = 0;
 			console.groupCollapsed("defineSelArgs");
 			console.log("");
 			console.log(++ n, "rangeA"  , rangeA  );
@@ -54,7 +54,7 @@ export default function getSelArgs(clPref, tOb) {
 			console.log(++ n, "a"       , a       );
 			console.log(++ n, "bEl"     , bEl     );
 			console.log(++ n, "b"       , b       );
-			console.groupEnd();
+			console.groupEnd();*/
 
 			return {
 				rootNode,

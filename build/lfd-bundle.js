@@ -2086,7 +2086,6 @@ function commit(self) {
 	history.i ++;
 	history[history.i] = editStage.tOb.clone;
 	history.splice(history.i + 1, Infinity);
-
 	self.updateButtons();
 }
 
@@ -2102,8 +2101,7 @@ function editLoop(self) {
 	/*self.domApi.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
 	});*/
-	self.domApi.editPartTextField.el.value = "";
-	self.domApi.editPartTextField.el.editedNode = null;
+	self.updateButtons();
 }
 
 function selectLoop(self) {
@@ -2119,7 +2117,10 @@ function selectLoop(self) {
 	if (rootNode && typeof rootNode.ch == "string") {
 		self.domApi.editPartTextField.el.editedNode = rootNode;
 		self.domApi.editPartTextField.el.value      = rootNode.ch;
-	} else {}
+	} else {
+		self.domApi.editPartTextField.el.value = "";
+		self.domApi.editPartTextField.el.editedNode = null;
+	}
 
 	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
 		v.style.boxShadow = "";
@@ -2462,7 +2463,7 @@ function getSelArgs(clPref, tOb) {
 				b = parseInt(bEl.dataset.partChIndex) + 1;
 			}
 
-			let n = 0;
+			/*let n = 0;
 			console.groupCollapsed("defineSelArgs");
 			console.log("");
 			console.log(++ n, "rangeA"  , rangeA  );
@@ -2473,7 +2474,7 @@ function getSelArgs(clPref, tOb) {
 			console.log(++ n, "a"       , a       );
 			console.log(++ n, "bEl"     , bEl     );
 			console.log(++ n, "b"       , b       );
-			console.groupEnd();
+			console.groupEnd();*/
 
 			return {
 				rootNode,
