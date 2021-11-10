@@ -239,10 +239,12 @@ function _getAppDom(self) {
 			el: dFragment.querySelector(`.${pr}-diagram`             ),
 		},
 		discard             : {
+			// Не работает из-за того, что при потере фокуса на <pre> происходит коммит. 
+			// А тогда уже делать discard нет смысла.
 			el: dFragment.querySelector(`.${pr}-discard`             ),
 			onclick: function(ev) {
 				const codeField = self.domApi.codeField;
-				codeField.el.focus();
+				// codeField.el.focus();
 				codeField.el.textContent = codeField.el.oldValue = _stringify(self.editStage.tOb);
 				editLoop(self);
 			},
