@@ -59,6 +59,52 @@ function editLoop(self) {
 	self.domApi.editPartTextField.el.editedNode = null;
 }
 
+function selectLoop(self) {
+	const {
+		rootNode,
+		rootPart,
+		aEl,
+		bEl,
+		a,
+		b,
+	} = self.editStage.selArgs;
+
+	if (rootNode && typeof rootNode.ch == "string") {
+		self.domApi.editPartTextField.el.editedNode = rootNode;
+		self.domApi.editPartTextField.el.value      = rootNode.ch;
+	} else {}
+
+	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
+		v.style.boxShadow = "";
+		v.style.background = "";
+	});
+
+	self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
+		v.style.boxShadow = "";
+		v.style.background = "";
+	});
+
+	if (rootPart) {
+		rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
+	}
+	if (aEl) {
+		let el = aEl;
+		do {
+			el.style.background = `
+				repeating-linear-gradient(
+					135deg, 
+					rgba(126,126,126,.2) 0, 
+					rgba(126,126,126,.2) 5px, 
+					transparent          5px, 
+					transparent          10px
+				)
+			`;
+			// el.style.background = "rgba(100,200,100,.3)";
+		} while (el != bEl && (el = el.nextElementSibling));
+	}
+	self.updateButtons();
+}
+
 function createOnEditField(self, el, fieldName) {
 	el.setAttribute("contenteditable", "true");
 	el.onfocus = function(ev) {
