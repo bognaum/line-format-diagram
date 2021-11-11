@@ -2040,7 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
+/* harmony import */ var _getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 
 
 
@@ -2114,19 +2114,9 @@ function editLoop(self) {
 }
 
 function selectLoop(self) {
-	const {
-		// rootNode,
-		aEl,
-		bEl,
+	const {r, a, b} = self.editStage.selArgs;
 
-		root,
-		a,
-		b,
-	} = self.editStage.selArgs;
-	const rootNode = self.editStage.tOb.getBySerial(root);
-
-	console.log("selArgs >>", root, a, b, rootNode);
-
+	const rootNode = self.editStage.tOb.getBySerial(r);
 	if (rootNode) {
 		const 
 			rootSN = rootNode.getSerial(),
@@ -2153,10 +2143,13 @@ function selectLoop(self) {
 		if (rootPart) {
 			rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
 		}
-		if (aEl) {
-			let el = aEl;
-			do {
-				el.style.background = `
+
+		if (typeof rootNode.ch != "string") {
+			const selectedNodes = rootNode.ch.slice(a, b);
+			for (const node of selectedNodes) {
+				const part = self.domApi.diagram.el.querySelector(
+					`[data-serial-n="${node.getSerial()}"]`);
+				part.style.background = `
 					repeating-linear-gradient(
 						135deg, 
 						rgba(126,126,126,.2) 0, 
@@ -2165,10 +2158,8 @@ function selectLoop(self) {
 						transparent          10px
 					)
 				`;
-				// el.style.background = "rgba(100,200,100,.3)";
-			} while (el != bEl && (el = el.nextElementSibling));
+			}
 		}
-		
 	}
 
 	self.updateButtons();
@@ -2282,30 +2273,41 @@ function _getAppDom(self) {
 		editTd              : {
 			el: dFragment.querySelector(`.${pr}-edit-td`             ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.td ? delete rootNode.td : rootNode.td = "X";
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
-				this.el.disabled = !self.editStage.selArgs?.rootNode;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode;
 			},
 		},
 		editBd              : {
 			el: dFragment.querySelector(`.${pr}-edit-bd`             ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.bd ? delete rootNode.bd : rootNode.bd = "X";
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
-				const rootNode = self.editStage.selArgs?.rootNode;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				this.el.disabled = !(rootNode && typeof rootNode.ch == "string");
 			},
 		},
 		editSplit           : {
 			el: dFragment.querySelector(`.${pr}-edit-split`          ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.split(a, b);
 				editLoop.commit(self);
 			},
@@ -2314,7 +2316,9 @@ function _getAppDom(self) {
 		editJoin            : {
 			el: dFragment.querySelector(`.${pr}-edit-join`           ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.join(a, b);
 				editLoop.commit(self);
 			},
@@ -2323,7 +2327,9 @@ function _getAppDom(self) {
 		editWrap            : {
 			el: dFragment.querySelector(`.${pr}-edit-wrap`           ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.wrap(a, b);
 				editLoop.commit(self);
 			},
@@ -2332,7 +2338,9 @@ function _getAppDom(self) {
 		editUnwrap          : {
 			el: dFragment.querySelector(`.${pr}-edit-unwrap`         ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.unwrap(a, b);
 				editLoop.commit(self);
 			},
@@ -2435,8 +2443,7 @@ function _stringify(tOb) {
 }
 
 /***/ }),
-/* 15 */,
-/* 16 */
+/* 15 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2462,7 +2469,7 @@ function getSelArgs(clPref, tOb) {
 		const 
 			rootPart = getPart(clPref, rootEl),
 			rootNode = rootPart ? tOb.getBySerial(rootPart.dataset.serialN) : null,
-			root     = parseInt(rootPart.dataset.serialN);
+			r        = parseInt(rootPart?.dataset.serialN || null);
 
 		if (rootPart) {
 			let a, b, aEl, bEl;
@@ -2503,16 +2510,7 @@ function getSelArgs(clPref, tOb) {
 			console.log(++ n, "b"       , b       );
 			console.groupEnd();*/
 
-			return {
-				rootNode,
-				rootPart,
-				aEl,
-				bEl,
-
-				root,
-				a,
-				b,
-			};
+			return {r, a, b};
 		}
 	}
 

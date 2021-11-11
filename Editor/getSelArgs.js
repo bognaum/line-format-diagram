@@ -16,7 +16,7 @@ export default function getSelArgs(clPref, tOb) {
 		const 
 			rootPart = getPart(clPref, rootEl),
 			rootNode = rootPart ? tOb.getBySerial(rootPart.dataset.serialN) : null,
-			r        = parseInt(rootPart.dataset.serialN);
+			r        = parseInt(rootPart?.dataset.serialN || null);
 
 		if (rootPart) {
 			let a, b, aEl, bEl;
@@ -57,16 +57,7 @@ export default function getSelArgs(clPref, tOb) {
 			console.log(++ n, "b"       , b       );
 			console.groupEnd();*/
 
-			return {
-				rootNode,
-				rootPart,
-				aEl,
-				bEl,
-
-				r,
-				a,
-				b,
-			};
+			return {r, a, b};
 		}
 	}
 

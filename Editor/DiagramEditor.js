@@ -71,11 +71,7 @@ function editLoop(self) {
 }
 
 function selectLoop(self) {
-	const {
-		r,
-		a,
-		b,
-	} = self.editStage.selArgs;
+	const {r, a, b} = self.editStage.selArgs;
 
 	const rootNode = self.editStage.tOb.getBySerial(r);
 	if (rootNode) {
@@ -234,30 +230,41 @@ function _getAppDom(self) {
 		editTd              : {
 			el: dFragment.querySelector(`.${pr}-edit-td`             ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.td ? delete rootNode.td : rootNode.td = "X";
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
-				this.el.disabled = !self.editStage.selArgs?.rootNode;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode;
 			},
 		},
 		editBd              : {
 			el: dFragment.querySelector(`.${pr}-edit-bd`             ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.bd ? delete rootNode.bd : rootNode.bd = "X";
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
-				const rootNode = self.editStage.selArgs?.rootNode;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				this.el.disabled = !(rootNode && typeof rootNode.ch == "string");
 			},
 		},
 		editSplit           : {
 			el: dFragment.querySelector(`.${pr}-edit-split`          ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.split(a, b);
 				editLoop.commit(self);
 			},
@@ -266,7 +273,9 @@ function _getAppDom(self) {
 		editJoin            : {
 			el: dFragment.querySelector(`.${pr}-edit-join`           ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.join(a, b);
 				editLoop.commit(self);
 			},
@@ -275,7 +284,9 @@ function _getAppDom(self) {
 		editWrap            : {
 			el: dFragment.querySelector(`.${pr}-edit-wrap`           ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.wrap(a, b);
 				editLoop.commit(self);
 			},
@@ -284,7 +295,9 @@ function _getAppDom(self) {
 		editUnwrap          : {
 			el: dFragment.querySelector(`.${pr}-edit-unwrap`         ),
 			onclick: function(ev) {
-				const {rootNode, a, b} = self.editStage.selArgs;
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
 				rootNode.unwrap(a, b);
 				editLoop.commit(self);
 			},
