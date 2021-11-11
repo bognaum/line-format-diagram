@@ -274,11 +274,15 @@ class Node {
 
 function unwrap (self) {
 	if (isArr(self.ch)) {
-		self.parent.ch.splice(self.chIndex, 1, ...self.ch);
-		initChildren(self.parent);
-	} else if (isStr(self.ch) && self.parent.ch.length == 1) {
-		self.parent.ch = self.ch;
-		initChildren(self.parent);
+		return () => {
+			self.parent.ch.splice(self.chIndex, 1, ...self.ch);
+			initChildren(self.parent);
+		}
+	} else if (isStr(self.ch) && self.parent && self.parent.ch.length == 1) {
+		return () => {
+			self.parent.ch = self.ch;
+			initChildren(self.parent);
+		}
 	}
 }
 
@@ -323,27 +327,30 @@ function join (self, a, b) {
 
 
 function split (self, a, b) {
-	const 
-		parts = [
-			self.ch.slice(0, a),
-			self.ch.slice(a, b),
-			self.ch.slice(b   ),
-		],
-		tds = [self.td || "X", "S", self.td || "X"],
-		newChildren = [];
+	if (self.parent) 
+		return () => {
+			const 
+				parts = [
+					self.ch.slice(0, a),
+					self.ch.slice(a, b),
+					self.ch.slice(b   ),
+				],
+				tds = [self.td || "X", "S", self.td || "X"],
+				newChildren = [];
 
-	for (let p of parts) {
-		const td = tds.shift();
-		if (p.length) 
-			newChildren.push(new self.constructor ({
-					td,
-					ch: p,
-					parent: self.parent,
-				}));
-	}
-		
+			for (let p of parts) {
+				const td = tds.shift();
+				if (p.length) 
+					newChildren.push(new self.constructor ({
+							td,
+							ch: p,
+							parent: self.parent,
+						}));
+			}
+				
 
-	self.parent.ch.splice(self.chIndex, 1, ...newChildren);
+			self.parent.ch.splice(self.chIndex, 1, ...newChildren);
+		}
 }
 
 function wrap(self, a, b) {
@@ -357,27 +364,30 @@ function wrap(self, a, b) {
 		newChildren = [];
 
 	if (isStr(self.ch)) {
+		return () => {
+			for (let str of parts) {
+				const td = tds.shift();
+				if (str.length)
+					newChildren.push(new self.constructor ({
+							td,
+							ch: str,
+							parent: self,
+						}));
+			}
 
-		for (let str of parts) {
-			const td = tds.shift();
-			if (str.length)
-				newChildren.push(new self.constructor ({
-						td,
-						ch: str,
-						parent: self,
-					}));
+			self.ch = newChildren;
 		}
-
-		self.ch = newChildren;
 	} else if (isArr(self.ch)) {
-		const wrNode = new Node({
-			td: "Wr",
-			ch: parts[1],
-			parent: self,
-		});
-		initChildren(wrNode);
-		newChildren.push(...parts[0], wrNode, ...parts[2]);
-		self.ch = newChildren;
+		return () => {
+			const wrNode = new Node({
+				td: "Wr",
+				ch: parts[1],
+				parent: self,
+			});
+			initChildren(wrNode);
+			newChildren.push(...parts[0], wrNode, ...parts[2]);
+			self.ch = newChildren;
+		}
 	} else {
 		throw new Error();
 	}
@@ -2309,10 +2319,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.split(a, b);
+				rootNode.split(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.split(a, b);
+			},
 		},
 		editJoin            : {
 			el: dFragment.querySelector(`.${pr}-edit-join`           ),
@@ -2331,10 +2346,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.wrap(a, b);
+				rootNode.wrap(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.wrap(a, b);
+			},
 		},
 		editUnwrap          : {
 			el: dFragment.querySelector(`.${pr}-edit-unwrap`         ),
@@ -2342,10 +2362,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.unwrap(a, b);
+				rootNode.unwrap(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.unwrap(a, b);
+			},
 		},
 		editPartTextField   : {
 			el: dFragment.querySelector(`.${pr}-edit-part-text-field`),

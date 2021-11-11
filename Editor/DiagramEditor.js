@@ -266,10 +266,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.split(a, b);
+				rootNode.split(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.split(a, b);
+			},
 		},
 		editJoin            : {
 			el: dFragment.querySelector(`.${pr}-edit-join`           ),
@@ -288,10 +293,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.wrap(a, b);
+				rootNode.wrap(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.wrap(a, b);
+			},
 		},
 		editUnwrap          : {
 			el: dFragment.querySelector(`.${pr}-edit-unwrap`         ),
@@ -299,10 +309,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.unwrap(a, b);
+				rootNode.unwrap(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.unwrap(a, b);
+			},
 		},
 		editPartTextField   : {
 			el: dFragment.querySelector(`.${pr}-edit-part-text-field`),
