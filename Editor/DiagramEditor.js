@@ -222,7 +222,9 @@ function _getAppDom(self) {
 				rootNode.td ? delete rootNode.td : rootNode.td = "X";
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				this.el.disabled = !self.editStage.selArgs?.rootNode;
+			},
 		},
 		editBd              : {
 			el: dFragment.querySelector(`.${pr}-edit-bd`             ),
@@ -231,7 +233,10 @@ function _getAppDom(self) {
 				rootNode.bd ? delete rootNode.bd : rootNode.bd = "X";
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const rootNode = self.editStage.selArgs?.rootNode;
+				this.el.disabled = !(rootNode && typeof rootNode.ch == "string");
+			},
 		},
 		editSplit           : {
 			el: dFragment.querySelector(`.${pr}-edit-split`          ),
