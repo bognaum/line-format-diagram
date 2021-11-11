@@ -15,6 +15,14 @@ function constructor(self, clPref, elem, tOb) {
 	[self.dom, self.domApi, self.updateButtons] = _getAppDom(self); 
 	self.editStage   = {
 			tOb:     tOb.clone,
+			selArgs: {
+				rootNode: null,
+				rootPart: null,
+				aEl     : null,
+				bEl     : null,
+				a       : null,
+				b       : null,
+			}
 		};
 	self.history   = [];
 	self.history.i = -1;
@@ -58,55 +66,63 @@ function editLoop(self) {
 	/*self.domApi.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
 	});*/
+	selectLoop(self);
 	self.updateButtons();
 }
 
 function selectLoop(self) {
 	const {
-		rootNode,
-		rootPart,
-		aEl,
-		bEl,
+		r,
 		a,
 		b,
 	} = self.editStage.selArgs;
 
-	if (rootNode && typeof rootNode.ch == "string") {
-		self.domApi.editPartTextField.el.editedNode = rootNode;
-		self.domApi.editPartTextField.el.value      = rootNode.ch;
-	} else {
-		self.domApi.editPartTextField.el.value = "";
-		self.domApi.editPartTextField.el.editedNode = null;
+	const rootNode = self.editStage.tOb.getBySerial(r);
+	if (rootNode) {
+		const 
+			rootSN = rootNode.getSerial(),
+			rootPart = self.domApi.diagram.el.querySelector(`[data-serial-n="${rootSN}"]`);
+
+		if (rootNode && typeof rootNode.ch == "string") {
+			self.domApi.editPartTextField.el.editedNode = rootNode;
+			self.domApi.editPartTextField.el.value      = rootNode.ch;
+		} else {
+			self.domApi.editPartTextField.el.value = "";
+			self.domApi.editPartTextField.el.editedNode = null;
+		}
+
+		self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
+			v.style.boxShadow = "";
+			v.style.background = "";
+		});
+
+		self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
+			v.style.boxShadow = "";
+			v.style.background = "";
+		});
+
+		if (rootPart) {
+			rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
+		}
+
+		if (typeof rootNode.ch != "string") {
+			const selectedNodes = rootNode.ch.slice(a, b);
+			for (const node of selectedNodes) {
+				const part = self.domApi.diagram.el.querySelector(
+					`[data-serial-n="${node.getSerial()}"]`);
+				part.style.background = `
+					repeating-linear-gradient(
+						135deg, 
+						rgba(126,126,126,.2) 0, 
+						rgba(126,126,126,.2) 5px, 
+						transparent          5px, 
+						transparent          10px
+					)
+				`;
+			}
+		}
 	}
 
-	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
-		v.style.boxShadow = "";
-		v.style.background = "";
-	});
-
-	self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
-		v.style.boxShadow = "";
-		v.style.background = "";
-	});
-
-	if (rootPart) {
-		rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
-	}
-	if (aEl) {
-		let el = aEl;
-		do {
-			el.style.background = `
-				repeating-linear-gradient(
-					135deg, 
-					rgba(126,126,126,.2) 0, 
-					rgba(126,126,126,.2) 5px, 
-					transparent          5px, 
-					transparent          10px
-				)
-			`;
-			// el.style.background = "rgba(100,200,100,.3)";
-		} while (el != bEl && (el = el.nextElementSibling));
-	}
 	self.updateButtons();
 }
 

@@ -15,7 +15,8 @@ export default function getSelArgs(clPref, tOb) {
 
 		const 
 			rootPart = getPart(clPref, rootEl),
-			rootNode = rootPart ? tOb.getBySerial(rootPart.dataset.serialN) : null;
+			rootNode = rootPart ? tOb.getBySerial(rootPart.dataset.serialN) : null,
+			r        = parseInt(rootPart.dataset.serialN);
 
 		if (rootPart) {
 			let a, b, aEl, bEl;
@@ -61,6 +62,8 @@ export default function getSelArgs(clPref, tOb) {
 				rootPart,
 				aEl,
 				bEl,
+
+				r,
 				a,
 				b,
 			};
