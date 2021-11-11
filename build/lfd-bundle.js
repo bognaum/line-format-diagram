@@ -2426,6 +2426,7 @@ function _getAppDom(self) {
 		el.api = api;
 		el.onclick = api.onclick;
 		el.oninput = api.oninput;
+		el.onfocus = api.onfocus;
 		el.onblur  = api.onblur ;
 	}
 
