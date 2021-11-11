@@ -2114,8 +2114,21 @@ function editLoop(self) {
 }
 
 function selectLoop(self) {
-	const {r, a, b} = self.editStage.selArgs;
 
+	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
+		v.style.boxShadow = "";
+		v.style.background = "";
+	});
+
+	self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
+		v.style.boxShadow = "";
+		v.style.background = "";
+	});
+
+	self.domApi.editPartTextField.el.value = "";
+	self.domApi.editPartTextField.el.editedNode = null;
+
+	const {r, a, b} = self.editStage.selArgs;
 	const rootNode = self.editStage.tOb.getBySerial(r);
 	if (rootNode) {
 		const 
@@ -2125,20 +2138,8 @@ function selectLoop(self) {
 		if (rootNode && typeof rootNode.ch == "string") {
 			self.domApi.editPartTextField.el.editedNode = rootNode;
 			self.domApi.editPartTextField.el.value      = rootNode.ch;
-		} else {
-			self.domApi.editPartTextField.el.value = "";
-			self.domApi.editPartTextField.el.editedNode = null;
-		}
+		} else {}
 
-		self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-part`).forEach((v) => {
-			v.style.boxShadow = "";
-			v.style.background = "";
-		});
-
-		self.domApi.diagram.el.querySelectorAll(`*`).forEach((v) => {
-			v.style.boxShadow = "";
-			v.style.background = "";
-		});
 
 		if (rootPart) {
 			rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
