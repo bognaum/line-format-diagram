@@ -157,10 +157,11 @@ function _getAppDom(self) {
 				<button class="${pr}-edit-split"     >split</button>
 				<button class="${pr}-edit-join"      >join</button>
 				&nbsp;
-				<button class="${pr}-edit-wrap"      >wrap</button>
-				<button class="${pr}-edit-wrap-subdiv">wrap/subdiv</button>
 				<button class="${pr}-edit-subdivide" >subdivide</button>
 				<button class="${pr}-edit-unwrap"    >unwrap</button>
+				&nbsp;
+				<button class="${pr}-edit-wrap"      >wrap</button>
+				<button class="${pr}-edit-wrap-subdiv">wrap/subdiv</button>
 			</div>
 			<div style="clear: both;"></div>
 			<br>
