@@ -116,34 +116,20 @@ function subdivide(self, a, b) {
 		tds = ["sd","sd","sd"],
 		newChildren = [];
 
-	if (isStr(self.ch)) {
-		return () => {
-			for (let str of parts) {
-				const td = tds.shift();
-				if (str.length)
-					newChildren.push(new self.constructor ({
-							td,
-							ch: str,
-							parent: self,
-						}));
-			}
+	return () => {
+		for (let part of parts) {
+			const td = tds.shift();
+			if (part.length)
+				newChildren.push(new self.constructor ({
+						td,
+						ch: part,
+						parent: self,
+					}));
+		}
 
-			self.ch = newChildren;
-		}
-	} else if (isArr(self.ch)) {
-		return () => {
-			const wrNode = new Node({
-				td: "Wr",
-				ch: parts[1],
-				parent: self,
-			});
-			initChildren(wrNode);
-			newChildren.push(...parts[0], wrNode, ...parts[2]);
-			self.ch = newChildren;
-		}
-	} else {
-		throw new Error();
+		self.ch = newChildren;
 	}
+		
 }
 
 function wrap(self, a, b) {
