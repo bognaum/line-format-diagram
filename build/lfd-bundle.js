@@ -273,15 +273,17 @@ class Node {
 }
 
 function unwrap (self) {
-	if (isArr(self.ch)) {
-		return () => {
-			self.parent.ch.splice(self.chIndex, 1, ...self.ch);
-			initChildren(self.parent);
-		}
-	} else if (isStr(self.ch) && self.parent && self.parent.ch.length == 1) {
-		return () => {
-			self.parent.ch = self.ch;
-			initChildren(self.parent);
+	if (self.parent) {
+		if (isArr(self.ch)) {
+			return () => {
+				self.parent.ch.splice(self.chIndex, 1, ...self.ch);
+				initChildren(self.parent);
+			}
+		} else if (isStr(self.ch) && self.parent && self.parent.ch.length == 1) {
+			return () => {
+				self.parent.ch = self.ch;
+				initChildren(self.parent);
+			}
 		}
 	}
 }
@@ -290,38 +292,42 @@ function join (self, a, b) {
 	if (isArr(self.ch)) {
 		const joined = self.ch.slice(a, b);
 		if (isArr(...joined.map(v => v.ch))) {
-			const 
-				startPoint = joined[0].chIndex,
-				pasted = new Node({
-					td: "J",
-					parent: self,
-					ch: [],
-				});
-			for (let v of joined)
-				pasted.ch.push(...v.ch);
-			for (let v of pasted.ch) 
-				v.parent = pasted;
-			self.ch.splice(startPoint, joined.length, pasted);
+			return () => {
+				const 
+					startPoint = joined[0].chIndex,
+					pasted = new Node({
+						td: "J",
+						parent: self,
+						ch: [],
+					});
+				for (let v of joined)
+					pasted.ch.push(...v.ch);
+				for (let v of pasted.ch) 
+					v.parent = pasted;
+				self.ch.splice(startPoint, joined.length, pasted);
+			}
 		} else if (isStr(...joined.map(v => v.ch))) {
-			const 
-				startPoint = joined[0].chIndex,
-				pastedStr = joined.reduce((a,v) => a += v.ch, ""),
-				pastedNode = new Node({
-					td: "J",
-					ch: pastedStr,
-					parent: self,
-				});
-			self.ch.splice(startPoint, joined.length, pastedNode);
+			return () => {
+				const 
+					startPoint = joined[0].chIndex,
+					pastedStr = joined.reduce((a,v) => a += v.ch, ""),
+					pastedNode = new Node({
+						td: "J",
+						ch: pastedStr,
+						parent: self,
+					});
+				self.ch.splice(startPoint, joined.length, pastedNode);
+			}
 		}
 	}
-	const 
+	/*const 
 		n = self.chIndex + 1,
 		right = self.parent.ch[n];
 	if (right)
 		if (isArr(self, right) || isStr(self, right)) {
 			self.ch = self.ch.concat(right.ch);
 			self.parent.ch.splice(n, 1);
-		}
+		}*/
 
 }
 
@@ -2335,10 +2341,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.join(a, b);
+				rootNode.join(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.join(a, b);
+			},
 		},
 		editWrap            : {
 			el: dFragment.querySelector(`.${pr}-edit-wrap`           ),

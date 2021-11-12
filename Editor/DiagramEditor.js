@@ -282,10 +282,15 @@ function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.join(a, b);
+				rootNode.join(a, b)();
 				editLoop.commit(self);
 			},
-			updateBtn: function() {},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.join(a, b);
+			},
 		},
 		editWrap            : {
 			el: dFragment.querySelector(`.${pr}-edit-wrap`           ),
