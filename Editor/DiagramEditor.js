@@ -16,10 +16,7 @@ function constructor(self, clPref, elem, tOb) {
 	self.editStage   = {
 			tOb:     tOb.clone,
 			selArgs: {
-				rootNode: null,
-				rootPart: null,
-				aEl     : null,
-				bEl     : null,
+				r       : null,
 				a       : null,
 				b       : null,
 			}
