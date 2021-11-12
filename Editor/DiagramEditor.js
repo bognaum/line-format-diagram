@@ -189,6 +189,7 @@ function _getAppDom(self) {
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
 				<button class="${pr}-edit-td"        >td</button>
 				<button class="${pr}-edit-bd"        >bd</button>
+				<button class="${pr}-edit-td-bd"     >td ↔ bd</button>
 				&nbsp;
 				<button class="${pr}-edit-split"     >split</button>
 				<button class="${pr}-edit-join"      >join</button>
@@ -288,6 +289,30 @@ function _getAppDom(self) {
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
 				this.el.disabled = !(rootNode && typeof rootNode.ch == "string");
+			},
+		},
+		editTdBd              : {
+			el: dFragment.querySelector(`.${pr}-edit-td-bd`             ),
+			onclick: function(ev) {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				const [td, bd] = [rootNode.td, rootNode.bd];
+				if (td)
+					rootNode.bd = td;
+				else
+					delete rootNode.bd;
+				if (bd)
+					rootNode.td = bd;
+				else
+					delete rootNode.td;
+				editLoop.commit(self);
+			},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !(rootNode && (typeof rootNode.ch == "string" || rootNode.bd));
 			},
 		},
 		editSplit           : {
