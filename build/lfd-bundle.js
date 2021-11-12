@@ -2180,10 +2180,10 @@ function editLoop(self) {
 	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, self.domApi.diagram.el, self.editStage.tOb);
 	self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
 	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-td-block`).forEach((v,i,a) => {
-		createOnEditField(self, v, "td");
+		createOnEditTdBd(self, v, "td");
 	});
 	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
-		createOnEditField(self, v, "bd");
+		createOnEditTdBd(self, v, "bd");
 	});
 	/*self.domApi.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
@@ -2276,6 +2276,45 @@ function createOnEditField(self, el, fieldName) {
 			node = self.editStage.tOb.getBySerial(part.dataset.serialN);
 		node[fieldName] = this.textContent;
 		self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+	}
+}
+
+function createOnEditTdBd(self, el, fieldName) {
+	el.onclick = function(ev) {
+		if (!this.isEdited) {
+			const 
+				part = _lib_js__WEBPACK_IMPORTED_MODULE_0__.getPart(self, this),
+				node = self.editStage.tOb.getBySerial(part.dataset.serialN),
+				text = node[fieldName];
+			el.innerHTML = `<textarea></textarea>`;
+			const ta = el.children[0];
+			ta.value = text;
+			setTextareaDimensions(ta);
+			ta.focus();
+			ta.onfocus = function(ev) {
+				this.oldValue = this.textContent;
+			}
+			ta.onblur = function(ev) {
+				if (this.oldValue != this.value)
+					editLoop.commit(self);
+			}
+			ta.oninput = function(ev) {
+				node[fieldName] = this.value;
+				self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+
+				setTextareaDimensions(this);
+			}
+		}
+		this.isEdited = true;
+	}
+
+	function setTextareaDimensions(ta) {
+		const 
+			text = ta.value,
+			lines = text.split("\n"),
+			maxLineLength = Math.max(...lines.map((v) => v.length));
+		ta.rows = lines.length || 1;
+		ta.cols = maxLineLength || 1;
 	}
 }
 
