@@ -79,37 +79,12 @@ function selectLoop(self) {
 		v.style.background = "";
 	});
 
-	self.domApi.editPartTextField.el.value = "";
-	self.domApi.editPartTextField.el.editedNode = null;
-
-	self.domApi.editTdField.el.value = "";
-	self.domApi.editTdField.el.editedNode = null;
-
-	self.domApi.editBdField.el.value = "";
-	self.domApi.editBdField.el.editedNode = null;
-
 	const {r, a, b} = self.editStage.selArgs;
 	const rootNode = self.editStage.tOb.getBySerial(r);
 	if (rootNode) {
 		const 
 			rootSN = rootNode.getSerial(),
 			rootPart = self.domApi.diagram.el.querySelector(`[data-serial-n="${rootSN}"]`);
-
-		if (rootNode && typeof rootNode.ch == "string") {
-			self.domApi.editPartTextField.el.editedNode = rootNode;
-			self.domApi.editPartTextField.el.value      = rootNode.ch;
-		} else {}
-
-		if (rootNode?.td) {
-			self.domApi.editTdField.el.editedNode = rootNode;
-			self.domApi.editTdField.el.value      = rootNode.td;
-		} else {}
-
-		if (rootNode?.bd) {
-			self.domApi.editBdField.el.editedNode = rootNode;
-			self.domApi.editBdField.el.value      = rootNode.bd;
-		} else {}
-
 
 		if (rootPart) {
 			rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
@@ -225,25 +200,6 @@ function _getAppDom(self) {
 				<button class="${pr}-edit-wrap-subdiv">wrap/subdiv</button>
 			</div>
 			<div style="clear: both;"></div>
-			<br>
-			<div>
-				<fieldset style="display: inline-block; vertical-align: top;">
-					<legend> &nbsp;&nbsp; td &nbsp;&nbsp; </legend>
-					<textarea class="${pr}-edit-td-field" rows="1" cols="30"></textarea>
-				</fieldset>
-				<fieldset style="display: inline-block; vertical-align: top;">
-					<legend> &nbsp;&nbsp; bd &nbsp;&nbsp; </legend>
-					<textarea class="${pr}-edit-bd-field" rows="1" cols="30"></textarea>
-				</fieldset>
-			</div>
-			<div>
-				<input class="${pr}-edit-part-text-field" 
-					style="
-						width: calc(100% - 6px); 
-						text-align: center;
-						font-family: consolas, monospace;
-					">
-			</div>
 			<br>
 		</div>
 
@@ -428,53 +384,6 @@ function _getAppDom(self) {
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
 				this.el.disabled = !rootNode?.unwrap(a, b);
-			},
-		},
-		editTdField   : {
-			el: dFragment.querySelector(`.${pr}-edit-td-field`),
-			onfocus: function(ev) {
-				this.tsartValue = this.value;
-			},
-			oninput: function(ev) {
-				const node = this.editedNode;
-				this.editedNode.td = this.value;
-				self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
-			},
-			onblur: function(ev) {
-				if (this.tsartValue != this.value)
-					editLoop.commit(self);
-			},
-		},
-		editPartTextField   : {
-			el: dFragment.querySelector(`.${pr}-edit-part-text-field`),
-			onfocus: function(ev) {
-				this.tsartValue = this.value;
-			},
-			oninput: function(ev) {
-				const node = this.editedNode;
-				if (typeof this.editedNode?.ch != "string")
-					throw new Error();
-				this.editedNode.ch = this.value;
-				self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
-			},
-			onblur: function(ev) {
-				if (this.tsartValue != this.value)
-					editLoop.commit(self);
-			},
-		},
-		editBdField   : {
-			el: dFragment.querySelector(`.${pr}-edit-bd-field`),
-			onfocus: function(ev) {
-				this.tsartValue = this.value;
-			},
-			oninput: function(ev) {
-				const node = this.editedNode;
-				this.editedNode.bd = this.value;
-				self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
-			},
-			onblur: function(ev) {
-				if (this.tsartValue != this.value)
-					editLoop.commit(self);
 			},
 		},
 		diagram             : {
