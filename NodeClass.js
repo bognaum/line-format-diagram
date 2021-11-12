@@ -7,6 +7,7 @@ export default class Node {
 	join         (a, b) { return join        (this, a, b);}
 	wrap         (a, b) { return wrap        (this, a, b);}
 	subdivide    (a, b) { return subdivide   (this, a, b);}
+	wrapSubdiv   (a, b) { return wrapSubdiv  (this, a, b);}
 	unwrap       (    ) { return unwrap      (this      );}
 
 	isStr        (    ) { return isStr       (this      );}
@@ -133,6 +134,44 @@ function subdivide(self, a, b) {
 }
 
 function wrap(self, a, b) {
+	const 
+		parts = [
+			self.ch.slice(0, a),
+			self.ch.slice(a, b),
+			self.ch.slice(b   ),
+		],
+		tds = ["X","W","X"],
+		newChildren = [];
+
+	if (isStr(self.ch)) {
+		return () => {
+			self.ch = [
+				new self.constructor({
+					td: "in",
+					ch: self.ch,
+					parent: self,
+				})
+			];
+			initChildren(self);
+		}
+	} else if (isArr(self.ch)) {
+		return () => {
+			const wrNode = new Node({
+				td: "Wr",
+				ch: parts[1],
+				parent: self,
+			});
+			initChildren(wrNode);
+			newChildren.push(...parts[0], wrNode, ...parts[2]);
+			self.ch = newChildren;
+		}
+	} else {
+		throw new Error();
+	}
+}
+
+
+function wrapSubdiv(self, a, b) {
 	const 
 		parts = [
 			self.ch.slice(0, a),
