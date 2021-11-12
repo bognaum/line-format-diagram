@@ -60,9 +60,9 @@ function editLoop(self) {
 	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-bottom-descr`).forEach((v,i,a) => {
 		createOnEditTdBd(self, v, "bd");
 	});
-	/*self.domApi.diagram.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
+	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-line-text`).forEach((v,i,a) => {
 		createOnEditField(self, v, "ch");
-	});*/
+	});
 	selectLoop(self);
 	self.updateButtons();
 }
@@ -137,20 +137,22 @@ function selectLoop(self) {
 }
 
 function createOnEditField(self, el, fieldName) {
-	el.setAttribute("contenteditable", "true");
-	el.onfocus = function(ev) {
-		this.oldValue = this.textContent;
-	}
-	el.onblur = function(ev) {
-		if (this.oldValue != this.textContent)
-			editLoop.commit(self);
-	}
-	el.oninput = function(ev) {
-		const 
-			part = lib.getPart(self, this),
-			node = self.editStage.tOb.getBySerial(part.dataset.serialN);
-		node[fieldName] = this.textContent;
-		self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+	el.onclick = function(ev) {
+		el.setAttribute("contenteditable", "true");
+		el.onfocus = function(ev) {
+			this.oldValue = this.textContent;
+		}
+		el.onblur = function(ev) {
+			if (this.oldValue != this.textContent)
+				editLoop.commit(self);
+		}
+		el.oninput = function(ev) {
+			const 
+				part = lib.getPart(self, this),
+				node = self.editStage.tOb.getBySerial(part.dataset.serialN);
+			node[fieldName] = this.textContent;
+			self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+		}
 	}
 }
 
