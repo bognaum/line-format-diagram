@@ -158,6 +158,7 @@ function _getAppDom(self) {
 				<button class="${pr}-edit-join"      >join</button>
 				&nbsp;
 				<button class="${pr}-edit-wrap"      >wrap</button>
+				<button class="${pr}-edit-subdivide" >subdivide</button>
 				<button class="${pr}-edit-unwrap"    >unwrap</button>
 			</div>
 			<div style="clear: both;"></div>
@@ -290,6 +291,22 @@ function _getAppDom(self) {
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
 				this.el.disabled = !rootNode?.join(a, b);
+			},
+		},
+		editSubdivide            : {
+			el: dFragment.querySelector(`.${pr}-edit-subdivide`      ),
+			onclick: function(ev) {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				rootNode.subdivide(a, b)();
+				editLoop.commit(self);
+			},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.subdivide(a, b);
 			},
 		},
 		editWrap            : {

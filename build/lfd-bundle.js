@@ -260,6 +260,7 @@ class Node {
 	split        (a, b) { return split       (this, a, b);}
 	join         (a, b) { return join        (this, a, b);}
 	wrap         (a, b) { return wrap        (this, a, b);}
+	subdivide    (a, b) { return subdivide   (this, a, b);}
 	unwrap       (    ) { return unwrap      (this      );}
 
 	isStr        (    ) { return isStr       (this      );}
@@ -357,6 +358,46 @@ function split (self, a, b) {
 
 			self.parent.ch.splice(self.chIndex, 1, ...newChildren);
 		}
+}
+
+function subdivide(self, a, b) {
+	const 
+		parts = [
+			self.ch.slice(0, a),
+			self.ch.slice(a, b),
+			self.ch.slice(b   ),
+		],
+		tds = ["sd","sd","sd"],
+		newChildren = [];
+
+	if (isStr(self.ch)) {
+		return () => {
+			for (let str of parts) {
+				const td = tds.shift();
+				if (str.length)
+					newChildren.push(new self.constructor ({
+							td,
+							ch: str,
+							parent: self,
+						}));
+			}
+
+			self.ch = newChildren;
+		}
+	} else if (isArr(self.ch)) {
+		return () => {
+			const wrNode = new Node({
+				td: "Wr",
+				ch: parts[1],
+				parent: self,
+			});
+			initChildren(wrNode);
+			newChildren.push(...parts[0], wrNode, ...parts[2]);
+			self.ch = newChildren;
+		}
+	} else {
+		throw new Error();
+	}
 }
 
 function wrap(self, a, b) {
@@ -2217,6 +2258,7 @@ function _getAppDom(self) {
 				<button class="${pr}-edit-join"      >join</button>
 				&nbsp;
 				<button class="${pr}-edit-wrap"      >wrap</button>
+				<button class="${pr}-edit-subdivide" >subdivide</button>
 				<button class="${pr}-edit-unwrap"    >unwrap</button>
 			</div>
 			<div style="clear: both;"></div>
@@ -2349,6 +2391,22 @@ function _getAppDom(self) {
 					{r, a, b} = self.editStage.selArgs,
 					rootNode = self.editStage.tOb.getBySerial(r);
 				this.el.disabled = !rootNode?.join(a, b);
+			},
+		},
+		editSubdivide            : {
+			el: dFragment.querySelector(`.${pr}-edit-subdivide`      ),
+			onclick: function(ev) {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				rootNode.subdivide(a, b)();
+				editLoop.commit(self);
+			},
+			updateBtn: function() {
+				const 
+					{r, a, b} = self.editStage.selArgs,
+					rootNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootNode?.subdivide(a, b);
 			},
 		},
 		editWrap            : {
