@@ -143,8 +143,11 @@ function createOnEditField(self, el, fieldName) {
 			this.oldValue = this.textContent;
 		}
 		el.onblur = function(ev) {
-			if (this.oldValue != this.textContent)
+			if (this.oldValue != this.textContent) {
 				editLoop.commit(self);
+			} else {
+				editLoop(self);
+			}
 		}
 		el.oninput = function(ev) {
 			const 
@@ -167,13 +170,17 @@ function createOnEditTdBd(self, el, fieldName) {
 			const ta = el.children[0];
 			ta.value = text;
 			setTextareaDimensions(ta);
+			el.oldValue = node[fieldName];
 			ta.focus();
 			ta.onfocus = function(ev) {
-				this.oldValue = this.textContent;
+				el.oldValue = node[fieldName];
 			}
 			ta.onblur = function(ev) {
-				if (this.oldValue != this.value)
+				if (el.oldValue != ta.value) {
 					editLoop.commit(self);
+				} else {
+					editLoop(self);
+				}
 			}
 			ta.oninput = function(ev) {
 				node[fieldName] = this.value;
