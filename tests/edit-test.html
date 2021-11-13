@@ -18,7 +18,165 @@
 		<div class="lfd-edit">
 			"https://developer.mozilla.org:443/en-US/search?q=URL#search-results"
 		</div>
+		<hr>
+		<br>
+		<div class="lfd-edit">
+			{
+				"td": "Arrays $_GET, $_POST, $_REQUEST",
+				"ch": [
+					{
+						"td": "QUERY_STRING",
+						"ch": [
+							{
+								"ch": "v1",
+								"td": "v1"
+							},
+							{
+								"ch": "="
+							},
+							{
+								"ch": "some%20value",
+								"bd": "$_REQUEST['v1']\n$_GET['v1']\n$_POST['v1']",
+								"td": "value"
+							},
+							{
+								"ch": "&"
+							},
+							{
+								"ch": "v2",
+								"td": "v2"
+							},
+							{
+								"ch": "="
+							},
+							{
+								"ch": "other%20value",
+								"bd": "$_REQUEST['v2']\n$_GET['v2']\n$_POST['v2']",
+								"td": "value"
+							},
+							{
+								"ch": "&"
+							},
+							{
+								"ch": "v3",
+								"td": "v3"
+							},
+							{
+								"ch": "="
+							},
+							{
+								"ch": "abcdef",
+								"bd": "$_REQUEST['v3']\n$_GET['v3']\n$_POST['v3']",
+								"td": "value"
+							},
+							{
+								"ch": "&"
+							}
+						]
+					}
+				]
+			}
+		</div>
+		<hr>
+		<br>
+		<div class="lfd-edit">
+			[
+				{
+					"ch": "http://",
+					"style": "color: #aaa;"
+				},
+				{
+					"td": "HTTP_HOST",
+					"ch": [
+						{
+							"td": "SERVER_NAME",
+							"ch": "some-site"
+						}
+					]
+				},
+				{
+					"td": "REQUEST_URI",
+					"ch": [
+						{
+							"td": "SCRIPT_NAME",
+							"ch": [
+								{
+									"td": "PHP_SELF",
+									"ch": [
+										{
+											"bd": "dirname($_SERVER['PHP_SELF'])",
+											"ch": "/a/b/c/"
+										},
+										{
+											"bd": "basename($_SERVER['PHP_SELF'])",
+											"ch": "page.php"
+										}
+									]
+								}
+							]
+						},
+						{
+							"ch": "?"
+						},
+						{
+							"td": "QUERY_STRING",
+							"ch": [
+								{
+									"td": "Arrays $_GET, $_POST, $_REQUEST",
+									"ch": [
+										{
+											"ch": "v1"
+										},
+										{
+											"ch": "="
+										},
+										{
+											"ch": "some%20value",
+											"bd": "$_REQUEST['v1']\n$_GET['v1']\n$_POST['v1']"
+										},
+										{
+											"ch": "&"
+										},
+										{
+											"ch": "v2"
+										},
+										{
+											"ch": "="
+										},
+										{
+											"ch": "other%20value",
+											"bd": "$_REQUEST['v2']\n$_GET['v2']\n$_POST['v2']"
+										},
+										{
+											"ch": "&"
+										},
+										{
+											"ch": "v3"
+										},
+										{
+											"ch": "="
+										},
+										{
+											"ch": "abcdef",
+											"bd": "$_REQUEST['v3']\n$_GET['v3']\n$_POST['v3']"
+										},
+										{
+											"ch": "&"
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"ch": "#link_to_id",
+					"style": "color: #aaa;"
+				}
+			]
+		</div>
 	</div>
+	
 	<script type="module">
 		import LFD from "./../lfd.js";
 		const lfd = new LFD();
