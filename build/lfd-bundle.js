@@ -2307,8 +2307,8 @@ function _getAppDom(self) {
 	const dFragment = _lib_js__WEBPACK_IMPORTED_MODULE_0__.eHTMLDF(`
 		<div class="${pr}-edit-panel" style="white-space: normal;">
 			<div class="${pr}-edit-panel__btn-block ${pr}-history-buttons" style="float: left;">
-				<button class="${pr}-nav-undo" >&nbsp;⤶ <span class="count"></span></button>
-				<button class="${pr}-nav-redo" >&nbsp;<span class="count"></span> ⤷</button>
+				<button class="${pr}-nav-undo" ><span class="count"></span> ⤶</button>
+				<button class="${pr}-nav-redo" >⤷ <span class="count"></span></button>
 				&nbsp;&nbsp;
 			</div>
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
@@ -2319,10 +2319,11 @@ function _getAppDom(self) {
 				<button class="${pr}-edit-split"     >split</button>
 				<button class="${pr}-edit-join"      >join</button>
 				&nbsp;
-				<button class="${pr}-edit-subdivide" >subdivide</button>
+				<button class="${pr}-edit-wrap"      >wrap</button>
 				<button class="${pr}-edit-unwrap"    >unwrap</button>
 				&nbsp;
-				<button class="${pr}-edit-wrap"      >wrap</button>
+				<button class="${pr}-edit-subdivide" >subdivide</button>
+				&nbsp;
 				<button class="${pr}-edit-wrap-subdiv">wrap/subdiv</button>
 			</div>
 			<div style="clear: both;"></div>
