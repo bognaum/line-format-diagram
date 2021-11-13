@@ -335,16 +335,16 @@ function join (self, a, b) {
 
 
 function split (self, a, b) {
-	if (self.parent) 
+	const 
+		parts = [
+			self.ch.slice(0, a),
+			self.ch.slice(a, b),
+			self.ch.slice(b   ),
+		],
+		tds = [self.td || "S", self.td || "S", self.td || "S"],
+		newChildren = [];
+	if (self.parent) {
 		return () => {
-			const 
-				parts = [
-					self.ch.slice(0, a),
-					self.ch.slice(a, b),
-					self.ch.slice(b   ),
-				],
-				tds = [self.td || "X", "S", self.td || "X"],
-				newChildren = [];
 
 			for (let p of parts) {
 				const td = tds.shift();
@@ -353,12 +353,27 @@ function split (self, a, b) {
 							td,
 							ch: p,
 							parent: self.parent,
-						}));
+						})
+					);
 			}
-				
 
 			self.parent.ch.splice(self.chIndex, 1, ...newChildren);
 		}
+	} else {
+		return () => {
+			for (let part of parts) {
+				const td = tds.shift();
+				if (part.length)
+					newChildren.push(new self.constructor ({
+							td,
+							ch: part,
+							parent: self,
+						})
+					);
+			}
+			self.ch = newChildren;
+		}
+	}
 }
 
 function subdivide(self, a, b) {
