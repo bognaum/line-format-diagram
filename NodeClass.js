@@ -23,12 +23,12 @@ export default class Node {
 function unwrap (self) {
 	if (self.parent) {
 		if (isArr(self.ch)) {
-			return () => {
+			return function unwrap1(){
 				self.parent.ch.splice(self.chIndex, 1, ...self.ch);
 				initChildren(self.parent);
 			}
 		} else if (isStr(self.ch) && self.parent && self.parent.ch.length == 1) {
-			return () => {
+			return function unwrap2() {
 				self.parent.ch = self.ch;
 				initChildren(self.parent);
 			}
@@ -40,7 +40,7 @@ function join (self, a, b) {
 	if (isArr(self.ch)) {
 		const joined = self.ch.slice(a, b);
 		if (isArr(...joined.map(v => v.ch))) {
-			return () => {
+			return function join1() {
 				const 
 					startPoint = joined[0].chIndex,
 					pasted = new Node({
@@ -55,7 +55,7 @@ function join (self, a, b) {
 				self.ch.splice(startPoint, joined.length, pasted);
 			}
 		} else if (isStr(...joined.map(v => v.ch))) {
-			return () => {
+			return function join2() {
 				const 
 					startPoint = joined[0].chIndex,
 					pastedStr = joined.reduce((a,v) => a += v.ch, ""),
@@ -90,7 +90,7 @@ function split (self, a, b) {
 		tds = [self.td || "S", self.td || "S", self.td || "S"],
 		newChildren = [];
 	if (self.parent) {
-		return () => {
+		return function split1() {
 
 			for (let p of parts) {
 				const td = tds.shift();
@@ -106,7 +106,7 @@ function split (self, a, b) {
 			self.parent.ch.splice(self.chIndex, 1, ...newChildren);
 		}
 	} else {
-		return () => {
+		return function split2() {
 			for (let part of parts) {
 				const td = tds.shift();
 				if (part.length)
@@ -132,7 +132,7 @@ function subdivide(self, a, b) {
 		tds = ["sd","sd","sd"],
 		newChildren = [];
 
-	return () => {
+	return function subdivide1() {
 		for (let part of parts) {
 			const td = tds.shift();
 			if (part.length)
