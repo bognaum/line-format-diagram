@@ -253,10 +253,14 @@ function wrapSubdiv(self, a, b) {
 }
 
 function getChIndex (self) {
-	if (self.parent) 
-		for (let [k,v] of self.parent.ch.entries()) 
+	if (self.parent) {
+		for (let [k,v] of self.parent.ch.entries()) {
 			if (v == self)
 				return k;
+		}
+		console.error(`(!)-USER'S `, `\n Invalid parent of`, self, "\n The invalid parent is", self.parent);
+		throw new Error("Invalid parent");
+	}
 
 	return null;
 }
