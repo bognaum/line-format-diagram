@@ -31,10 +31,22 @@ function constructor(self, clPref, elem, tOb) {
 
 	document.addEventListener("selectionchange", function(ev) {
 		const 
-			clPref = self.clPref,
-			tOb    = self.editStage.tOb;
-		self.editStage.selArgs = getSelArgs(clPref, tOb);
-		selectLoop(self);
+			selectedR = window.getSelection().getRangeAt(0),
+			editorR = new Range();
+		editorR.selectNodeContents(elem);
+
+		const insideDiagram = 
+			editorR.compareBoundaryPoints(Range.START_TO_START, selectedR) == -1
+			&&
+			editorR.compareBoundaryPoints(Range.END_TO_END,     selectedR) == 1;
+
+		if (insideDiagram) {
+			const 
+				clPref = self.clPref,
+				tOb    = self.editStage.tOb;
+			self.editStage.selArgs = getSelArgs(clPref, tOb);
+			selectLoop(self);
+		}
 	});
 
 }
