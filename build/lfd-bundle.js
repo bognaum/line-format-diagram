@@ -270,6 +270,8 @@ class Node {
 	toJSON       (    ) { return toJSON      (this      );}
 	getSerial    (    ) { return getSerial   (this      );}
 	getBySerial  (sN  ) { return getBySerial (this, sN  );}
+	preRecIter   (    ) { return preRecIter  (this      );}
+	postRecIter  (    ) { return postRecIter (this      );}
 	get chIndex () { return getChIndex(this); }
 	get clone   () { return getClone  (this); }
 }
@@ -503,6 +505,32 @@ function wrapSubdiv(self, a, b) {
 		}
 	} else {
 		throw new Error();
+	}
+}
+
+function * preRecIter(self) {
+	yield * recur(self);
+	function * recur(ob) {
+		if (ob instanceof Array) {
+			for (let v of ob)
+					yield * recur(v);
+		} else if (typeof ob == "object") {
+			yield ob;
+			yield * recur(ob.ch);
+		}
+	}
+}
+
+function * postRecIter(self) {
+	yield * recur(self);
+	function * recur(ob) {
+		if (ob instanceof Array) {
+			for (let v of ob)
+					yield * recur(v);
+		} else if (typeof ob == "object") {
+			yield * recur(ob.ch);
+			yield ob;
+		}
 	}
 }
 
