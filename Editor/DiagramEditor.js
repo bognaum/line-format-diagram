@@ -188,6 +188,9 @@ function _getAppDom(self) {
 				&nbsp;&nbsp;
 			</div>
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
+				<button class="${pr}-edit-set-all-td">TDs +</button>
+				<button class="${pr}-edit-del-all-td">TDs -</button>
+				&nbsp;
 				<button class="${pr}-edit-td"        >td</button>
 				<button class="${pr}-edit-bd"        >bd</button>
 				<button class="${pr}-edit-td-bd"     >td ↔ bd</button>
@@ -200,7 +203,7 @@ function _getAppDom(self) {
 				&nbsp;
 				<button class="${pr}-edit-subdivide" >subdivide</button>
 				&nbsp;
-				<button class="${pr}-edit-wrap-subdiv">wrap/subdiv</button>
+				<button class="${pr}-edit-wrap-subdiv" hidden>wrap/subdiv</button>
 			</div>
 			<div style="clear: both;"></div>
 			<br>
@@ -259,6 +262,31 @@ function _getAppDom(self) {
 				this.el.disabled = (hist.i == hist.length - 1);
 				this.el.querySelector(`.count`).textContent = 
 					hist.length - 1 - hist.i;
+			},
+		},
+		editSetAllTd              : {
+			el: dFragment.querySelector(`.${pr}-edit-set-all-td`     ),
+			onclick: function(ev) {
+				lib.forEachRecur((node) => {
+					node.td ||= "•";
+				}, self.editStage.tOb);
+				editLoop(self);
+			},
+			updateBtn: function() {
+				this.el.disabled = false;
+			},
+		},
+		editDelAllTd              : {
+			el: dFragment.querySelector(`.${pr}-edit-del-all-td`     ),
+			onclick: function(ev) {
+				lib.forEachRecur((node) => {
+					if (node.td === "•")
+						delete node.td;
+				}, self.editStage.tOb);
+				editLoop(self);
+			},
+			updateBtn: function() {
+				this.el.disabled = false;
 			},
 		},
 		editTd              : {
