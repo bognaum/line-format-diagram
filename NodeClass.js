@@ -362,3 +362,27 @@ function initChildren(self) {
 	if (isArr(self.ch))
 		self.ch.forEach(v => v.parent = self);
 }
+
+function testToIntegrity(self) {
+	recur(self);
+	function recur(node) {
+		if (!node.ch) {
+			throw new Error();
+		}
+		if (!node.ch.length) {
+			throw new Error();
+		}
+		if (typeof node.ch == "object") {
+			for (const ch of node.ch) {
+				if (ch.parent != node) {
+					throw new Error();
+				}
+				recur(ch);
+			}
+		} else if (typeof node.ch == "string") {
+
+		} else {
+			throw new Error();
+		}
+	}
+}

@@ -415,17 +415,18 @@ function wrap(self, a, b) {
 
 	if (isStr(self.ch)) {
 		if (self.parent) {
-			return () => {
+			return function wrap1() {
 				const wr = new self.constructor({
 					td: "Wr",
 					ch: [self],
 					parent: self.parent,
 				});
 				self.parent.ch[self.chIndex] = wr;
+				initChildren(wr);
 				initChildren(self);
 			}
 		} else {
-			return () => {
+			return function wrap2() {
 				const clone = self.clone;
 				self.ch = [clone];
 				clone.td ||= "in";
@@ -434,15 +435,30 @@ function wrap(self, a, b) {
 			}
 		}
 	} else if (isArr(self.ch)) {
-		return () => {
-			const wrNode = new Node({
-				td: "Wr",
-				ch: parts[1],
-				parent: self,
-			});
-			initChildren(wrNode);
-			newChildren.push(...parts[0], wrNode, ...parts[2]);
-			self.ch = newChildren;
+		if (parts[1].length) {
+			return function wrap3() {
+				const wrNode = new Node({
+					td: "Wr",
+					ch: parts[1],
+					parent: self,
+				});
+				initChildren(wrNode);
+				newChildren.push(...parts[0], wrNode, ...parts[2]);
+				self.ch = newChildren;
+			}
+		} else if (a == 0 && b == 0) {
+			if (self.parent) {
+				return function wrap4() {
+					const wr = new Node({
+						td: "Wr",
+						ch: [self],
+						parent: self.parent,
+					});
+					self.parent.ch[self.chIndex] = wr;
+					initChildren(wr);
+					initChildren(self);
+				}
+			}
 		}
 	} else {
 		throw new Error();
@@ -491,10 +507,14 @@ function wrapSubdiv(self, a, b) {
 }
 
 function getChIndex (self) {
-	if (self.parent) 
-		for (let [k,v] of self.parent.ch.entries()) 
+	if (self.parent) {
+		for (let [k,v] of self.parent.ch.entries()) {
 			if (v == self)
 				return k;
+		}
+		console.error(`(!)-USER'S `, `\n Invalid parent of`, self, "\n The invalid parent is", self.parent);
+		throw new Error("Invalid parent");
+	}
 
 	return null;
 }
@@ -593,8 +613,32 @@ function forEachRecur(preCb, ob, postCb) {
 }
 
 function initChildren(self) {
-	if (isArr(self))
+	if (isArr(self.ch))
 		self.ch.forEach(v => v.parent = self);
+}
+
+function testToIntegrity(self) {
+	recur(self);
+	function recur(node) {
+		if (!node.ch) {
+			throw new Error();
+		}
+		if (!node.ch.length) {
+			throw new Error();
+		}
+		if (typeof node.ch == "object") {
+			for (const ch of node.ch) {
+				if (ch.parent != node) {
+					throw new Error();
+				}
+				recur(ch);
+			}
+		} else if (typeof node.ch == "string") {
+
+		} else {
+			throw new Error();
+		}
+	}
 }
 
 /***/ }),
@@ -2181,10 +2225,22 @@ function constructor(self, clPref, elem, tOb) {
 
 	document.addEventListener("selectionchange", function(ev) {
 		const 
-			clPref = self.clPref,
-			tOb    = self.editStage.tOb;
-		self.editStage.selArgs = (0,_getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__.default)(clPref, tOb);
-		selectLoop(self);
+			selectedR = window.getSelection().getRangeAt(0),
+			editorR = new Range();
+		editorR.selectNodeContents(elem);
+
+		const insideDiagram = 
+			editorR.compareBoundaryPoints(Range.START_TO_START, selectedR) == -1
+			&&
+			editorR.compareBoundaryPoints(Range.END_TO_END,     selectedR) == 1;
+
+		if (insideDiagram) {
+			const 
+				clPref = self.clPref,
+				tOb    = self.editStage.tOb;
+			self.editStage.selArgs = (0,_getSelArgs_js__WEBPACK_IMPORTED_MODULE_3__.default)(clPref, tOb);
+			selectLoop(self);
+		}
 	});
 
 }
@@ -2285,6 +2341,7 @@ function createOnEditField(self, el, fieldName) {
 }
 
 function createOnEditTdBd(self, el, fieldName) {
+	el.style.cursor = "pointer";
 	el.onclick = function(ev) {
 		if (!this.isEdited) {
 			const 
