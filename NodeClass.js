@@ -158,16 +158,26 @@ function wrap(self, a, b) {
 		tds = ["X","W","X"],
 		newChildren = [];
 
+
 	if (isStr(self.ch)) {
-		return () => {
-			self.ch = [
-				new self.constructor({
-					td: "in",
-					ch: self.ch,
-					parent: self,
-				})
-			];
-			initChildren(self);
+		if (self.parent) {
+			return () => {
+				const wr = new self.constructor({
+					td: "Wr",
+					ch: [self],
+					parent: self.parent,
+				});
+				self.parent.ch[self.chIndex] = wr;
+				initChildren(self);
+			}
+		} else {
+			return () => {
+				const clone = self.clone;
+				self.ch = [clone];
+				clone.td ||= "in";
+				self.td ||= "Wr";
+				initChildren(self);
+			}
 		}
 	} else if (isArr(self.ch)) {
 		return () => {
