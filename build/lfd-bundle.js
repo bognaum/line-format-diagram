@@ -2297,6 +2297,7 @@ function createOnEditTdBd(self, el, fieldName) {
 			setTextareaDimensions(ta);
 			el.oldValue = node[fieldName];
 			ta.focus();
+			ta.select();
 			ta.onfocus = function(ev) {
 				el.oldValue = node[fieldName];
 			}
