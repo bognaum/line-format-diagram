@@ -161,17 +161,18 @@ function wrap(self, a, b) {
 
 	if (isStr(self.ch)) {
 		if (self.parent) {
-			return () => {
+			return function wrap1() {
 				const wr = new self.constructor({
 					td: "Wr",
 					ch: [self],
 					parent: self.parent,
 				});
 				self.parent.ch[self.chIndex] = wr;
+				initChildren(wr);
 				initChildren(self);
 			}
 		} else {
-			return () => {
+			return function wrap2() {
 				const clone = self.clone;
 				self.ch = [clone];
 				clone.td ||= "in";
@@ -180,15 +181,30 @@ function wrap(self, a, b) {
 			}
 		}
 	} else if (isArr(self.ch)) {
-		return () => {
-			const wrNode = new Node({
-				td: "Wr",
-				ch: parts[1],
-				parent: self,
-			});
-			initChildren(wrNode);
-			newChildren.push(...parts[0], wrNode, ...parts[2]);
-			self.ch = newChildren;
+		if (parts[1].length) {
+			return function wrap3() {
+				const wrNode = new Node({
+					td: "Wr",
+					ch: parts[1],
+					parent: self,
+				});
+				initChildren(wrNode);
+				newChildren.push(...parts[0], wrNode, ...parts[2]);
+				self.ch = newChildren;
+			}
+		} else if (a == 0 && b == 0) {
+			if (self.parent) {
+				return function wrap4() {
+					const wr = new Node({
+						td: "Wr",
+						ch: [self],
+						parent: self.parent,
+					});
+					self.parent.ch[self.chIndex] = wr;
+					initChildren(wr);
+					initChildren(self);
+				}
+			}
 		}
 	} else {
 		throw new Error();
