@@ -339,6 +339,6 @@ function forEachRecur(preCb, ob, postCb) {
 }
 
 function initChildren(self) {
-	if (isArr(self))
+	if (isArr(self.ch))
 		self.ch.forEach(v => v.parent = self);
 }
