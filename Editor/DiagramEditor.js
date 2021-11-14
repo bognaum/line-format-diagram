@@ -135,6 +135,7 @@ function createOnEditField(self, el, fieldName) {
 }
 
 function createOnEditTdBd(self, el, fieldName) {
+	el.style.cursor = "pointer";
 	el.onclick = function(ev) {
 		if (!this.isEdited) {
 			const 
