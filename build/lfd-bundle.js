@@ -2366,7 +2366,10 @@ function commit(self) {
 	this(self);
 
 	history.i ++;
-	history[history.i] = editStage.tOb.clone;
+	history[history.i] = {
+		tOb: editStage.tOb.clone,
+		selArgs: {...editStage.selArgs},
+	};
 	history.splice(history.i + 1, Infinity);
 	self.updateButtons();
 }
@@ -2667,7 +2670,8 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const {editStage, history} = self;
 				if (history[history.i - 1]) {
-					editStage.tOb = history[-- history.i].clone;
+					editStage.tOb = history[-- history.i].tOb.clone;
+					editStage.selArgs = {...history[history.i].selArgs};
 					self.updateButtons();
 					(0,_DiagramEditor_js__WEBPACK_IMPORTED_MODULE_2__.editLoop)(self);
 				}
@@ -2683,7 +2687,8 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const {editStage, history} = self;
 				if (history[history.i + 1]) {
-					editStage.tOb = history[++ history.i].clone;
+					editStage.tOb = history[++ history.i].tOb.clone;
+					editStage.selArgs = {...history[history.i].selArgs};
 					self.updateButtons();
 					(0,_DiagramEditor_js__WEBPACK_IMPORTED_MODULE_2__.editLoop)(self);
 				}

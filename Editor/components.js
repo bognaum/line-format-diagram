@@ -63,7 +63,8 @@ export default function _getAppDom(self) {
 			onclick: function(ev) {
 				const {editStage, history} = self;
 				if (history[history.i - 1]) {
-					editStage.tOb = history[-- history.i].clone;
+					editStage.tOb = history[-- history.i].tOb.clone;
+					editStage.selArgs = {...history[history.i].selArgs};
 					self.updateButtons();
 					editLoop(self);
 				}
@@ -79,7 +80,8 @@ export default function _getAppDom(self) {
 			onclick: function(ev) {
 				const {editStage, history} = self;
 				if (history[history.i + 1]) {
-					editStage.tOb = history[++ history.i].clone;
+					editStage.tOb = history[++ history.i].tOb.clone;
+					editStage.selArgs = {...history[history.i].selArgs};
 					self.updateButtons();
 					editLoop(self);
 				}

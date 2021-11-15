@@ -64,7 +64,10 @@ function commit(self) {
 	this(self);
 
 	history.i ++;
-	history[history.i] = editStage.tOb.clone;
+	history[history.i] = {
+		tOb: editStage.tOb.clone,
+		selArgs: {...editStage.selArgs},
+	};
 	history.splice(history.i + 1, Infinity);
 	self.updateButtons();
 }
