@@ -151,7 +151,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "eHTML": () => (/* binding */ eHTML),
 /* harmony export */   "eHTMLDF": () => (/* binding */ eHTMLDF),
 /* harmony export */   "getPart": () => (/* binding */ getPart),
-/* harmony export */   "isPart": () => (/* binding */ isPart)
+/* harmony export */   "isPart": () => (/* binding */ isPart),
+/* harmony export */   "copyToClipboard": () => (/* binding */ copyToClipboard)
 /* harmony export */ });
 /* harmony import */ var _NodeClass_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
@@ -241,6 +242,15 @@ function eHTML(code, shell=null) {
 function eHTMLDF(code) {
 	const _shell = document.createElement("template");
 	return _shell.innerHTML = code, _shell.content;
+}
+
+function copyToClipboard(str) {
+	const tA = document.createElement("textarea");
+	tA.value = str;
+	document.body.appendChild(tA);
+	tA.select();
+	document.execCommand("copy");
+	document.body.removeChild(tA);
 }
 
 /***/ }),
@@ -2572,6 +2582,7 @@ function _getAppDom(self) {
 					<!-- <button class="${pr}-new-blank">New Blank</button> -->
 				</div>
 				<div style="float: right;">
+					<button class="${pr}-to-clipboard-min">To Clipboard Min</button>
 					<button class="${pr}-to-clipboard">To Clipboard</button>
 				</div>
 				<div style="clear: both;"></div>
@@ -2812,14 +2823,19 @@ function _getAppDom(self) {
 		toClipboard         : {
 			el: dFragment.querySelector(`.${pr}-to-clipboard`        ),
 			onclick: function(ev) {
-				const str = self.domApi.codeField.el.textContent;
+				// const str = self.domApi.codeField.el.textContent;
+				const str = JSON.stringify(self.editStage.tOb, null, 4);
 
-				const tA = document.createElement("textarea");
-				tA.value = str;
-				document.body.appendChild(tA);
-				tA.select();
-				document.execCommand("copy");
-				document.body.removeChild(tA);
+				_lib_js__WEBPACK_IMPORTED_MODULE_0__.copyToClipboard(str);
+			},
+			updateBtn: function() {},
+		},
+		toClipboardMin         : {
+			el: dFragment.querySelector(`.${pr}-to-clipboard-min`        ),
+			onclick: function(ev) {
+				const str = JSON.stringify(self.editStage.tOb);
+
+				_lib_js__WEBPACK_IMPORTED_MODULE_0__.copyToClipboard(str);
 			},
 			updateBtn: function() {},
 		},

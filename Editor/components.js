@@ -43,6 +43,7 @@ export default function _getAppDom(self) {
 					<!-- <button class="${pr}-new-blank">New Blank</button> -->
 				</div>
 				<div style="float: right;">
+					<button class="${pr}-to-clipboard-min">To Clipboard Min</button>
 					<button class="${pr}-to-clipboard">To Clipboard</button>
 				</div>
 				<div style="clear: both;"></div>
@@ -283,14 +284,19 @@ export default function _getAppDom(self) {
 		toClipboard         : {
 			el: dFragment.querySelector(`.${pr}-to-clipboard`        ),
 			onclick: function(ev) {
-				const str = self.domApi.codeField.el.textContent;
+				// const str = self.domApi.codeField.el.textContent;
+				const str = JSON.stringify(self.editStage.tOb, null, 4);
 
-				const tA = document.createElement("textarea");
-				tA.value = str;
-				document.body.appendChild(tA);
-				tA.select();
-				document.execCommand("copy");
-				document.body.removeChild(tA);
+				lib.copyToClipboard(str);
+			},
+			updateBtn: function() {},
+		},
+		toClipboardMin         : {
+			el: dFragment.querySelector(`.${pr}-to-clipboard-min`        ),
+			onclick: function(ev) {
+				const str = JSON.stringify(self.editStage.tOb);
+
+				lib.copyToClipboard(str);
 			},
 			updateBtn: function() {},
 		},

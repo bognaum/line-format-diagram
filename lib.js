@@ -8,6 +8,7 @@ export {
 	eHTMLDF,
 	getPart,
 	isPart,
+	copyToClipboard,
 };
 
 function getPart(self, el) {
@@ -93,4 +94,13 @@ function eHTML(code, shell=null) {
 function eHTMLDF(code) {
 	const _shell = document.createElement("template");
 	return _shell.innerHTML = code, _shell.content;
+}
+
+function copyToClipboard(str) {
+	const tA = document.createElement("textarea");
+	tA.value = str;
+	document.body.appendChild(tA);
+	tA.select();
+	document.execCommand("copy");
+	document.body.removeChild(tA);
 }
