@@ -2225,6 +2225,7 @@ function _getHFZ(lineCount) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "editLoop": () => (/* binding */ editLoop),
+/* harmony export */   "stringifyTOb": () => (/* binding */ stringifyTOb),
 /* harmony export */   "default": () => (/* binding */ DiagramEditor)
 /* harmony export */ });
 /* harmony import */ var _lib_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
@@ -2305,7 +2306,7 @@ function commit(self) {
 
 function editLoop(self) {
 	(0,_buildDiagram_js__WEBPACK_IMPORTED_MODULE_1__.default)(self, self.domApi.diagram.el, self.editStage.tOb);
-	self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+	self.domApi.codeField.el.textContent = stringifyTOb(self.editStage.tOb);
 	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-td-block`).forEach((v,i,a) => {
 		createOnEditTdBd(self, v, "td");
 	});
@@ -2381,7 +2382,7 @@ function createOnEditField(self, el, fieldName) {
 				part = _lib_js__WEBPACK_IMPORTED_MODULE_0__.getPart(self, this),
 				node = self.editStage.tOb.getBySerial(part.dataset.serialN);
 			node[fieldName] = this.textContent;
-			self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+			self.domApi.codeField.el.textContent = stringifyTOb(self.editStage.tOb);
 		}
 	}
 }
@@ -2413,7 +2414,7 @@ function createOnEditTdBd(self, el, fieldName) {
 			}
 			ta.oninput = function(ev) {
 				node[fieldName] = this.value;
-				self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+				self.domApi.codeField.el.textContent = stringifyTOb(self.editStage.tOb);
 
 				setTextareaDimensions(this);
 			}
@@ -2431,7 +2432,7 @@ function createOnEditTdBd(self, el, fieldName) {
 	}
 }
 
-function _stringify(tOb) {
+function stringifyTOb(tOb) {
 	return JSON.stringify(tOb, null, 4);
 }
 
@@ -2815,7 +2816,7 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const codeField = self.domApi.codeField;
 				// codeField.el.focus();
-				codeField.el.textContent = codeField.el.oldValue = _stringify(self.editStage.tOb);
+				codeField.el.textContent = codeField.el.oldValue = (0,_DiagramEditor_js__WEBPACK_IMPORTED_MODULE_2__.stringifyTOb)(self.editStage.tOb);
 				(0,_DiagramEditor_js__WEBPACK_IMPORTED_MODULE_2__.editLoop)(self);
 			},
 			updateBtn: function() {},
@@ -2884,10 +2885,6 @@ function _getAppDom(self) {
 			if (domApi[i].updateBtn)
 				domApi[i].updateBtn();
 	}
-}
-
-function _stringify(tOb) {
-	return JSON.stringify(tOb, null, 4);
 }
 
 

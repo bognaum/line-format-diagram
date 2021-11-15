@@ -1,6 +1,9 @@
 import * as lib          from "./../lib.js";
 import JsonEHl           from "./../json-err-hl/json-err-hl.js";
-import {editLoop}        from "./DiagramEditor.js";
+import {
+	editLoop, 
+	stringifyTOb
+}                        from "./DiagramEditor.js";
 
 export default function _getAppDom(self) {
 	const pr = self.clPref;
@@ -276,7 +279,7 @@ export default function _getAppDom(self) {
 			onclick: function(ev) {
 				const codeField = self.domApi.codeField;
 				// codeField.el.focus();
-				codeField.el.textContent = codeField.el.oldValue = _stringify(self.editStage.tOb);
+				codeField.el.textContent = codeField.el.oldValue = stringifyTOb(self.editStage.tOb);
 				editLoop(self);
 			},
 			updateBtn: function() {},
@@ -345,8 +348,4 @@ export default function _getAppDom(self) {
 			if (domApi[i].updateBtn)
 				domApi[i].updateBtn();
 	}
-}
-
-function _stringify(tOb) {
-	return JSON.stringify(tOb, null, 4);
 }

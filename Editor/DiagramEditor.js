@@ -4,7 +4,7 @@ import JsonEHl           from "./../json-err-hl/json-err-hl.js";
 import getSelArgs        from "./getSelArgs.js";
 import components        from "./components.js";
 
-export {editLoop};
+export {editLoop, stringifyTOb};
 
 export default class DiagramEditor {
 	constructor (clPref, elem, tOb) { constructor(this, clPref, elem, tOb);}
@@ -71,7 +71,7 @@ function commit(self) {
 
 function editLoop(self) {
 	buildDiagram(self, self.domApi.diagram.el, self.editStage.tOb);
-	self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+	self.domApi.codeField.el.textContent = stringifyTOb(self.editStage.tOb);
 	self.domApi.diagram.el.querySelectorAll(`.${self.clPref}-td-block`).forEach((v,i,a) => {
 		createOnEditTdBd(self, v, "td");
 	});
@@ -147,7 +147,7 @@ function createOnEditField(self, el, fieldName) {
 				part = lib.getPart(self, this),
 				node = self.editStage.tOb.getBySerial(part.dataset.serialN);
 			node[fieldName] = this.textContent;
-			self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+			self.domApi.codeField.el.textContent = stringifyTOb(self.editStage.tOb);
 		}
 	}
 }
@@ -179,7 +179,7 @@ function createOnEditTdBd(self, el, fieldName) {
 			}
 			ta.oninput = function(ev) {
 				node[fieldName] = this.value;
-				self.domApi.codeField.el.textContent = _stringify(self.editStage.tOb);
+				self.domApi.codeField.el.textContent = stringifyTOb(self.editStage.tOb);
 
 				setTextareaDimensions(this);
 			}
@@ -197,6 +197,6 @@ function createOnEditTdBd(self, el, fieldName) {
 	}
 }
 
-function _stringify(tOb) {
+function stringifyTOb(tOb) {
 	return JSON.stringify(tOb, null, 4);
 }
