@@ -279,29 +279,27 @@ function _getAppDom(self) {
 		editAllTd              : {
 			el: dFragment.querySelector(`.${pr}-edit-all-td`     ),
 			onclick: function(ev) {
-				let status;
-				lib.forEachRecur((node) => {
-					if (!node.td)
-						status = true;
-				}, self.editStage.tOb);
-				lib.forEachRecur((node) => {
-					if (status) {
-						if (!node.td)
-							node.td = "•";
-					} else {
-						if (node.td == "•")
-							delete node.td;
+				for (const node of self.editStage.tOb.preRecIter()) {
+					if (!node.td) {
+						for (const node of self.editStage.tOb.preRecIter()) {
+							node.td ||= "•";
+						}
+						break;
+					} else if (node.td == "•") {
+						for (const node of self.editStage.tOb.preRecIter()) {
+							if (node.td == "•")
+								delete node.td;
+						}
+						break;
 					}
-				}, self.editStage.tOb);
+				}
 				editLoop(self);
 			},
 			updateBtn: function() {
-				let posibility = false;
-				lib.forEachRecur((node) => {
+				for (const node of self.editStage.tOb.preRecIter()) 
 					if (!node.td || node.td == "•")
-						posibility = true;
-				}, self.editStage.tOb);
-				this.el.disabled = !posibility;
+						return this.el.disabled = false;
+				this.el.disabled = true;
 			},
 		},
 		editTd              : {
