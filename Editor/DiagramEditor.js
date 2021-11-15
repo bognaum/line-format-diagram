@@ -34,21 +34,24 @@ function constructor(self, clPref, elem, tOb) {
 
 	document.addEventListener("selectionchange", function(ev) {
 		const 
-			selectedR = window.getSelection().getRangeAt(0),
+			sel       = window.getSelection(),
+			selectedR = sel.rangeCount ? sel.getRangeAt(0) : null,
 			editorR = new Range();
 		editorR.selectNodeContents(elem);
 
-		const insideDiagram = 
-			editorR.compareBoundaryPoints(Range.START_TO_START, selectedR) == -1
-			&&
-			editorR.compareBoundaryPoints(Range.END_TO_END,     selectedR) == 1;
+		if (selectedR) {
+			const insideDiagram = 
+				editorR.compareBoundaryPoints(Range.START_TO_START, selectedR) == -1
+				&&
+				editorR.compareBoundaryPoints(Range.END_TO_END,     selectedR) == 1;
 
-		if (insideDiagram) {
-			const 
-				clPref = self.clPref,
-				tOb    = self.editStage.tOb;
-			self.editStage.selArgs = getSelArgs(clPref, tOb);
-			selectLoop(self);
+			if (insideDiagram) {
+				const 
+					clPref = self.clPref,
+					tOb    = self.editStage.tOb;
+				self.editStage.selArgs = getSelArgs(clPref, tOb);
+				selectLoop(self);
+			}
 		}
 	});
 
