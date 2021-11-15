@@ -92,18 +92,18 @@ function selectLoop(self) {
 	});
 
 	const {r, a, b} = self.editStage.selArgs;
-	const rootNode = self.editStage.tOb.getBySerial(r);
-	if (rootNode) {
+	const rootSelNode = self.editStage.tOb.getBySerial(r);
+	if (rootSelNode) {
 		const 
-			rootSN = rootNode.getSerial(),
+			rootSN = rootSelNode.getSerial(),
 			rootPart = self.domApi.diagram.el.querySelector(`[data-serial-n="${rootSN}"]`);
 
 		if (rootPart) {
 			rootPart.style.boxShadow = "inset 0 0 5px #777, 0 0 5px #777";
 		}
 
-		if (typeof rootNode.ch != "string") {
-			const selectedNodes = rootNode.ch.slice(a, b);
+		if (typeof rootSelNode.ch != "string") {
+			const selectedNodes = rootSelNode.ch.slice(a, b);
 			for (const node of selectedNodes) {
 				const part = self.domApi.diagram.el.querySelector(
 					`[data-serial-n="${node.getSerial()}"]`);
@@ -201,10 +201,10 @@ function _getAppDom(self) {
 				&nbsp;&nbsp;
 			</div>
 			<div class="${pr}-edit-panel__btn-block ${pr}-edit-buttons" style="float: right;">
-				<button class="${pr}-edit-all-td"    >all td</button>
+				<button class="${pr}-edit-all-td"    >all td +/-</button>
 				&nbsp;
-				<button class="${pr}-edit-td"        >td</button>
-				<button class="${pr}-edit-bd"        >bd</button>
+				<button class="${pr}-edit-td"        >td +/-</button>
+				<button class="${pr}-edit-bd"        >bd +/-</button>
 				<button class="${pr}-edit-td-bd"     >td ↔ bd</button>
 				&nbsp;
 				<button class="${pr}-edit-split"     >split</button>
@@ -307,15 +307,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.td ? delete rootNode.td : rootNode.td = "X";
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.td ? delete rootSelNode.td : rootSelNode.td = "X";
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !rootNode;
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootSelNode;
 			},
 		},
 		editBd              : {
@@ -323,15 +323,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.bd ? delete rootNode.bd : rootNode.bd = "X";
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.bd ? delete rootSelNode.bd : rootSelNode.bd = "X";
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !(rootNode && typeof rootNode.ch == "string");
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !(rootSelNode && typeof rootSelNode.ch == "string");
 			},
 		},
 		editTdBd              : {
@@ -339,23 +339,23 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				const [td, bd] = [rootNode.td, rootNode.bd];
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				const [td, bd] = [rootSelNode.td, rootSelNode.bd];
 				if (td)
-					rootNode.bd = td;
+					rootSelNode.bd = td;
 				else
-					delete rootNode.bd;
+					delete rootSelNode.bd;
 				if (bd)
-					rootNode.td = bd;
+					rootSelNode.td = bd;
 				else
-					delete rootNode.td;
+					delete rootSelNode.td;
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !(rootNode && (typeof rootNode.ch == "string" || rootNode.bd));
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !(rootSelNode && (typeof rootSelNode.ch == "string" || rootSelNode.bd));
 			},
 		},
 		editSplit           : {
@@ -363,15 +363,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.split(a, b)();
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.split(a, b)();
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !rootNode?.split(a, b);
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootSelNode?.split(a, b);
 			},
 		},
 		editJoin            : {
@@ -379,15 +379,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.join(a, b)();
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.join(a, b)();
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !rootNode?.join(a, b);
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootSelNode?.join(a, b);
 			},
 		},
 		editSubdivide            : {
@@ -395,15 +395,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.subdivide(a, b)();
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.subdivide(a, b)();
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !rootNode?.subdivide(a, b);
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootSelNode?.subdivide(a, b);
 			},
 		},
 		editWrap            : {
@@ -411,15 +411,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.wrap(a, b)();
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.wrap(a, b)();
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !rootNode?.wrap(a, b);
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootSelNode?.wrap(a, b);
 			},
 		},
 		editWrapSubdiv            : {
@@ -427,15 +427,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.wrapSubdiv(a, b)();
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.wrapSubdiv(a, b)();
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !rootNode?.wrapSubdiv(a, b);
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootSelNode?.wrapSubdiv(a, b);
 			},
 		},
 		editUnwrap          : {
@@ -443,15 +443,15 @@ function _getAppDom(self) {
 			onclick: function(ev) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				rootNode.unwrap(a, b)();
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				rootSelNode.unwrap(a, b)();
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
 				const 
 					{r, a, b} = self.editStage.selArgs,
-					rootNode = self.editStage.tOb.getBySerial(r);
-				this.el.disabled = !rootNode?.unwrap(a, b);
+					rootSelNode = self.editStage.tOb.getBySerial(r);
+				this.el.disabled = !rootSelNode?.unwrap(a, b);
 			},
 		},
 		diagram             : {
