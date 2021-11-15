@@ -179,7 +179,8 @@ export default function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootSelNode = self.editStage.tOb.getBySerial(r);
-				rootSelNode.split(a, b)();
+				const newSel = rootSelNode.split(a, b)();
+				self.editStage.selArgs = newSel;
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
@@ -195,7 +196,8 @@ export default function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootSelNode = self.editStage.tOb.getBySerial(r);
-				rootSelNode.join(a, b)();
+				const newSel = rootSelNode.join(a, b)();
+				self.editStage.selArgs = newSel;
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
@@ -211,7 +213,8 @@ export default function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootSelNode = self.editStage.tOb.getBySerial(r);
-				rootSelNode.subdivide(a, b)();
+				const newSel = rootSelNode.subdivide(a, b)();
+				self.editStage.selArgs = newSel;
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
@@ -227,7 +230,8 @@ export default function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootSelNode = self.editStage.tOb.getBySerial(r);
-				rootSelNode.wrap(a, b)();
+				const newSel = rootSelNode.wrap(a, b)();
+				self.editStage.selArgs = newSel;
 				editLoop.commit(self);
 			},
 			updateBtn: function() {
@@ -259,7 +263,8 @@ export default function _getAppDom(self) {
 				const 
 					{r, a, b} = self.editStage.selArgs,
 					rootSelNode = self.editStage.tOb.getBySerial(r);
-				rootSelNode.unwrap(a, b)();
+				const newSel = rootSelNode.unwrap(a, b)();
+				self.editStage.selArgs = newSel;
 				editLoop.commit(self);
 			},
 			updateBtn: function() {

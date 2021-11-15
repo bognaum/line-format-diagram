@@ -28,11 +28,23 @@ function unwrap (self) {
 			return function unwrap1(){
 				self.parent.ch.splice(self.chIndex, 1, ...self.ch);
 				initChildren(self.parent);
+				const selRootEl = self.parent;
+				return {
+					r: self.parent.getSerial(), 
+					a: 0, 
+					b: selRootEl.ch.length
+				};
 			}
 		} else if (isStr(self.ch) && self.parent && self.parent.ch.length == 1) {
 			return function unwrap2() {
 				self.parent.ch = self.ch;
 				initChildren(self.parent);
+				const selRootEl = self.parent;
+				return {
+					r: self.parent.getSerial(), 
+					a: 0, 
+					b: selRootEl.ch.length
+				};
 			}
 		}
 	}
@@ -55,6 +67,12 @@ function join (self, a, b) {
 				for (let v of pasted.ch) 
 					v.parent = pasted;
 				self.ch.splice(startPoint, joined.length, pasted);
+				const selRootEl = self;
+				return {
+					r: selRootEl.getSerial(), 
+					a: 0, 
+					b: selRootEl.ch.length
+				};
 			}
 		} else if (isStr(...joined.map(v => v.ch))) {
 			return function join2() {
@@ -67,6 +85,12 @@ function join (self, a, b) {
 						parent: self,
 					});
 				self.ch.splice(startPoint, joined.length, pastedNode);
+				const selRootEl = self;
+				return {
+					r: selRootEl.getSerial(), 
+					a: 0, 
+					b: selRootEl.ch.length
+				};
 			}
 		}
 	}
@@ -106,6 +130,12 @@ function split (self, a, b) {
 			}
 
 			self.parent.ch.splice(self.chIndex, 1, ...newChildren);
+			const selRootEl = self.parent;
+			return {
+				r: selRootEl.getSerial(), 
+				a: 0, 
+				b: selRootEl.ch.length
+			};
 		}
 	} else {
 		return function split2() {
@@ -120,6 +150,13 @@ function split (self, a, b) {
 					);
 			}
 			self.ch = newChildren;
+			// return {r: self.getSerial(), a, b};
+			const selRootEl = self;
+			return {
+				r: selRootEl.getSerial(), 
+				a: 0, 
+				b: selRootEl.ch.length
+			};
 		}
 	}
 }
@@ -146,6 +183,12 @@ function subdivide(self, a, b) {
 		}
 
 		self.ch = newChildren;
+		const selRootEl = self;
+		return {
+			r: selRootEl.getSerial(), 
+			a: 0, 
+			b: selRootEl.ch.length
+		};
 	}
 		
 }
@@ -172,6 +215,12 @@ function wrap(self, a, b) {
 				self.parent.ch[self.chIndex] = wr;
 				initChildren(wr);
 				initChildren(self);
+				const selRootEl = wr;
+				return {
+					r: selRootEl.getSerial(), 
+					a: 0, 
+					b: selRootEl.ch.length
+				};
 			}
 		} else {
 			return function wrap2() {
@@ -180,6 +229,12 @@ function wrap(self, a, b) {
 				clone.td ||= "in";
 				self.td ||= "Wr";
 				initChildren(self);
+				const selRootEl = self;
+				return {
+					r: selRootEl.getSerial(), 
+					a: 0, 
+					b: selRootEl.ch.length
+				};
 			}
 		}
 	} else if (isArr(self.ch)) {
@@ -193,6 +248,12 @@ function wrap(self, a, b) {
 				initChildren(wrNode);
 				newChildren.push(...parts[0], wrNode, ...parts[2]);
 				self.ch = newChildren;
+				const selRootEl = wrNode;
+				return {
+					r: selRootEl.getSerial(), 
+					a: 0, 
+					b: selRootEl.ch.length
+				};
 			}
 		} else if (a == 0 && b == 0) {
 			if (self.parent) {
@@ -205,6 +266,12 @@ function wrap(self, a, b) {
 					self.parent.ch[self.chIndex] = wr;
 					initChildren(wr);
 					initChildren(self);
+					const selRootEl = wr;
+					return {
+						r: selRootEl.getSerial(), 
+						a: 0, 
+						b: selRootEl.ch.length
+					};
 				}
 			}
 		}
