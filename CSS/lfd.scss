@@ -119,6 +119,30 @@ $link_line_color: #999;
 		border: $link_line_th + 3 solid transparent;
 		display: block;
 	}
+	.#{$pref}-copy-btn-wr {
+		// border: 1px solid #000;
+		height: 0;
+		text-align: right;
+		// display: none;
+		position: relative;
+		opacity: 0;
+		transition: opacity .1s linear;
+		.#{$pref}-copy-btn {
+			opacity: .4;
+			transition: opacity .1s linear;
+			cursor: pointer;
+			// position: absolute;
+			// border: 1px solid #000;
+			&:hover {
+				opacity: 1.0;
+			}
+		}
+	}
+	&:hover .#{$pref}-copy-btn-wr {
+		// display: block;
+		// transition: opacity 2s;
+		opacity: 1;
+	}
 }
 
 .#{$pref}.top-lines{

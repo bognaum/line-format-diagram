@@ -1966,6 +1966,24 @@ function setStyle(clPref) {
   border: 4px solid transparent;
   display: block;
 }
+.line-format-diagram .line-format-diagram-copy-btn-wr {
+  height: 0;
+  text-align: right;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.1s linear;
+}
+.line-format-diagram .line-format-diagram-copy-btn-wr .line-format-diagram-copy-btn {
+  opacity: 0.4;
+  transition: opacity 0.1s linear;
+  cursor: pointer;
+}
+.line-format-diagram .line-format-diagram-copy-btn-wr .line-format-diagram-copy-btn:hover {
+  opacity: 1;
+}
+.line-format-diagram:hover .line-format-diagram-copy-btn-wr {
+  opacity: 1;
+}
 
 .line-format-diagram.top-lines .line-format-diagram-part .line-format-diagram-grid-v-liner {
   margin-top: 5px;
@@ -1992,7 +2010,7 @@ function setStyle(clPref) {
   border: none;
 }
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL0Q6L0dpdEh1Yi1teS9saW5lLWZvcm1hdC1kaWdyYW0vQ1NTL2xmZC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVlBO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7QUFFQTtBQUFBO0FBQUE7QUFBQTtBQUtBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBTUE7RUFDQztFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUNBO0VBQ0M7RUFFQTtFQUNBO0VBQ0E7RUFDQTs7QUFNQTtFQUNDOztBQUtEO0VBQ0M7RUFDQTs7QUFFRDtFQUNDOztBQUdGO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFDQSxjQXpFZTtFQTBFZjtFQUNBO0VBQ0E7O0FBQ0E7RUFDQztFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBTUw7RUFDQyxjQXJHZ0I7O0FBc0doQjtFQUNDLGNBdkdlOztBQTBHakI7RUFDQzs7QUFFRDtFQUNDLFNBL0d3QjtFQWdIeEI7RUFDQTs7O0FBTUE7RUFDQztFQUNBOztBQUVEO0VBQ0M7RUFDQTs7QUFDQTtFQUNDOzs7QUFTRjtFQUNDO0VBQ0E7O0FBRUQ7RUFDQztFQUNBO0VBQ0E7O0FBQ0E7RUFDQyIsImZpbGUiOiJsZmQuc2Nzcy5qcyJ9 */`.replaceAll(/\bline-format-diagram/g, clPref);
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL0Q6L0dpdEh1Yi1teS9saW5lLWZvcm1hdC1kaWdyYW0vQ1NTL2xmZC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVlBO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7QUFFQTtBQUFBO0FBQUE7QUFBQTtBQUtBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBTUE7RUFDQztFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUNBO0VBQ0M7RUFFQTtFQUNBO0VBQ0E7RUFDQTs7QUFNQTtFQUNDOztBQUtEO0VBQ0M7RUFDQTs7QUFFRDtFQUNDOztBQUdGO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFDQSxjQXpFZTtFQTBFZjtFQUNBO0VBQ0E7O0FBQ0E7RUFDQztFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBTUw7RUFDQyxjQXJHZ0I7O0FBc0doQjtFQUNDLGNBdkdlOztBQTBHakI7RUFDQzs7QUFFRDtFQUNDLFNBL0d3QjtFQWdIeEI7RUFDQTs7QUFFRDtFQUVDO0VBQ0E7RUFFQTtFQUNBO0VBQ0E7O0FBQ0E7RUFDQztFQUNBO0VBQ0E7O0FBR0E7RUFDQzs7QUFJSDtFQUdDOzs7QUFNQTtFQUNDO0VBQ0E7O0FBRUQ7RUFDQztFQUNBOztBQUNBO0VBQ0M7OztBQVNGO0VBQ0M7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFDQTs7QUFDQTtFQUNDIiwiZmlsZSI6ImxmZC5zY3NzLmpzIn0= */`.replaceAll(/\bline-format-diagram/g, clPref);
 
 	const styleClassName = `${clPref}__theme-style`;
 
@@ -2044,10 +2062,19 @@ function buildDiagram(self, elem, tOb) {
 	opts.bdColor = opts.bdColor &&= ` border-color: ${opts.bdColor}; `;
 
 	const {tLevels, bLevels} = _getLevels(tOb);
-	const htmlStr = _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
-		+ _getLinersHtmlStr(bLevels, self.clPref);
+	const htmlStr = 
+		_getCopyBtnStr(self.clPref)
+		+ _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
+		+ _getLinersHtmlStr(bLevels, self.clPref) ;
 
 	elem.innerHTML = htmlStr;
+	elem.querySelector(`.${self.clPref}-copy-btn`).onclick = (ev) => {
+		let str = "";
+		for (const node of tOb.preRecIter()) 
+			if (typeof node.ch == "string")
+				str += node.ch;
+		_lib_js__WEBPACK_IMPORTED_MODULE_0__.copyToClipboard(str);
+	}
 }
 
 function _getLevels(tOb) {
@@ -2270,6 +2297,13 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			str += `</div>`; // .${clPref}-part
 		}
 	}
+}
+function _getCopyBtnStr(clPref) {
+	return `
+		<div class="${clPref}-copy-btn-wr" style="">
+			<button class="${clPref}-copy-btn" style="display: inline-block;">copy</button>
+		</div>
+	`;
 }
 function _getLinersHtmlStr(bLevels, clPref) {
 	let str = "";

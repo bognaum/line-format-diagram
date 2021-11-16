@@ -12,10 +12,19 @@ export default function buildDiagram(self, elem, tOb) {
 	opts.bdColor = opts.bdColor &&= ` border-color: ${opts.bdColor}; `;
 
 	const {tLevels, bLevels} = _getLevels(tOb);
-	const htmlStr = _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
-		+ _getLinersHtmlStr(bLevels, self.clPref);
+	const htmlStr = 
+		_getCopyBtnStr(self.clPref)
+		+ _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
+		+ _getLinersHtmlStr(bLevels, self.clPref) ;
 
 	elem.innerHTML = htmlStr;
+	elem.querySelector(`.${self.clPref}-copy-btn`).onclick = (ev) => {
+		let str = "";
+		for (const node of tOb.preRecIter()) 
+			if (typeof node.ch == "string")
+				str += node.ch;
+		lib.copyToClipboard(str);
+	}
 }
 
 function _getLevels(tOb) {
@@ -238,6 +247,13 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 			str += `</div>`; // .${clPref}-part
 		}
 	}
+}
+function _getCopyBtnStr(clPref) {
+	return `
+		<div class="${clPref}-copy-btn-wr" style="">
+			<button class="${clPref}-copy-btn" style="display: inline-block;">copy</button>
+		</div>
+	`;
 }
 function _getLinersHtmlStr(bLevels, clPref) {
 	let str = "";
