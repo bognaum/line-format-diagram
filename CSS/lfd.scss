@@ -122,20 +122,29 @@ $link_line_color: #999;
 	.#{$pref}-copy-btn-wr {
 		display: inline-block;
 		vertical-align: top;
-		text-align: right;
 		position: relative;
 		opacity: 0;
-		transition: opacity .1s linear;
-		.#{$pref}-copy-btn {
+		span {
 			opacity: .4;
-			transition: opacity .1s linear;
+			font-weight: bold;
+			font-size: 30px;
+			display: inline-block;
+			margin-top: -20px;
+		}
+		.#{$pref}-copy-btn {
+			display: none;
+			position: absolute;
+			// top: 0;
+			right: 0;
+			// top: 100%;
+			bottom: 0;
 			cursor: pointer;
-			&:hover {
-				opacity: 1.0;
-			}
 		}
 		&:hover {
 			opacity: 1;
+			.#{$pref}-copy-btn {
+				display: inline-block;
+			}
 		}
 	}
 	&:hover .#{$pref}-copy-btn-wr {

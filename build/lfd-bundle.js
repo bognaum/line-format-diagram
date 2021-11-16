@@ -1969,21 +1969,28 @@ function setStyle(clPref) {
 .line-format-diagram .line-format-diagram-copy-btn-wr {
   display: inline-block;
   vertical-align: top;
-  text-align: right;
   position: relative;
   opacity: 0;
-  transition: opacity 0.1s linear;
+}
+.line-format-diagram .line-format-diagram-copy-btn-wr span {
+  opacity: 0.4;
+  font-weight: bold;
+  font-size: 30px;
+  display: inline-block;
+  margin-top: -20px;
 }
 .line-format-diagram .line-format-diagram-copy-btn-wr .line-format-diagram-copy-btn {
-  opacity: 0.4;
-  transition: opacity 0.1s linear;
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
   cursor: pointer;
-}
-.line-format-diagram .line-format-diagram-copy-btn-wr .line-format-diagram-copy-btn:hover {
-  opacity: 1;
 }
 .line-format-diagram .line-format-diagram-copy-btn-wr:hover {
   opacity: 1;
+}
+.line-format-diagram .line-format-diagram-copy-btn-wr:hover .line-format-diagram-copy-btn {
+  display: inline-block;
 }
 .line-format-diagram:hover .line-format-diagram-copy-btn-wr {
   opacity: 1;
@@ -2014,7 +2021,7 @@ function setStyle(clPref) {
   border: none;
 }
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL0Q6L0dpdEh1Yi1teS9saW5lLWZvcm1hdC1kaWdyYW0vQ1NTL2xmZC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVlBO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7QUFFQTtBQUFBO0FBQUE7QUFBQTtBQUtBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBTUE7RUFDQztFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUNBO0VBQ0M7RUFFQTtFQUNBO0VBQ0E7RUFDQTs7QUFNQTtFQUNDOztBQUtEO0VBQ0M7RUFDQTs7QUFFRDtFQUNDOztBQUdGO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFDQSxjQXpFZTtFQTBFZjtFQUNBO0VBQ0E7O0FBQ0E7RUFDQztFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBTUw7RUFDQyxjQXJHZ0I7O0FBc0doQjtFQUNDLGNBdkdlOztBQTBHakI7RUFDQzs7QUFFRDtFQUNDLFNBL0d3QjtFQWdIeEI7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTs7QUFDQTtFQUNDOztBQUdGO0VBQ0M7O0FBR0Y7RUFDQzs7O0FBTUE7RUFDQztFQUNBOztBQUVEO0VBQ0M7RUFDQTs7QUFDQTtFQUNDOzs7QUFTRjtFQUNDO0VBQ0E7O0FBRUQ7RUFDQztFQUNBO0VBQ0E7O0FBQ0E7RUFDQyIsImZpbGUiOiJsZmQuc2Nzcy5qcyJ9 */`.replaceAll(/\bline-format-diagram/g, clPref);
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL0Q6L0dpdEh1Yi1teS9saW5lLWZvcm1hdC1kaWdyYW0vQ1NTL2xmZC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVlBO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7QUFFQTtBQUFBO0FBQUE7QUFBQTtBQUtBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBTUE7RUFDQztFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUNBO0VBQ0M7RUFFQTtFQUNBO0VBQ0E7RUFDQTs7QUFNQTtFQUNDOztBQUtEO0VBQ0M7RUFDQTs7QUFFRDtFQUNDOztBQUdGO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFDQSxjQXpFZTtFQTBFZjtFQUNBO0VBQ0E7O0FBQ0E7RUFDQztFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBTUw7RUFDQyxjQXJHZ0I7O0FBc0doQjtFQUNDLGNBdkdlOztBQTBHakI7RUFDQzs7QUFFRDtFQUNDLFNBL0d3QjtFQWdIeEI7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFDQTtFQUNBOztBQUNBO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7RUFFQTtFQUVBO0VBQ0E7O0FBRUQ7RUFDQzs7QUFDQTtFQUNDOztBQUlIO0VBQ0M7OztBQU1BO0VBQ0M7RUFDQTs7QUFFRDtFQUNDO0VBQ0E7O0FBQ0E7RUFDQzs7O0FBU0Y7RUFDQztFQUNBOztBQUVEO0VBQ0M7RUFDQTtFQUNBOztBQUNBO0VBQ0MiLCJmaWxlIjoibGZkLnNjc3MuanMifQ== */`.replaceAll(/\bline-format-diagram/g, clPref);
 
 	const styleClassName = `${clPref}__theme-style`;
 
@@ -2306,6 +2313,7 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 function _getCopyBtnStr(clPref) {
 	return `
 		<div class="${clPref}-copy-btn-wr" style="">
+			<span>≡</span>
 			<button class="${clPref}-copy-btn">copy</button>
 		</div>
 	`;

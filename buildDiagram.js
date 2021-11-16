@@ -252,6 +252,7 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 function _getCopyBtnStr(clPref) {
 	return `
 		<div class="${clPref}-copy-btn-wr" style="">
+			<span>≡</span>
 			<button class="${clPref}-copy-btn">copy</button>
 		</div>
 	`;
