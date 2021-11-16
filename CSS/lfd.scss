@@ -120,10 +120,9 @@ $link_line_color: #999;
 		display: block;
 	}
 	.#{$pref}-copy-btn-wr {
-		// border: 1px solid #000;
-		height: 0;
+		display: inline-block;
+		vertical-align: top;
 		text-align: right;
-		// display: none;
 		position: relative;
 		opacity: 0;
 		transition: opacity .1s linear;
@@ -131,16 +130,15 @@ $link_line_color: #999;
 			opacity: .4;
 			transition: opacity .1s linear;
 			cursor: pointer;
-			// position: absolute;
-			// border: 1px solid #000;
 			&:hover {
 				opacity: 1.0;
 			}
 		}
+		&:hover {
+			opacity: 1;
+		}
 	}
 	&:hover .#{$pref}-copy-btn-wr {
-		// display: block;
-		// transition: opacity 2s;
 		opacity: 1;
 	}
 }

@@ -12,10 +12,11 @@ export default function buildDiagram(self, elem, tOb) {
 	opts.bdColor = opts.bdColor &&= ` border-color: ${opts.bdColor}; `;
 
 	const {tLevels, bLevels} = _getLevels(tOb);
-	const htmlStr = 
-		_getCopyBtnStr(self.clPref)
-		+ _getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref) 
-		+ _getLinersHtmlStr(bLevels, self.clPref) ;
+	const htmlStr = [
+		_getHtmlStr(tOb, opts, tLevels, bLevels, self.clPref),
+		_getCopyBtnStr(self.clPref),
+		_getLinersHtmlStr(bLevels, self.clPref),
+	].join(""); 
 
 	elem.innerHTML = htmlStr;
 	elem.querySelector(`.${self.clPref}-copy-btn`).onclick = (ev) => {
@@ -251,7 +252,7 @@ function _getHtmlStr(templ, opts, tLevels, _bLevels, clPref) {
 function _getCopyBtnStr(clPref) {
 	return `
 		<div class="${clPref}-copy-btn-wr" style="">
-			<button class="${clPref}-copy-btn" style="display: inline-block;">copy</button>
+			<button class="${clPref}-copy-btn">copy</button>
 		</div>
 	`;
 }
