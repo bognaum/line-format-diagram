@@ -46,8 +46,20 @@ export default function _getAppDom(self) {
 					<!-- <button class="${pr}-new-blank">New Blank</button> -->
 				</div>
 				<div style="float: right;">
-					<button class="${pr}-to-clipboard-min">To Clipboard Min</button>
 					<button class="${pr}-to-clipboard">To Clipboard</button>
+					with indents:
+					<select name="" id="" class="${pr}-indent-select" style="font-family: consolas, monospace">
+						<option value=""        >min</option>
+						<option value="\t"      >\\t</option>
+						<option value=" "       >&nbsp;1&nbsp;</option>
+						<option value="  "      >&nbsp;2&nbsp;</option>
+						<option value="   "     >&nbsp;3&nbsp;</option>
+						<option value="    "    >&nbsp;4&nbsp;</option>
+						<option value="     "   >&nbsp;5&nbsp;</option>
+						<option value="      "  >&nbsp;6&nbsp;</option>
+						<option value="       " >&nbsp;7&nbsp;</option>
+						<option value="        ">&nbsp;8&nbsp;</option>
+					</select>
 				</div>
 				<div style="clear: both;"></div>
 			</div>
@@ -294,21 +306,16 @@ export default function _getAppDom(self) {
 		toClipboard         : {
 			el: dFragment.querySelector(`.${pr}-to-clipboard`        ),
 			onclick: function(ev) {
-				// const str = self.domApi.codeField.el.textContent;
-				const str = JSON.stringify(self.editStage.tOb, null, 4);
+				const 
+					indent = self.domApi.indentSelect.el.value,
+					str = JSON.stringify(self.editStage.tOb, null, indent);
 
 				lib.copyToClipboard(str);
 			},
 			updateBtn: function() {},
 		},
-		toClipboardMin         : {
-			el: dFragment.querySelector(`.${pr}-to-clipboard-min`        ),
-			onclick: function(ev) {
-				const str = JSON.stringify(self.editStage.tOb);
-
-				lib.copyToClipboard(str);
-			},
-			updateBtn: function() {},
+		indentSelect: {
+			el: dFragment.querySelector(`.${pr}-indent-select`       ),
 		},
 		codeField           : {
 			el: dFragment.querySelector(`.${pr}-code-field`          ),
